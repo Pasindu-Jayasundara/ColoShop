@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.Message;
+import entity.User;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,13 +17,13 @@ import model.HibernateUtil;
 import org.hibernate.Session;
 
 @WebServlet(name = "UserContactMessage", urlPatterns = {"/UserContactMessage"})
-public class UserContactMessage extends HttpServlet {
+public class SendUserMessage extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            int userId = request.getSession().getAttribute("user").getId();
+            int userId = ((User) request.getSession().getAttribute("user")).getId();
             String title = request.getParameter("title");
             String message = request.getParameter("message");
             

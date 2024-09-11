@@ -44,8 +44,11 @@ public class VerifyNewUser extends HttpServlet {
             user.setVerified_status(verified_status);
 
             response_DTO = new Response_DTO(true, "Account Verification Successfull");
+            request.getSession().invalidate();
 
         }
+        
+        hibernateSession.close();
 
         Gson gson = new Gson();
 
