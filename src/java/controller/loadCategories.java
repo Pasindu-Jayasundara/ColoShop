@@ -18,7 +18,7 @@ import org.hibernate.criterion.Order;
 
 
 @WebServlet(name = "loadCategories", urlPatterns = {"/loadCategories"})
-public class loadCategories extends HttpServlet {
+public class LoadCategories extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

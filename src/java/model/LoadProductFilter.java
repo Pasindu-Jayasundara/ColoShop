@@ -25,7 +25,7 @@ public class LoadProductFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         int resultCount = 0;
-        if (httpServletRequest.getParameter("productCount") != null && !httpServletRequest.getParameter("productCount").isEmpty()) {
+        if (httpServletRequest.getParameter("productCount") != null && !httpServletRequest.getParameter("productCount").isBlank()) {
             try {
                 resultCount = Integer.parseInt(httpServletRequest.getParameter("productCount"));
                 httpServletRequest.setAttribute("productCount", resultCount);
