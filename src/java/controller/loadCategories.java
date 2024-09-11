@@ -15,28 +15,26 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 
-
-
 @WebServlet(name = "loadCategories", urlPatterns = {"/loadCategories"})
 public class LoadCategories extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         Gson gson = new Gson();
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
-        
+
         Criteria categoryCriteria = hibernateSession.createCriteria(Category.class);
         categoryCriteria.addOrder(Order.desc("category"));
         List<Category> list = categoryCriteria.list();
-        
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("categoryList", gson.toJsonTree(list));
-        
+
+        hibernateSession.close();
+
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(jsonObject));
-        
-        hibernateSession.close();
-        
+
     }
 }

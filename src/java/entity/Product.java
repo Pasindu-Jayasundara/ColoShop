@@ -43,6 +43,9 @@ public class Product implements Serializable {
 
     @Column(name = "delivery_fee", nullable = false)
     private Double delivery_fee;
+    
+    @Column(name = "sold_count")
+    private int sold_count;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -189,6 +192,14 @@ public class Product implements Serializable {
 
     public void setSeller(Seller seller) {
         this.seller = seller;
+    }
+
+    public int getSold_count() {
+        return sold_count;
+    }
+
+    public void setSold_count(int sold_count) {
+        this.sold_count = sold_count;
     }
     
     
