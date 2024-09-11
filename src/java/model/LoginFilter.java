@@ -13,7 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
 @WebFilter(urlPatterns = {"/UserLogin"})
-public class LoginFilter implements Filter {
+public class LogInFilter implements Filter {
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

@@ -43,6 +43,10 @@ public class UserLogin extends HttpServlet {
             } else {
                 //verified
                 request.getSession().setAttribute("user", user);
+                
+                //sync session cart and user cart
+                request.getRequestDispatcher("/SyncSessionAndUserCart").include(request, response);
+                
                 message = "Login Success";
                 isSuccess = true;
             }
