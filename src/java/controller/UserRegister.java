@@ -9,6 +9,9 @@ import entity.Status;
 import entity.User;
 import entity.Verified_status;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +21,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "UserRegister", urlPatterns = {"/UserRegister"})
 public class UserRegister extends HttpServlet {
@@ -39,7 +44,6 @@ public class UserRegister extends HttpServlet {
             
             encryptPassword = password;
         }
-        
         
         
         User user = new User();
@@ -64,20 +68,42 @@ public class UserRegister extends HttpServlet {
         user.setToken(token);
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
-        hibernateSession.save(user);
+        final String addedUserId = (String) hibernateSession.save(user);
 
+        //send email verification code
         Thread emailThred = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 String fromEmailAddress="pasindubathiya28@gmail.com";
                 String appPassword = "";
-                String to = email;
+                final String to = email;
                 String subject="";
                 String body="";
                 
                 try {
                     Email.send(fromEmailAddress, appPassword, to, subject, body);
+                    
+                    //delete verify token after 5 min
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask(){
+                        @Override
+                        public void run() {
+                            
+                            Session openSession = HibernateUtil.getSessionFactory().openSession();
+                            Criteria createCriteria = openSession.createCriteria(User.class);
+                            createCriteria.add(Restrictions.eq("id", addedUserId));
+                            
+                            User searchedUser = (User) createCriteria.uniqueResult();
+                            searchedUser.setToken("");
+                            
+                            openSession.update(searchedUser);
+                            openSession.beginTransaction().commit();
+                            openSession.close();
+                            
+                        }
+                    
+                    }, 300000);//5 min
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -85,6 +111,8 @@ public class UserRegister extends HttpServlet {
             }
         });
         emailThred.start();
+        
+        request.getSession().setAttribute("userEmail", email);
 
         hibernateSession.close();
 
