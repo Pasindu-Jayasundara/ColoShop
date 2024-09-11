@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,8 +19,13 @@ public class Wishlist implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "email", length = 60, nullable = false)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     public Wishlist() {
     }
@@ -31,14 +38,21 @@ public class Wishlist implements Serializable {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public User getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
     
     
-
 }

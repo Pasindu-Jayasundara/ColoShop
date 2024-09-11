@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import dto.Response_DTO;
+import entity.Newsletter;
 import entity.Wishlist;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -22,10 +23,10 @@ public class RegisterToNewsletter extends HttpServlet {
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-        Wishlist wishlist = new Wishlist();
-        wishlist.setEmail(email);
+        Newsletter newsletter = new Newsletter();
+        newsletter.setEmail(email);
 
-        hibernateSession.save(wishlist);
+        hibernateSession.save(newsletter);
         hibernateSession.beginTransaction().commit();
 
         Response_DTO response_DTO = new Response_DTO(true, "Subscribed Successfuly");
