@@ -5,4 +5,20 @@
             30
         </session-timeout>
     </session-config>
+    <filter>
+        <filter-name>UserRegisterFilter</filter-name>
+        <filter-class>model.UserRegister_VerifyDataFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UserRegisterFilter</filter-name>
+        <url-pattern>/UserRegister</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>UserRegister_VerifyNewUserFilter</filter-name>
+        <filter-class>model.UserRegister_VerifyNewUserFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UserRegister_VerifyNewUserFilter</filter-name>
+        <url-pattern>/UserRegister</url-pattern>
+    </filter-mapping>
 </web-app>

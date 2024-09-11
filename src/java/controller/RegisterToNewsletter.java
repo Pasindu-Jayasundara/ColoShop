@@ -26,7 +26,7 @@ public class RegisterToNewsletter extends HttpServlet {
         wishlist.setEmail(email);
 
         hibernateSession.save(wishlist);
-        hibernateSession.beginTransaction();
+        hibernateSession.beginTransaction().commit();
 
         Response_DTO response_DTO = new Response_DTO(true, "Subscribed Successfuly");
         Gson gson = new Gson();

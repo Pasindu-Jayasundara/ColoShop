@@ -48,6 +48,7 @@ public class RegisterToNewsletterFilter implements Filter {
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, message);
             Gson gson = new Gson();
+            response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }
     }
