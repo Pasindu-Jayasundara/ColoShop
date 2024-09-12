@@ -21,4 +21,21 @@
         <filter-name>UserRegister_VerifyNewUserFilter</filter-name>
         <url-pattern>/UserRegister</url-pattern>
     </filter-mapping>
+    
+    <filter>
+        <filter-name>AddNewProductFilter</filter-name>
+        <filter-class>model.user.AddNewProductFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddNewProductFilter</filter-name>
+        <url-pattern>/AddNewProduct</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>AddNewProductDBDataFilter</filter-name>
+        <filter-class>model.user.AddNewProductDBDataFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddNewProductDBDataFilter</filter-name>
+        <url-pattern>/AddNewProduct</url-pattern>
+    </filter-mapping>
 </web-app>
