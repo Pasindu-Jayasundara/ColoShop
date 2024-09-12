@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Asus
  */
 @WebServlet(name = "ReplyToBuyerMessage", urlPatterns = {"/ReplyToBuyerMessage"})
-public class ReplyToBuyerMessage extends HttpServlet {
+public class SellerReplyToBuyerMessage extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

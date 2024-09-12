@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "AdvancedSearchProduct", urlPatterns = {"/AdvancedSearchProduct"})
-public class AdvancedSearchProduct extends HttpServlet {
+@WebServlet(name = "MessageToSeller", urlPatterns = {"/MessageToSeller"})
+public class BuyerMessageToSeller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
