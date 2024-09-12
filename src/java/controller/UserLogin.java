@@ -45,7 +45,7 @@ public class UserLogin extends HttpServlet {
                 request.getSession().setAttribute("user", user);
                 
                 //sync session cart and user cart
-                request.getRequestDispatcher("/SyncSessionAndUserCart").include(request, response);
+                request.getRequestDispatcher("/SyncSessionCartAndUserCart").include(request, response);
                 
                 message = "Login Success";
                 isSuccess = true;
