@@ -40,7 +40,7 @@ public class AddNewBrandFilter implements Filter{
 
             } else {
                 String brand = request.getParameter("brand");
-                if (brand.length() > 15) {
+                if (brand.length() > 45) {
                     //too long
                     isInvalid = true;
                     message = "Brand Name Too Long";

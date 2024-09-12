@@ -12,8 +12,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter(urlPatterns = {"/AddCategory"})
-public class AddNewCategoryFilter implements Filter{
+@WebFilter(urlPatterns = {"/AddNewSize"})
+public class AddNewSizeFilter implements Filter{
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -33,17 +33,17 @@ public class AddNewCategoryFilter implements Filter{
             message = "Please LogIn First";
 
         } else {
-            if (request.getParameter("category") == null || request.getParameter("category").isBlank()) {
+            if (request.getParameter("size") == null || request.getParameter("size").isBlank()) {
                 //no color
                 isInvalid = true;
-                message = "Missing Category";
+                message = "Missing Size";
 
             } else {
-                String category = request.getParameter("category");
-                if (category.length() > 25) {
+                String size = request.getParameter("size");
+                if (size.length() > 5) {
                     //too long
                     isInvalid = true;
-                    message = "Category Name Too Long";
+                    message = "Size Name Too Long";
 
                 } else {
                     chain.doFilter(request, response);

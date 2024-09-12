@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +21,10 @@ public class Product_color implements Serializable {
     
     @Column(name = "color" ,length = 15,nullable = false)
     private String color;
+    
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
 
     public Product_color() {
     }
@@ -37,6 +43,14 @@ public class Product_color implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
     

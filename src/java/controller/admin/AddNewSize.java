@@ -3,8 +3,10 @@ package controller.admin;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.Product_color;
+import entity.Size;
 import entity.Status;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,13 +17,13 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-@WebServlet(name = "AddNewColor", urlPatterns = {"/AddNewColor"})
-public class AddNewColor extends HttpServlet {
+@WebServlet(name = "AddNewSize", urlPatterns = {"/AddNewSize"})
+public class AddNewSize extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String productColor = request.getParameter("color");
+        
+        String productSize = request.getParameter("size");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         
@@ -29,20 +31,19 @@ public class AddNewColor extends HttpServlet {
         statusCriteria.add(Restrictions.eq("status", "Active"));
         Status activeStatus = (Status) statusCriteria.uniqueResult();
 
-        Product_color product_color = new Product_color();
-        product_color.setColor(productColor);
-        product_color.setStatus(activeStatus);
+        Size size = new Size();
+        size.setSize(productSize);
+        size.setStatus(activeStatus);
 
-        hibernateSession.save(product_color);
+        hibernateSession.save(size);
         hibernateSession.beginTransaction().commit();
         hibernateSession.close();
 
-        Response_DTO response_DTO = new Response_DTO(false, "Product Color Adding Successfull");
+        Response_DTO response_DTO = new Response_DTO(false, "Product Size Adding Successfull");
         Gson gson = new Gson();
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));
-
     }
 
 }

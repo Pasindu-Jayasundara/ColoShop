@@ -2,7 +2,7 @@ package controller.admin;
 
 import com.google.gson.Gson;
 import dto.Response_DTO;
-import entity.Category;
+import entity.Size;
 import entity.Status;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -15,37 +15,37 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-@WebServlet(name = "DeleteCategory", urlPatterns = {"/DeleteCategory"})
-public class DeleteCategory extends HttpServlet {
+@WebServlet(name = "DeleteSize", urlPatterns = {"/DeleteSize"})
+public class DeleteSize extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+        
+        int sizeId = Integer.parseInt(request.getParameter("sizeId"));
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;
         String message = "";
 
-        Category category = (Category) hibernateSession.load(Category.class, categoryId);
-        if (category != null) {
-            //category avaliable
-            if (category.getStatus().getStatus().equals("Active")) {
+        Size size = (Size) hibernateSession.load(Size.class, sizeId);
+        if (size != null) {
+            //size avaliable
+            if (size.getStatus().getStatus().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
                 statusCriteria.add(Restrictions.eq("status", "De-Active"));
                 Status deActiveStatus = (Status) statusCriteria.uniqueResult();
 
-                category.setStatus(deActiveStatus);
-                hibernateSession.update(category);
+                size.setStatus(deActiveStatus);
+                hibernateSession.update(size);
                 hibernateSession.beginTransaction().commit();
 
-                message = "Category Removing Success";
+                message = "Product Size Removing Success";
             }
         } else {
-            //no category
+            //no size
             isDone = false;
-            message = "Category not Found";
+            message = "Product Size not Found";
         }
 
         hibernateSession.close();
@@ -55,6 +55,6 @@ public class DeleteCategory extends HttpServlet {
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));
-
     }
+
 }

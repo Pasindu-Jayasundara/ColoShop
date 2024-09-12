@@ -11,9 +11,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import model.Validation;
 
-@WebFilter(urlPatterns = {"/AddCategory"})
-public class AddNewCategoryFilter implements Filter{
+@WebFilter(urlPatterns = {"/DeleteColor"})
+public class DeleteColorFilter implements Filter{
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -33,20 +34,29 @@ public class AddNewCategoryFilter implements Filter{
             message = "Please LogIn First";
 
         } else {
-            if (request.getParameter("category") == null || request.getParameter("category").isBlank()) {
+            if (request.getParameter("colorId") == null || request.getParameter("colorId").isBlank()) {
                 //no color
                 isInvalid = true;
-                message = "Missing Category";
+                message = "Missing Color Id";
 
             } else {
-                String category = request.getParameter("category");
-                if (category.length() > 25) {
-                    //too long
+                String colorId = request.getParameter("colorId");
+                if (Validation.isInteger(colorId)) {
+                    //not a number
                     isInvalid = true;
-                    message = "Category Name Too Long";
+                    message = "Not a Number";
 
                 } else {
-                    chain.doFilter(request, response);
+                    int cId = Integer.parseInt(colorId);
+                    if (cId <= 0) {
+                        // invalid range
+                        isInvalid = true;
+                        message = "Invalid Id Range";
+
+                    } else {
+                        chain.doFilter(request, response);
+
+                    }
                 }
 
             }

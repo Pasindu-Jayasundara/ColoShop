@@ -11,9 +11,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import model.Validation;
 
-@WebFilter(urlPatterns = {"/AddCategory"})
-public class AddNewCategoryFilter implements Filter{
+@WebFilter(urlPatterns = {"/DeleteCategory"})
+public class DeleteCategoryFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -21,7 +22,7 @@ public class AddNewCategoryFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         boolean isInvalid = false;
@@ -33,20 +34,29 @@ public class AddNewCategoryFilter implements Filter{
             message = "Please LogIn First";
 
         } else {
-            if (request.getParameter("category") == null || request.getParameter("category").isBlank()) {
-                //no color
+            if (request.getParameter("categoryId") == null || request.getParameter("categoryId").isBlank()) {
+                //no category
                 isInvalid = true;
-                message = "Missing Category";
+                message = "Missing Category Id";
 
             } else {
-                String category = request.getParameter("category");
-                if (category.length() > 25) {
-                    //too long
+                String categoryId = request.getParameter("categoryId");
+                if (Validation.isInteger(categoryId)) {
+                    //not a number
                     isInvalid = true;
-                    message = "Category Name Too Long";
+                    message = "Not a Number";
 
                 } else {
-                    chain.doFilter(request, response);
+                    int cId = Integer.parseInt(categoryId);
+                    if (cId <= 0) {
+                        // invalid range
+                        isInvalid = true;
+                        message = "Invalid Id Range";
+
+                    } else {
+                        chain.doFilter(request, response);
+
+                    }
                 }
 
             }
@@ -59,11 +69,11 @@ public class AddNewCategoryFilter implements Filter{
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }
-        
+
     }
 
     @Override
     public void destroy() {
     }
-    
+
 }
