@@ -26,7 +26,7 @@ public class Seller implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserTable user;
 
     public Seller() {
     }
@@ -47,11 +47,11 @@ public class Seller implements Serializable {
         this.status = status;
     }
 
-    public User getUser() {
+    public UserTable getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserTable user) {
         this.user = user;
     }
     

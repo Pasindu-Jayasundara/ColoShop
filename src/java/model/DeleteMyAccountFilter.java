@@ -12,8 +12,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter(urlPatterns = {"/LogOut"})
-public class LogOutFilter implements Filter{
+@WebFilter(urlPatterns = {"/DeleteMyAccount"})
+public class DeleteMyAccountFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -21,23 +21,33 @@ public class LogOutFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        if(httpServletRequest.getSession().getAttribute("user")!=null || httpServletRequest.getSession().getAttribute("admin")!=null){
-            chain.doFilter(request, response);
-        }else{
-            
-            Response_DTO response_DTO = new Response_DTO(false, "Please LogIn First");
+        boolean isUser = false;
+        boolean isAdmin = false;
+
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            isUser = true;
+        } else if (httpServletRequest.getSession().getAttribute("admin") != null) {
+            isAdmin = true;
+        } else {
+            Response_DTO response_DTO = new Response_DTO(false, "Please Login First");
             Gson gson = new Gson();
+
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
-            
         }
-        
+
+        if (isAdmin || isUser) {
+            request.setAttribute("isUser", isUser);
+            request.setAttribute("isAdmin", isAdmin);
+            chain.doFilter(request, response);
+        }
+
     }
 
     @Override
     public void destroy() {
     }
-    
+
 }

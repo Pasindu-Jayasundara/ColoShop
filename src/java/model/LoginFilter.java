@@ -12,7 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
-@WebFilter(urlPatterns = {"/UserLogin"})
+@WebFilter(urlPatterns = {"/UserLogin","/AdminLogin"})
 public class LogInFilter implements Filter {
     
     @Override

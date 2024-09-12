@@ -21,7 +21,7 @@ public class Cart implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserTable user;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -38,11 +38,11 @@ public class Cart implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserTable getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserTable user) {
         this.user = user;
     }
 

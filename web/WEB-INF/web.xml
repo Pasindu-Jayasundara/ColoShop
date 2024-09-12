@@ -7,7 +7,7 @@
     </session-config>
     <filter>
         <filter-name>UserRegisterFilter</filter-name>
-        <filter-class>model.UserRegister_VerifyDataFilter</filter-class>
+        <filter-class>model.user.UserRegister_VerifyDataFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>UserRegisterFilter</filter-name>
@@ -15,7 +15,7 @@
     </filter-mapping>
     <filter>
         <filter-name>UserRegister_VerifyNewUserFilter</filter-name>
-        <filter-class>model.UserRegister_VerifyNewUserFilter</filter-class>
+        <filter-class>model.user.UserRegister_VerifyNewUserFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>UserRegister_VerifyNewUserFilter</filter-name>

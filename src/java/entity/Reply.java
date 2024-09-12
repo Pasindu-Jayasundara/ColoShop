@@ -12,36 +12,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "message")
-public class Message implements Serializable {
+@Table(name = "reply")
+public class Reply implements Serializable {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "message", nullable = false)
-    private String message;
-
-    @Column(name = "title", length = 45, nullable = false)
-    private String title;
-
     @Column(name = "datetime", nullable = false)
     private Date datetime;
 
+    @Column(name = "reply", nullable = false)
+    private String reply;
+
     @ManyToOne
-    @JoinColumn(name = "message_status_id")
-    private Message_status message_status;
-    
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserTable user;
-    
+    @JoinColumn(name = "message_id")
+    private Message message;
+
     @ManyToOne
     @JoinColumn(name = "admin_id")
     private AdminDetailTable admin;
 
-    public Message() {
+    public Reply() {
     }
 
     public int getId() {
@@ -52,22 +45,6 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Date getDatetime() {
         return datetime;
     }
@@ -76,20 +53,20 @@ public class Message implements Serializable {
         this.datetime = datetime;
     }
 
-    public Message_status getMessage_status() {
-        return message_status;
+    public String getReply() {
+        return reply;
     }
 
-    public void setMessage_status(Message_status message_status) {
-        this.message_status = message_status;
+    public void setReply(String reply) {
+        this.reply = reply;
     }
 
-    public UserTable getUser() {
-        return user;
+    public Message getMessage() {
+        return message;
     }
 
-    public void setUser(UserTable user) {
-        this.user = user;
+    public void setMessage(Message message) {
+        this.message = message;
     }
 
     public AdminDetailTable getAdmin() {
@@ -99,7 +76,5 @@ public class Message implements Serializable {
     public void setAdmin(AdminDetailTable admin) {
         this.admin = admin;
     }
-    
-    
 
 }
