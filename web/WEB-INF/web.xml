@@ -30,6 +30,11 @@
         <filter-name>AddNewProductFilter</filter-name>
         <url-pattern>/AddNewProduct</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>AddNewProductFilter</filter-name>
+        <url-pattern>/UpdateProduct</url-pattern>
+    </filter-mapping>
+    
     <filter>
         <filter-name>AddNewProductDBDataFilter</filter-name>
         <filter-class>model.user.AddNewProductDBDataFilter</filter-class>
@@ -37,5 +42,9 @@
     <filter-mapping>
         <filter-name>AddNewProductDBDataFilter</filter-name>
         <url-pattern>/AddNewProduct</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AddNewProductDBDataFilter</filter-name>
+        <url-pattern>/UpdateProduct</url-pattern>
     </filter-mapping>
 </web-app>

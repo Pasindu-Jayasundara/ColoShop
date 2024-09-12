@@ -84,6 +84,9 @@ public class AddNewProduct extends HttpServlet {
             product.setSeller(seller);
             product.setCategory(category);
             
+            hibernateSession.save(product);
+            hibernateSession.beginTransaction().commit();
+            
             message = "Product Adding Success";
 
         } else {

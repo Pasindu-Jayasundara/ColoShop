@@ -49,7 +49,7 @@ public class DeleteProduct extends HttpServlet {
             product.setStatus(deActiveStatus);
             hibernaSession.update(product);
             hibernaSession.beginTransaction().commit();
-
+            
             isDone = true;
             message = "Product Deletion Success";
         } else {
