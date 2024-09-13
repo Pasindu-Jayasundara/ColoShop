@@ -2,6 +2,14 @@ package model;
 
 public class Validation {
 
+    public static Boolean isValidEmail(String email) {
+        return email.matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+    }
+
+    public static Boolean isValidPassword(String password) {
+        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$");
+    }
+
     public static boolean isDouble(String text) {
         return text.matches("^\\d+(\\.\\d{2})?$");
     }
@@ -10,4 +18,11 @@ public class Validation {
         return text.matches("^\\d+$");
     }
 
+    public static boolean isValidMobile(String text) {
+        return text.matches("^07[01245678]{1}[0-9]{7}$");
+    }
+    
+    public static boolean isValidName(String text) {
+        return text.matches("^[A-Za-z]+$");
+    }
 }

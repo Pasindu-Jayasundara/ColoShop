@@ -21,8 +21,9 @@ public class VerifyNewUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String token = request.getParameter("token");
+        String token = (String) request.getAttribute("token");
         String email = (String) request.getSession().getAttribute("userEmail");
+//        String email = "pasindubathiya2d8@gmail.com";
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Criteria userCriteria = hibernateSession.createCriteria(UserTable.class);
@@ -32,22 +33,31 @@ public class VerifyNewUser extends HttpServlet {
 
         Response_DTO response_DTO;
 
-        if (!user.getToken().equals(token)) {
-            // token not match
-            response_DTO = new Response_DTO(false, "Incorrect Validation Token");
+        if (user == null) {
+            //missing user
+            response_DTO = new Response_DTO(false, "Missing User");
 
         } else {
-            Criteria verifiedCriteria = hibernateSession.createCriteria(Verified_status.class);
-            verifiedCriteria.add(Restrictions.eq("status", "Verified"));
+            if (!user.getToken().equals(token)) {
+                // token not match
+                response_DTO = new Response_DTO(false, "Incorrect Validation Token");
 
-            Verified_status verified_status = (Verified_status) verifiedCriteria.uniqueResult();
-            user.setVerified_status(verified_status);
+            } else {
+                Criteria verifiedCriteria = hibernateSession.createCriteria(Verified_status.class);
+                verifiedCriteria.add(Restrictions.eq("status", "Verified"));
 
-            response_DTO = new Response_DTO(true, "Account Verification Successfull");
-            request.getSession().invalidate();
+                Verified_status verified_status = (Verified_status) verifiedCriteria.uniqueResult();
+                user.setVerified_status(verified_status);
 
+                hibernateSession.update(user);
+                hibernateSession.beginTransaction().commit();
+
+                response_DTO = new Response_DTO(true, "Account Verification Successfull");
+                request.getSession().invalidate();
+
+            }
         }
-        
+
         hibernateSession.close();
 
         Gson gson = new Gson();

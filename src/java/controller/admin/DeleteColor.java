@@ -30,7 +30,7 @@ public class DeleteColor extends HttpServlet {
         Product_color productColor = (Product_color) hibernateSession.load(Product_color.class, colorId);
         if (productColor != null) {
             //color avaliable
-            if (productColor.getStatus().getStatus().equals("Active")) {
+            if (productColor.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
                 statusCriteria.add(Restrictions.eq("status", "De-Active"));

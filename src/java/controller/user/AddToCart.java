@@ -29,32 +29,52 @@ public class AddToCart extends HttpServlet {
         String message = "";
 
         if (!isLoggedIn && isOnlyOneProduct) {
+
             //not logged in
             //have only one product id
             //add to session cart
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            Product product = (Product) hibernateSession.load(Product.class, productId);
+            int productId = (int) request.getAttribute("productId");
+            Product product = (Product) hibernateSession.get(Product.class, productId);
 
             boolean isNewTOCart = true;
             ArrayList<Product> productList;
             if (request.getSession(false).getAttribute("userSessionCart") != null) {
+
                 //already have session cart
                 productList = (ArrayList<Product>) request.getSession().getAttribute("userSessionCart");
-                for (Product oneProduct : productList) {
-                    if (oneProduct.getId() == productId) {
-                        message = "Product Already In Cart";
-                        isNewTOCart = false;
-                        break;
+                if (!productList.isEmpty()) {
+                    for (Product oneProduct : productList) {
+                        if (oneProduct.getId() == productId) {
+                            message = "Product Already In Cart";
+                            isNewTOCart = false;
+
+                            break;
+                        }
                     }
                 }
 
+            } else {
+                // If the session cart does not exist, create a new ArrayList
+                productList = new ArrayList<>();
+                request.getSession().setAttribute("userSessionCart", productList);
             }
             if (isNewTOCart) {
                 productList = (ArrayList<Product>) request.getSession().getAttribute("userSessionCart");
                 boolean add = productList.add(product);
+                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
                 if (add) {
                     message = "Product Successfully Added";
+                } else {
+                    message = "Product Adding Faild";
+
                 }
+                System.out.println("sssssssssssssssssssssssssssssssss");
+                System.out.println("sssssssssssssssssssssssssssssssss");
+                System.out.println("sssssssssssssssssssssssssssssssss");
+                System.out.println("sssssssssssssssssssssssssssssssss");
             }
 
         } else if (isLoggedIn && isOnlyOneProduct) {
@@ -64,10 +84,10 @@ public class AddToCart extends HttpServlet {
             int productId = Integer.parseInt(request.getParameter("productId"));
             UserTable user = (UserTable) request.getSession().getAttribute("user");
 
-            if (hibernateSession.load(Cart.class, productId) == null) {
+            if (hibernateSession.get(Cart.class, productId) == null) {
                 //not avaliable in db cart
 
-                Product product = (Product) hibernateSession.load(Product.class, productId);
+                Product product = (Product) hibernateSession.get(Product.class, productId);
 
                 Cart cart = new Cart();
                 cart.setProduct(product);
@@ -100,7 +120,7 @@ public class AddToCart extends HttpServlet {
             hibernateSession.beginTransaction().commit();
 
         }
-        
+
         hibernateSession.close();
 
         Gson gson = new Gson();

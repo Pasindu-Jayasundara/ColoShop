@@ -30,7 +30,7 @@ public class DeleteSize extends HttpServlet {
         Size size = (Size) hibernateSession.load(Size.class, sizeId);
         if (size != null) {
             //size avaliable
-            if (size.getStatus().getStatus().equals("Active")) {
+            if (size.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
                 statusCriteria.add(Restrictions.eq("status", "De-Active"));

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Verified_status")
+@Table(name = "verified_status")
 public class Verified_status implements Serializable {
 
     @Id
@@ -17,7 +17,7 @@ public class Verified_status implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "ststus", length = 15, nullable = false)
+    @Column(name = "status", length = 15, nullable = false)
     private String status;
 
     public Verified_status() {

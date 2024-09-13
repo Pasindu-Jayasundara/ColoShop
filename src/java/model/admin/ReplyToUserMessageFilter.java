@@ -1,6 +1,6 @@
 package model.admin;
 
-import com.Check;
+
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import model.Validation;
 
 @WebFilter(urlPatterns = {"/ReplyToUserMessage"})
 public class ReplyToUserMessageFilter implements Filter {
@@ -51,7 +52,7 @@ public class ReplyToUserMessageFilter implements Filter {
                 String email = request.getParameter("email");
                 int messageId = Integer.parseInt(request.getParameter("messageId"));
 
-                if (!Check.isValidEmail(email)) {
+                if (!Validation.isValidEmail(email)) {
                     // invalid email format
                     isInvalid = true;
                     errorMessage = "Invalid Email Format";

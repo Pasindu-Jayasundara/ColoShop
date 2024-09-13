@@ -146,6 +146,14 @@ public class Product implements Serializable {
         this.delivery_fee = delivery_fee;
     }
 
+    public int getSold_count() {
+        return sold_count;
+    }
+
+    public void setSold_count(int sold_count) {
+        this.sold_count = sold_count;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -194,14 +202,5 @@ public class Product implements Serializable {
         this.seller = seller;
     }
 
-    public int getSold_count() {
-        return sold_count;
-    }
-
-    public void setSold_count(int sold_count) {
-        this.sold_count = sold_count;
-    }
-    
-    
-
+   
 }

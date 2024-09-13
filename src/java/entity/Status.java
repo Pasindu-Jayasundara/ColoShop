@@ -14,15 +14,15 @@ public class Status implements Serializable {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "status",length = 10,nullable = false)
-    private String status;
+    @Column(name = "name",length = 10)
+    private String name;
 
     public Status() {
     }
-    
+
     public int getId() {
         return id;
     }
@@ -31,12 +31,12 @@ public class Status implements Serializable {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

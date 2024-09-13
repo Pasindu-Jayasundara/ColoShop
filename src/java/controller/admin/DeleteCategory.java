@@ -30,7 +30,7 @@ public class DeleteCategory extends HttpServlet {
         Category category = (Category) hibernateSession.load(Category.class, categoryId);
         if (category != null) {
             //category avaliable
-            if (category.getStatus().getStatus().equals("Active")) {
+            if (category.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
                 statusCriteria.add(Restrictions.eq("status", "De-Active"));

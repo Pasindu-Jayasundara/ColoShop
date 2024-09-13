@@ -1,8 +1,10 @@
 package model.user;
 
-import com.Check;
 import com.google.gson.Gson;
 import dto.Response_DTO;
+import dto.User_DTO;
+import entity.Status;
+import entity.UserTable;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,6 +12,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import model.HibernateUtil;
+import model.Validation;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 public class UserRegister_VerifyDataFilter implements Filter {
 
@@ -20,41 +28,45 @@ public class UserRegister_VerifyDataFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+        Gson gson = new Gson();
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        User_DTO fromJson = gson.fromJson(httpServletRequest.getReader(), User_DTO.class);
+
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (request.getParameter("first_name") == null && request.getParameter("first_name").isBlank()) {
+        if (fromJson.getFirst_name() == null || fromJson.getFirst_name().trim() == "") {
             // no first name
             isInvalid = true;
             errorMessage = "Missing First Name";
 
-        } else if (request.getParameter("last_name") == null && request.getParameter("last_name").isBlank()) {
+        } else if (fromJson.getLast_name() == null || fromJson.getLast_name().trim() == "") {
             //no last name
             isInvalid = true;
             errorMessage = "Missing Last Name";
 
-        } else if (request.getParameter("email") == null && request.getParameter("email").isBlank()) {
+        } else if (fromJson.getEmail() == null || fromJson.getEmail().trim() == "") {
             //no email
             isInvalid = true;
             errorMessage = "Missing Email Address";
 
-        } else if (request.getParameter("password") == null && request.getParameter("password").isBlank()) {
+        } else if (fromJson.getPassword() == null || fromJson.getPassword().trim() == "") {
             //no password
             isInvalid = true;
             errorMessage = "Missing Password";
 
-        } else if (request.getParameter("re_type_password") == null && request.getParameter("re_type_password").isBlank()) {
+        } else if (fromJson.getRe_type_password() == null || fromJson.getRe_type_password().trim() == "") {
             //no retype password
             isInvalid = true;
             errorMessage = "Missing Re-Typed Password";
 
         } else {
 
-            String first_name = request.getParameter("first_name");
-            String last_name = request.getParameter("last_name");
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String re_type_password = request.getParameter("re_type_password");
+            String first_name = fromJson.getFirst_name();
+            String last_name = fromJson.getLast_name();
+            String email = fromJson.getEmail();
+            String password = fromJson.getPassword();
+            String re_type_password = fromJson.getRe_type_password();
 
             if (first_name.length() > 45) {
                 //first name too long
@@ -83,27 +95,27 @@ public class UserRegister_VerifyDataFilter implements Filter {
 
             } else {
 
-                if (!Check.isValidEmail(email)) {
+                if (!Validation.isValidEmail(email)) {
                     //invalid email format 
                     isInvalid = true;
                     errorMessage = "Invalid Email Format";
 
-                } else if (!Check.isValidName(first_name)) {
+                } else if (!Validation.isValidName(first_name)) {
                     //invalid first name
                     isInvalid = true;
                     errorMessage = "Invalid First Name Format";
 
-                } else if (!Check.isValidName(last_name)) {
+                } else if (!Validation.isValidName(last_name)) {
                     //invalid last name
                     isInvalid = true;
                     errorMessage = "Invalid Last Name Format";
 
-                } else if (!Check.isValidPassword(password)) {
+                } else if (!Validation.isValidPassword(password)) {
                     //invalid password
                     isInvalid = true;
                     errorMessage = "Invalid Password Format";
 
-                } else if (!Check.isValidPassword(re_type_password)) {
+                } else if (!Validation.isValidPassword(re_type_password)) {
                     //invalid retype password
                     isInvalid = true;
                     errorMessage = "Invalid Re-Typed Password Format";
@@ -116,7 +128,39 @@ public class UserRegister_VerifyDataFilter implements Filter {
                         errorMessage = "Miss-match Passwords";
 
                     } else {
-                        chain.doFilter(request, response);
+                        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+                        //status
+                        Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
+                        statusCriteria.add(Restrictions.eq("name", "Active"));
+                        Status activeStatus = (Status) statusCriteria.uniqueResult();
+
+                        //find user
+                        Criteria userCriteria = hibernateSession.createCriteria(UserTable.class);
+
+                        userCriteria.add(Restrictions.and(
+                                Restrictions.eq("email", email),
+                                Restrictions.eq("status", activeStatus))
+                        );
+
+                        if (!userCriteria.list().isEmpty()) {
+                            // already emailregistered
+                            Response_DTO response_DTO = new Response_DTO(false, "User Already Registered");
+
+                            hibernateSession.close();
+
+                            response.setContentType("application/json");
+                            response.getWriter().write(gson.toJson(response_DTO));
+                        } else {
+
+                            request.setAttribute("first_name", first_name);
+                            request.setAttribute("last_name", last_name);
+                            request.setAttribute("email", email);
+                            request.setAttribute("password", password);
+                            request.setAttribute("re_type_password", re_type_password);
+
+                            chain.doFilter(request, response);
+                        }
 
                     }
                 }
@@ -126,7 +170,6 @@ public class UserRegister_VerifyDataFilter implements Filter {
 
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-            Gson gson = new Gson();
 
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));

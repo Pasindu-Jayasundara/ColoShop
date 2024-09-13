@@ -1,6 +1,7 @@
 package model.user;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -24,25 +25,30 @@ public class AddToCartFilter implements Filter {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
-        if (httpServletRequest.getAttribute("newCartProduct") != null || request.getParameter("productId") != null) {
+        Gson gson = new Gson();
+        JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
+        String pId = fromJson.get("productId").getAsString();
+
+        //new cart product is a arraylist of product comes when syncing session cart and db cart
+        if (httpServletRequest.getAttribute("newCartProduct") != null || pId != null) {
 
             boolean isOnlyOneProduct = false;
             boolean proceedToCart = true;
 
             boolean isLoggedIn = true;
-            if (httpServletRequest.getSession(false).getAttribute("user") == null) {
+            if (httpServletRequest.getSession().getAttribute("user") == null) {
                 //already logedin user
                 isLoggedIn = false;
             }
 
-            if (request.getParameter("productId") != null) {
+            if (pId != null) {
 
                 isOnlyOneProduct = true;
 
                 boolean isInvalid = false;
                 String errorMessage = "";
 
-                int productId = Integer.parseInt(request.getParameter("productId"));
+                int productId = Integer.parseInt(pId);
                 if (productId <= 0) {
                     //invalid product id
                     isInvalid = true;
@@ -53,7 +59,6 @@ public class AddToCartFilter implements Filter {
                 if (isInvalid) {
                     proceedToCart = false;
                     Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-                    Gson gson = new Gson();
 
                     response.setContentType("application/json");
                     response.getWriter().write(gson.toJson(response_DTO));
@@ -64,6 +69,7 @@ public class AddToCartFilter implements Filter {
             if (proceedToCart) {
                 request.setAttribute("isOnlyOneProduct", isOnlyOneProduct);
                 request.setAttribute("isLoggedIn", isLoggedIn);
+                request.setAttribute("productId", Integer.valueOf(pId));
                 chain.doFilter(request, response);
             }
         }

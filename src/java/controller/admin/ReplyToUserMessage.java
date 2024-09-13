@@ -1,6 +1,5 @@
 package controller.admin;
 
-import com.Email;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.AdminDetailTable;
@@ -14,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Email;
 import model.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -26,7 +26,7 @@ public class ReplyToUserMessage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         final String email = request.getParameter("email");
-        String reply = request.getParameter("reply");
+        final String reply = request.getParameter("reply");
         int messageId = Integer.parseInt(request.getParameter("messageId"));
         
         boolean isInvalid = false;
@@ -67,14 +67,12 @@ public class ReplyToUserMessage extends HttpServlet {
                 @Override
                 public void run() {
 
-                    String fromEmailAddress="pasindubathiya28@gmail.com";
-                    String appPassword = "";
                     final String to = email;
-                    String subject="";
-                    String body="";
+                    String subject="Reply to your message";
+                    String body=reply;
 
                     try {
-                        Email.send(fromEmailAddress, appPassword, to, subject, body);
+                        Email.sendEmail(to, subject, body);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

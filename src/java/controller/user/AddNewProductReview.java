@@ -2,7 +2,7 @@ package controller.user;
 
 import com.google.gson.Gson;
 import dto.Response_DTO;
-import entity.Order;
+import entity.OrderDataTable;
 import entity.Order_item;
 import entity.Product;
 import entity.Review;
@@ -38,16 +38,16 @@ public class AddNewProductReview extends HttpServlet {
         boolean isDone = false;
         
         //get user orders
-        Criteria orderCriteria = hibernateSession.createCriteria(Order.class);
+        Criteria orderCriteria = hibernateSession.createCriteria(OrderDataTable.class);
         orderCriteria.add(Restrictions.eq("user", user));
 
-        List<Order> orderList = orderCriteria.list();
+        List<OrderDataTable> orderList = orderCriteria.list();
         if (!orderList.isEmpty()) {
             //have orders
             Product product = (Product) hibernateSession.load(Product.class, productId);
 
             orderLoop:
-            for (Order order : orderList) {
+            for (OrderDataTable order : orderList) {
                 //get order items of these orders
 
                 Criteria orderItemCriteria = hibernateSession.createCriteria(Order_item.class);

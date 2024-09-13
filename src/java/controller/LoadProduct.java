@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.Product;
+import entity.Status;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -14,8 +15,9 @@ import model.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
-@WebServlet(name = "LoadProduct", urlPatterns = {"/loadProduct"})
+@WebServlet(name = "LoadProduct", urlPatterns = {"/LoadProduct"})
 public class LoadProduct extends HttpServlet {
 
     @Override
@@ -24,13 +26,22 @@ public class LoadProduct extends HttpServlet {
         int resultCount = (int) request.getAttribute("productCount");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
-        Criteria productCriteria = hibernateSession.createCriteria(Product.class);
 
+        Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
+        statusCriteria.add(Restrictions.eq("name", "Active"));
+        Status statusActive = (Status) statusCriteria.uniqueResult();
+
+        Criteria productCriteria = hibernateSession.createCriteria(Product.class);
+        productCriteria.add(Restrictions.eq("status", statusActive));
         productCriteria.addOrder(Order.desc("id"));
         productCriteria.setMaxResults(resultCount);
 
         List<Product> productList = productCriteria.list();
-
+        
+        for (Product product : productList) {
+            product.getSeller().setUser(null);
+        }
+ 
         Gson gson = new Gson();
         Response_DTO response_DTO = new Response_DTO(true, gson.toJsonTree(productList));
 
@@ -38,7 +49,6 @@ public class LoadProduct extends HttpServlet {
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));
-
     }
 
 }

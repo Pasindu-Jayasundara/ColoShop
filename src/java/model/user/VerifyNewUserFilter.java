@@ -1,6 +1,7 @@
 package model.user;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -23,12 +24,15 @@ public class VerifyNewUserFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token = request.getParameter("token");
+
+        Gson gson = new Gson();
+        JsonObject dto = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
+        String token = dto.get("token").getAsString();
 
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (request.getParameter("token") == null && request.getParameter("token").isBlank()) {
+        if (token == null) {
             //no token
             isInvalid = true;
             errorMessage = "Missing Verification Token";
@@ -46,14 +50,14 @@ public class VerifyNewUserFilter implements Filter {
                 errorMessage = "Invalid Token Length";
 
             } else {
+                request.setAttribute("token", token);
                 chain.doFilter(request, response);
             }
 
         }
-        
+
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-            Gson gson = new Gson();
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }

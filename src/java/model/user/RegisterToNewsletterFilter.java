@@ -1,6 +1,6 @@
 package model.user;
 
-import com.Check;
+
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import java.io.IOException;
@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import model.Validation;
 
 @WebFilter(urlPatterns = {"/RegisterToNewsletter"})
 public class RegisterToNewsletterFilter implements Filter {
@@ -27,7 +28,7 @@ public class RegisterToNewsletterFilter implements Filter {
 
         if (request.getParameter("email") != null && !request.getParameter("email").isBlank()) {
             String email = request.getParameter("email");
-            if (Check.isValidEmail(email)) {
+            if (Validation.isValidEmail(email)) {
 
                 if (email.length() <= 60) {
                     chain.doFilter(request, response);

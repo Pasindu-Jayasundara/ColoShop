@@ -7,6 +7,8 @@ public class User_DTO implements Serializable{
     private String first_name;
     private String last_name;
     private String email;
+    private String password;
+    private String re_type_password;
 
     public User_DTO() {
     }
@@ -33,6 +35,22 @@ public class User_DTO implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRe_type_password() {
+        return re_type_password;
+    }
+
+    public void setRe_type_password(String re_type_password) {
+        this.re_type_password = re_type_password;
     }
     
 }

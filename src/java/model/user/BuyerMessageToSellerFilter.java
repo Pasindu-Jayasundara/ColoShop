@@ -52,23 +52,16 @@ public class BuyerMessageToSellerFilter implements Filter {
             isInvalid = true;
             errorMessage = "Missing Message Content";
         }
-    }
-
-    if (isInvalid
-
-    
-        ) {
-            Response_DTO response_DTO = new Response_DTO(false, errorMessage);
+        
+        Response_DTO response_DTO = new Response_DTO(false, errorMessage);
         Gson gson = new Gson();
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));
     }
 
-}
-
-@Override
-public void destroy() {
+    @Override
+    public void destroy() {
     }
 
 }

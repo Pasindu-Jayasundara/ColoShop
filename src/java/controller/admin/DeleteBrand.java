@@ -30,7 +30,7 @@ public class DeleteBrand extends HttpServlet {
         Brand brand = (Brand) hibernateSession.load(Brand.class, brandId);
         if (brand != null) {
             //brand avaliable
-            if (brand.getStatus().getStatus().equals("Active")) {
+            if (brand.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
                 statusCriteria.add(Restrictions.eq("status", "De-Active"));

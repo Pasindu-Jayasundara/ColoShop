@@ -3,7 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.AdminDetailTable;
-import entity.Order;
+import entity.OrderDataTable;
 import entity.Order_status;
 import entity.Product;
 import entity.Status;
@@ -45,13 +45,13 @@ public class DeleteMyAccount extends HttpServlet {
                 orderStatus.add(Restrictions.ne("status", "Delivered"));
                 Order_status order_status = (Order_status) orderStatus.uniqueResult();
 
-                Criteria orderCriteria = hibernateSession.createCriteria(Order.class);
+                Criteria orderCriteria = hibernateSession.createCriteria(OrderDataTable.class);
                 orderCriteria.add(Restrictions.and(
                         Restrictions.eq("user", user),
                         Restrictions.eq("order_status", order_status)
                 ));
 
-                List<Order> orderList = orderCriteria.list();
+                List<OrderDataTable> orderList = orderCriteria.list();
                 if (!orderList.isEmpty()) {
                     isDone = false;
                     message = "You Have Undelivered Orders";
