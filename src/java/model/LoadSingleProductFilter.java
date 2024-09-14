@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -10,8 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 
-@WebFilter
+@WebFilter(urlPatterns = {"/LoadSingleProduct","/loadSimilarProduct"})
 public class LoadSingleProductFilter implements Filter {
 
     @Override
@@ -21,14 +23,20 @@ public class LoadSingleProductFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+        Gson gson = new Gson();
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        
+        String productId = gson.fromJson(httpServletRequest.getReader(),JsonObject.class).get("id").getAsString();
+
         String message = "";
         boolean isInvalid = false;
 
-        if (request.getParameter("id") != null && !request.getParameter("id").isBlank()) {
+        if (productId != null) {
             // have id
             try {
-                int id = Integer.parseInt(request.getParameter("id"));
+                int id = Integer.parseInt(productId);
                 if (id >= 0) {
+                    request.setAttribute("id", id);
                     chain.doFilter(request, response);
                 } else {
                     // id cannot be negative
@@ -47,12 +55,11 @@ public class LoadSingleProductFilter implements Filter {
             isInvalid = true;
             message = "Cannot Find Product Id";
         }
-        
-        if(isInvalid){
-            
+
+        if (isInvalid) {
+
             Response_DTO response_DTO = new Response_DTO(false, message);
-            Gson gson = new Gson();
-            
+
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }

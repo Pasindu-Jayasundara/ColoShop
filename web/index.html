@@ -119,7 +119,7 @@
 						</div>
 
 						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-							data-notify="2">
+							data-notify="2" onclick="loadCart();">
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 
@@ -147,7 +147,7 @@
 				</div>
 
 				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
-					data-notify="2">
+					data-notify="2" onclick="loadCart();">
 					<i class="zmdi zmdi-shopping-cart"></i>
 				</div>
 
@@ -264,59 +264,29 @@
 			</div>
 
 			<div class="header-cart-content flex-w js-pscroll">
-				<ul class="header-cart-wrapitem w-full">
-					<li class="header-cart-item flex-w flex-t m-b-12">
+				<ul class="header-cart-wrapitem w-full" id="cartSideBarContainer">
+
+					<li class="header-cart-item flex-w flex-t m-b-12" id="cartListElement">
 						<div class="header-cart-item-img">
 							<img src="images/item-cart-01.jpg" alt="IMG">
 						</div>
 
 						<div class="header-cart-item-txt p-t-8">
-							<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-								White Shirt Pleat
+							<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04 cartProductName">
+								<!-- White Shirt Pleat -->
 							</a>
 
-							<span class="header-cart-item-info">
-								1 x $19.00
+							<span class="header-cart-item-info cartProductUnitPrice">
+								<!-- 1 x $19.00 -->
 							</span>
 						</div>
 					</li>
 
-					<li class="header-cart-item flex-w flex-t m-b-12">
-						<div class="header-cart-item-img">
-							<img src="images/item-cart-02.jpg" alt="IMG">
-						</div>
-
-						<div class="header-cart-item-txt p-t-8">
-							<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-								Converse All Star
-							</a>
-
-							<span class="header-cart-item-info">
-								1 x $39.00
-							</span>
-						</div>
-					</li>
-
-					<li class="header-cart-item flex-w flex-t m-b-12">
-						<div class="header-cart-item-img">
-							<img src="images/item-cart-03.jpg" alt="IMG">
-						</div>
-
-						<div class="header-cart-item-txt p-t-8">
-							<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-								Nixon Porter Leather
-							</a>
-
-							<span class="header-cart-item-info">
-								1 x $17.00
-							</span>
-						</div>
-					</li>
 				</ul>
 
 				<div class="w-full">
-					<div class="header-cart-total w-full p-tb-40">
-						Total: $75.00
+					<div class="header-cart-total w-full p-tb-40" id="cartProductTotal">
+						<!-- Total: $75.00 -->
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -719,6 +689,7 @@
 
 			<!-- products -->
 			<div class="row isotope-grid" id="productContainer">
+
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" id="productElement">
 					<!-- Block2 -->
 					<div class="block2">
@@ -744,7 +715,7 @@
 							</div>
 
 							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 addToWishlist">
 									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
 										alt="ICON">
 									<img class="icon-heart2 dis-block trans-04 ab-t-l"
@@ -754,6 +725,7 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
 
 			<!-- Load more -->

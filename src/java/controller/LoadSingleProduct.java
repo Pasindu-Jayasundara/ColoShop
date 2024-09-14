@@ -16,13 +16,15 @@ import org.hibernate.Session;
 public class LoadSingleProduct extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int productId = Integer.parseInt(request.getParameter("id"));
+        int productId = (int) request.getAttribute("id");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Product product = (Product) hibernateSession.get(Product.class, productId);
 
+        product.getSeller().setUser(null);
+        
         hibernateSession.close();
 
         Gson gson = new Gson();

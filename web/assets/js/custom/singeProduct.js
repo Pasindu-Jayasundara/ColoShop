@@ -1,73 +1,114 @@
+
 window.addEventListener("load", () => {
-    loadProduct();
+
+    let url = window.location.href;
+    const splitArr = url.split("?");
+
+    let productId = splitArr[1].split("=")[1];
+
+    loadSingleProduct(productId);
+
 });
 
-var bigCategoryElement;
-var isBigFirstTime = true;
-const loadBigCategories = (categoryName) => {
+var pId;
+const loadSingleProduct = async (productId) => {
 
-    let parent = document.getElementById("category-big-container");
-    bigCategoryElement = document.getElementById("bigCategoryElement");
-
-    if (isBigFirstTime) {
-        parent.innerHTML = "";
-        isBigFirstTime = false;
+    const data = {
+        "id": productId
     }
 
-    let element = bigCategoryElement.cloneNode(true);
-    element.querySelector(".bigCategoryCategory").innerHTML = categoryName;
+    const response = await fetch("LoadSingleProduct", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
 
-    parent.appendChild(element);
-
-};
-
-var smallCategoryElement;
-var isSmallFirstTime = true;
-const loadSmallCategories = (categoryName) => {
-
-    let parent = document.getElementById("category-small-container");
-    smallCategoryElement = document.getElementById("smallCategoryElement");
-
-    if (isSmallFirstTime) {
-        parent.innerHTML = "";
-        isSmallFirstTime = false;
-    }
-
-    let element = smallCategoryElement.cloneNode(true);
-    element.innerHTML = categoryName;
-    element.setAttribute("data-filter", "." + categoryName);
-
-    parent.appendChild(element);
-
-};
-
-const arr=[];
-var isProductFirstTime =true;
-const productArr = [];
-const loadProduct = async () => {
-
-    const response = await fetch("LoadProduct?productCount=30");
     if (response.ok) {
 
+        console.log(response)
+
+        const jsonData = await response.json();
+        const data = jsonData.data;
+
+        console.log(data)
+
+        pId=data.id;
+        document.getElementById("productName").innerHTML=data.name;
+        document.getElementById("productPrice").innerHTML="Price : Rs. "+data.unit_price;
+        document.getElementById("productDesc").innerHTML=data.description;
+        document.getElementById("productSize").innerHTML="Size :"+data.size.size;
+        document.getElementById("productColor").innerHTML="Color :"+data.product_color.color;
+
+        document.getElementById("descTab").innerHTML=data.description;
+        document.getElementById("tabCategory").innerHTML=data.category.category;
+        document.getElementById("tabBrand").innerHTML=data.brand.brand;
+        document.getElementById("tabColor").innerHTML=data.product_color.color;
+        document.getElementById("tabSize").innerHTML=data.size.size;
+
+        // loadReview(productId);
+        loadSimilarProducts();
+        
+    }
+
+};
+
+const loadReview = async(productId)=>{
+
+    const data = {
+        "id":productId
+    }
+
+    const response = await fetch("loadSimilarProduct",{
+        method:"POST",
+        body:JSON.stringify(data),
+        headers:{
+            "Content-Type":"application/json"
+        }
+    });
+
+    if (response.ok) {
+        console.log(response);
+
+        let jsonData = await response.json();
+        let data = jsonData.data;
+    }
+
+};
+
+var isProductFirstTime =true;
+const productArr = [];
+const loadSimilarProducts = async () => {
+
+    console.log("similar product")
+    const data = {
+        "id":pId
+    }
+
+    const response = await fetch("loadSimilarProduct",{
+        method:"POST",
+        body:JSON.stringify(data),
+        headers:{
+            "Content-Type":"application/json"
+        }
+    });
+
+    if (response.ok) {
+
+        console.log(response)
         const data = await response.json();
         const productData = data.data;
 
         let parent = document.getElementById("productContainer");
         let productElement = document.getElementById("productElement");
-
+        parent.innerHTML = "";
         for (var i = 1; i <= productData.length; i++) {
 
             let product = productData[i - 1];
             // console.log(product);
 
             productArr.push(product);
-
-            if(!arr.includes(product.category.category)){
-                loadBigCategories(product.category.category);
-                loadSmallCategories(product.category.category);
-
-                arr.push(product.category.category);
-            }
             
             if (isProductFirstTime) {
                 parent.innerHTML = "";
