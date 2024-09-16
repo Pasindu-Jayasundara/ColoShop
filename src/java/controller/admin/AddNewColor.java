@@ -21,7 +21,7 @@ public class AddNewColor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String productColor = request.getParameter("color");
+        String productColor = (String) request.getAttribute("option");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         

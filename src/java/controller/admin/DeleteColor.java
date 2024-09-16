@@ -21,7 +21,7 @@ public class DeleteColor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int colorId = Integer.parseInt(request.getParameter("colorId"));
+        int colorId = (int) request.getAttribute("id");
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;

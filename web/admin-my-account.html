@@ -43,6 +43,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
 </head>
 
 <body>
@@ -145,7 +148,53 @@
                                     <td class="mssageStatus"></td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-dark msgBtn" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal" data-bs-whatever="a" msg-id="" onclick="openModel()">Reply</button>
+                                            data-bs-target="#exampleModal" data-bs-whatever="a" msg-id=""
+                                            onclick="openModel()">Reply</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                        Manage
+                    </button>
+                </h2>
+                <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+
+                        <div class="d-flex justify-content-between">
+                            <select class="form-select col-2" aria-label="Default select example" id="featureList"
+                                onchange="loadSelectOptionTable()">
+                                <option value="0" selected>Choose</option>
+                                <option value="1">Color</option>
+                                <option value="2">Size</option>
+                                <option value="3">Category</option>
+                                <option value="4">Brand</option>
+                            </select>
+
+                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal2">Add New Option</button>
+                        </div>
+                        <table class="ui compact celled definition table" id="manageTable">
+                            <thead class="full-width" id="manageMeaders">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th>Avaliable Options</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="manageTableBody">
+                                <tr id="manageRow">
+                                    <td class="msgCount text-center"></td>
+                                    <td class="avaliableOption"></td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-dark msgBtn" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal" data-bs-whatever="a"
+                                            msg-id="">Remove</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -157,6 +206,41 @@
 
     </div>
 
+    <!-- add new option model -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Option</h1>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="addNewFeatureList" class="col-form-label">Type:</label>
+                            <select class="form-select col-2" aria-label="Default select example" id="addNewFeatureList"></select>
+                                <option value="0" selected>Choose</option>
+                                <option value="1">Color</option>
+                                <option value="2">Size</option>
+                                <option value="3">Category</option>
+                                <option value="4">Brand</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newOption" class="col-form-label">New Option:</label>
+                            <input type="text" class="form-control" id="newOption">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveOption();">Save Option</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- newsletter model -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -192,6 +276,8 @@
     <SCript>
         $('.ui.checkbox').checkbox();
     </SCript>
+
+
     <script src="assets/js/custom/adminMyAccount.js"></script>
 </body>
 

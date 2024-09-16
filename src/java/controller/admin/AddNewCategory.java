@@ -22,7 +22,7 @@ public class AddNewCategory extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        String newCategory = request.getParameter("category");
+        String newCategory = (String) request.getAttribute("option");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 

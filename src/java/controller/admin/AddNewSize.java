@@ -23,7 +23,7 @@ public class AddNewSize extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        String productSize = request.getParameter("size");
+        String productSize = (String) request.getAttribute("option");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         

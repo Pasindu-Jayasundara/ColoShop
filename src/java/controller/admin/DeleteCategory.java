@@ -21,7 +21,7 @@ public class DeleteCategory extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+        int categoryId = (int) request.getAttribute("categoryId");
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;

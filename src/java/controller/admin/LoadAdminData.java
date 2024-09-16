@@ -5,10 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.AdminDetailTable;
+import entity.Brand;
+import entity.Category;
 import entity.Message;
 import entity.Message_status;
 import entity.Product;
+import entity.Product_color;
 import entity.Seller;
+import entity.Size;
 import entity.Status;
 import entity.UserTable;
 import java.io.IOException;
@@ -93,13 +97,91 @@ public class LoadAdminData extends HttpServlet {
             
             jsonMessages.add(messageJson);
         }
+        
+        //features
+        
+        //color
+        Criteria colorCriteria = hibernateSession.createCriteria(Product_color.class);
+        colorCriteria.add(Restrictions.eq("status", status));
+        ArrayList<Product_color> colorList = (ArrayList<Product_color>) colorCriteria.list();
 
+        JsonArray jsonColors = new JsonArray();
+        for (Product_color color : colorList) {
+            
+            JsonObject colorJson = new JsonObject();
+            
+            colorJson.addProperty("id", color.getId()); 
+            colorJson.addProperty("color", color.getColor()); 
+            
+            jsonColors.add(colorJson);
+        }
+
+        
+        //category
+        Criteria categoryCriteria = hibernateSession.createCriteria(Category.class);
+        categoryCriteria.add(Restrictions.eq("status", status));
+        ArrayList<Category> categoryList = (ArrayList<Category>) categoryCriteria.list();
+
+        JsonArray jsonCategory = new JsonArray();
+        for (Category category : categoryList) {
+            
+            JsonObject categoryJson = new JsonObject();
+            
+            categoryJson.addProperty("id", category.getId()); 
+            categoryJson.addProperty("category", category.getCategory()); 
+            
+            jsonCategory.add(categoryJson);
+        }
+
+        
+        //brand
+        Criteria brandCriteria = hibernateSession.createCriteria(Brand.class);
+        brandCriteria.add(Restrictions.eq("status", status));
+        ArrayList<Brand> brandList = (ArrayList<Brand>) brandCriteria.list();
+
+        JsonArray jsonBrand = new JsonArray();
+        for (Brand brand : brandList) {
+            
+            JsonObject categoryJson = new JsonObject();
+            
+            categoryJson.addProperty("id", brand.getId()); 
+            categoryJson.addProperty("brand", brand.getBrand()); 
+            
+            jsonBrand.add(categoryJson);
+        }
+        
+        
+        
+        //size
+        Criteria sizeCriteria = hibernateSession.createCriteria(Size.class);
+        sizeCriteria.add(Restrictions.eq("status", status));
+        ArrayList<Size> sizeList = (ArrayList<Size>) sizeCriteria.list();
+
+        JsonArray jsonSize = new JsonArray();
+        for (Size size : sizeList) {
+            
+            JsonObject sizeJson = new JsonObject();
+            
+            sizeJson.addProperty("id", size.getId()); 
+            sizeJson.addProperty("size", size.getSize()); 
+            
+            jsonSize.add(sizeJson);
+        }
+        
+        
+        
+        
+        
         JsonObject jo = new JsonObject();
         jo.addProperty("sellerCount", sellerCount);
         jo.addProperty("buyerCount", buyerCount);
         jo.addProperty("productCount", productCount);
         jo.addProperty("userName", name);
         jo.add("messageArr", jsonMessages);
+        jo.add("colorArr", jsonColors);
+        jo.add("categoryArr", jsonCategory);
+        jo.add("brandArr",jsonBrand );
+        jo.add("sizeArr", jsonSize);
 
         Response_DTO response_DTO = new Response_DTO(true, jo);
 

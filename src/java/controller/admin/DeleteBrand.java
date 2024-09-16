@@ -21,7 +21,7 @@ public class DeleteBrand extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int brandId = Integer.parseInt(request.getParameter("brandId"));
+        int brandId = (int) request.getAttribute("brandId");
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;

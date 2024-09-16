@@ -21,7 +21,7 @@ public class DeleteSize extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int sizeId = Integer.parseInt(request.getParameter("sizeId"));
+        int sizeId = (int) request.getAttribute("sizeId");
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;
