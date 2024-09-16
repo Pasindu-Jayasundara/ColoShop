@@ -40,15 +40,15 @@ public class AddNewProduct extends HttpServlet {
         if ((boolean) request.getAttribute("isImageUploadSuccess")) {
             //image uploading success
 
-            String name = request.getParameter("name");
-            String description = request.getParameter("description");
-            double unit_price = Double.parseDouble(request.getParameter("unit_price"));
-            double delivery_fee = Double.parseDouble(request.getParameter("delivery_fee"));
-            int status_id = Integer.parseInt(request.getParameter("status_id"));
-            int product_color_id = Integer.parseInt(request.getParameter("product_color_id"));
-            int size_id = Integer.parseInt(request.getParameter("size_id"));
-            int brand_id = Integer.parseInt(request.getParameter("brand_id"));
-            int category_id = Integer.parseInt(request.getParameter("category_id"));
+            String name = (String) request.getAttribute("name");
+            String description = (String) request.getAttribute("description");
+            double unit_price =  (double) request.getAttribute("unit_price");
+            double delivery_fee = (double) request.getAttribute("delivery_fee");
+            int status_id = (int) request.getAttribute("status_id");
+            int product_color_id = (int) request.getAttribute("product_color_id");
+            int size_id = (int) request.getAttribute("size_id");
+            int brand_id = (int) request.getAttribute("brand_id");
+            int category_id = (int) request.getAttribute("category_id");
             
             String img1Path = (String) request.getAttribute("img1Path");
             String img2Path = (String) request.getAttribute("img2Path");

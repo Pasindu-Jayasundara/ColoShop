@@ -55,7 +55,7 @@ public class LoadCart extends HttpServlet {
             Gson gson = new Gson();
 
             Response_DTO response_DTO;
-            if (cartList.isEmpty()) {
+            if (cartList==null || cartList.isEmpty()) {
                 response_DTO = new Response_DTO(false, "No Cart Data");
             } else {
                 response_DTO = new Response_DTO(true, gson.toJsonTree(cartList));

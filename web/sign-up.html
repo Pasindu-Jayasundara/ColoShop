@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Smart Trade</title>
+        <title>ColoShop</title>
         <meta name="robots" content="noindex, follow" />
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,13 +35,13 @@
             <!-- Start Header -->
             <div class="signin-header">
                 <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <a href="index.html" class="site-logo"><img src="./assets/images/logo/logo.png" alt="logo"></a>
+                    <div class="col-sm-4">
+                        <a href="index.html" class="site-logo"><img src="images/icons/favicon.png" alt="logo"></a>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-sm-8">
                         <div class="singin-header-btn">
                             <p>Already a member?</p>
-                            <a href="sign-in.html" class="axil-btn btn-bg-secondary sign-up-btn">Sign In</a>
+                            <a href="sign-in.html" class="btn btn-bg-black sign-up-btn text-light py-3 px-5 fs-5" style="background-color: black;">Sign In Now</a>
                         </div>
                     </div>
                 </div>
@@ -50,19 +50,22 @@
 
             <div class="row">
                 <div class="col-xl-4 col-lg-6">
-                    <div class="axil-signin-banner bg_image bg_image--10">
-                        <h3 class="title">We Offer the Best Products</h3>
+                    <div class="axil-signin-banner " 
+                    style="background-image: url('images/bg.jpg'); 
+                    background-repeat: no-repeat; 
+                    background-size: cover;
+                    background-position: center;
+                    width: 550px; height: auto;">
+                        <h3 class="title" style="margin-top: -10%;">We Offer the Best Products</h3>
                     </div>
                 </div>
-                <div class="col-lg-6 offset-xl-2">
-                    <div class="axil-signin-form-wrap">
-                        <div class="axil-signin-form">
-                            <h3 class="title">I'm New Here</h3>
-                            <p class="b2 mb--10">Create a new Smart Trade account to start shopping and manage your trades with ease.</p>
+                <div class="col-lg-6 offset-xl-2" >
+                    <!-- <div class="axil-signin-form-wrap"> -->
+                        <!-- <div class="axil-signin-form"> -->
+                            <h3 class="title" style="margin-top: 15%;">I'm New Here</h3>
+                            <p class="b2 mb--10 mb-5">Create a new ColoShop account to start shopping and manage your <br> trades with ease.</p>
                             
-                            <p class="text-danger" id="message"></p>
-                            
-                            <form class="singin-form">
+                            <form class="col-7">
                                 <div class="form-group">
                                     <label>First Name</label>
                                     <input type="text" class="form-control" id="first_name" value="">
@@ -84,11 +87,11 @@
                                     <input type="password" class="form-control" id="re_type_password" value="">
                                 </div>
                                 <div class="form-group">
-                                    <button type="button" class="axil-btn btn-bg-primary submit-btn" onclick="signup()">Create Account</button>
+                                    <button type="button" class="btn btn-dark py-3 px-3 fs-3" onclick="signup()">Create Account</button>
                                 </div>
                             </form>
-                        </div>
-                    </div>
+                        <!-- </div> -->
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

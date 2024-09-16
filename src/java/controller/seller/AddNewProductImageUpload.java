@@ -20,9 +20,9 @@ public class AddNewProductImageUpload extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Part image1 = request.getPart("image1");
-        Part image2 = request.getPart("image2");
-        Part image3 = request.getPart("image3");
+        Part image1 =   (Part) request.getAttribute("image1");
+        Part image2 =   (Part) request.getAttribute("image2");
+        Part image3 =   (Part) request.getAttribute("image3");
 
         String applicationPath = request.getServletContext().getRealPath("");
         String newApplicationPath = applicationPath.replace("build" + File.separator + "web", "web");

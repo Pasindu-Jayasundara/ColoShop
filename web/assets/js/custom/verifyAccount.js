@@ -21,16 +21,18 @@ const verifyAccount = async() => {
         console.log(json);
 
         if (json.success) {
-            console.log("f");
-
             window.location = "index.html";
         } else {
-            console.log("g");
-
-            document.getElementById("message").innerHTML = json.content;
+            Notification().error({
+                message:data.message
+            })
         }
     } else {
-        document.getElementById("message").innerHTML = "Please try agin later";
+        Notification().error({
+            message:"Please Try Again Later"
+        })
+
+        console.log(response)
     }
 };
 

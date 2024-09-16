@@ -21,11 +21,18 @@ const signup = async() => {
         const data = await response.json();
         console.log(data);
         if (data.success) {
-            alert(data.message);
-//            window.location = "verify-account.html";
+           window.location = "verify-account.html";
         } else {
-            alert(data.message);
+            Notification().error({
+                message:data.message
+            })
         }
+    }else{
+        Notification().error({
+            message:"Please Try Again Later"
+        })
+
+        console.log(response)
     }
 };
 
