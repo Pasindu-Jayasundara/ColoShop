@@ -47,53 +47,67 @@
 
 <body>
 
-    <header>
-        <!-- Header desktop -->
-        <div class="container-menu-desktop">
-            <!-- Topbar -->
-            <div class="top-bar">
-                <div class="wrap-menu-desktop">
-                    <nav class="limiter-menu-desktop container">
-
-                        <!-- Menu desktop -->
-                        <div class="menu-desktop">
-                            <a class="item"></a>
-                            <div class="ui red horizontal label">Seller Account</div>
-                            </a>
-                            <div class="inline field ms-4 pt-2">
-                                <div class="ui toggle checkbox">
-                                    <input type="checkbox" tabindex="0" class="hidden" checked>
-                                    <label>Become Buyer</label>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Icon header -->
-                        <div class="wrap-icon-header flex-w flex-r-m">
-                            <img class="ui avatar image" src="/images/wireframe/square-image.png">
-                            <span>Username</span>
-                            <span class="btn btn-dark ms-4">LogOut</span>
-                        </div>
-
-                    </nav>
+    <div class="w-100 py-3 bg-dark"></div>
+    <div class="w-100 py-3 bg-light d-flex px-4 align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <a class="item">
+                <div class="ui red horizontal label">Seller Account</div>
+            </a>
+            <div class="inline field ms-4 pt-2">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" tabindex="0" class="hidden" checked>
+                    <label>Become Buyer</label>
                 </div>
             </div>
-
-
         </div>
-    </header>
-    <div class="container mt-5 pt-5">
+        <div>
+            <div class="wrap-icon-header flex-w flex-r-m">
+                <img class="ui avatar image" src="/images/wireframe/square-image.png">
+                <span>Username</span>
+                <span class="btn btn-dark ms-4">LogOut</span>
+            </div>
+        </div>
+    </div>
 
+    <div class="container">
+        <div class="ui cards my-5">
+            <div class="card">
+                <div class="content">
+                    <div class="header">Elliot Fu</div>
+                    <div class="meta">Friend</div>
+                    <div class="description">
+                        Elliot Fu is a film-maker from New York.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="content">
+                    <div class="header">Veronika Ossi</div>
+                    <div class="meta">Friend</div>
+                    <div class="description">
+                        Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="content">
+                    <div class="header">Jenny Hess</div>
+                    <div class="meta">Friend</div>
+                    <div class="description">
+                        Jenny is a student studying Media Management at the New School
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="accordion" id="accordionExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
                         Add New Product
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
 
                         <form class="row g-3" id="productForm">
@@ -489,7 +503,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -505,7 +518,7 @@
     <SCript>
         $('.ui.checkbox')
             .checkbox()
-        ;
+            ;
     </SCript>
     <script src="assets/js/custom/myAccount.js"></script>
 </body>
