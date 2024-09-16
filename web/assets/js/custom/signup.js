@@ -24,7 +24,7 @@ const signup = async() => {
            window.location = "verify-account.html";
         } else {
             Notification().error({
-                message:data.message
+                message:data.data
             })
         }
     }else{

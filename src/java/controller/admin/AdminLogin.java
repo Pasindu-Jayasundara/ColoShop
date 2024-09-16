@@ -20,6 +20,7 @@ public class AdminLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        Gson gson = new Gson();
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -53,7 +54,6 @@ public class AdminLogin extends HttpServlet {
         
         hibernateSession.close();
 
-        Gson gson = new Gson();
         Response_DTO response_DTO = new Response_DTO(isSuccess, message);
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));

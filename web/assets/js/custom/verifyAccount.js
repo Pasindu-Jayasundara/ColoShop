@@ -24,7 +24,7 @@ const verifyAccount = async() => {
             window.location = "index.html";
         } else {
             Notification().error({
-                message:data.message
+                message:data.data
             })
         }
     } else {

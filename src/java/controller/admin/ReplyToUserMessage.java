@@ -6,6 +6,7 @@ import entity.AdminDetailTable;
 import entity.Message;
 import entity.Message_status;
 import entity.Reply;
+import entity.UserTable;
 import java.io.IOException;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -25,9 +26,8 @@ public class ReplyToUserMessage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        final String email = request.getParameter("email");
-        final String reply = request.getParameter("reply");
-        int messageId = Integer.parseInt(request.getParameter("messageId"));
+        final String reply = (String) request.getAttribute("reply");
+        int messageId = Integer.parseInt((String) request.getAttribute("messageId"));
         
         boolean isInvalid = false;
         String errorMessage = "";
@@ -41,7 +41,7 @@ public class ReplyToUserMessage extends HttpServlet {
                        
             //message table
             Criteria messageStatusCriteria = hibernateSession.createCriteria(Message_status.class);
-            messageStatusCriteria.add(Restrictions.eq("status", "3"));//replied
+            messageStatusCriteria.add(Restrictions.eq("id", "3"));//replied
             
             Message_status messageStatus = (Message_status) messageStatusCriteria.uniqueResult();
             
@@ -55,9 +55,13 @@ public class ReplyToUserMessage extends HttpServlet {
             replyObj.setMessage(message);
             replyObj.setReply(reply);
             replyObj.setAdmin(admin);
-            replyObj.setDatetime(new Date("yyyy-MM-dd HH:mm:ss"));
+            replyObj.setDatetime(new Date());
             
             hibernateSession.save(replyObj);
+            
+            
+            UserTable user = (UserTable) hibernateSession.get(UserTable.class,messageId);
+            final String email = user.getEmail();
             
             hibernateSession.beginTransaction().commit();
             

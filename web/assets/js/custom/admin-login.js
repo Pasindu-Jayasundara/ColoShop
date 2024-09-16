@@ -1,6 +1,6 @@
 const login = async() => {
 
-    const response = await fetch("UserLogin",{
+    const response = await fetch("AdminLogin",{
         method:"POST",
         body:{
             email:document.getElementById("email").value,
@@ -17,14 +17,14 @@ const login = async() => {
 
         const data = await response.json();
         if(data.success){
-            window.location="my-account.html";
+            window.location="admin-my-account.html";
         }else{
             popup.error({
-                message:data.message
+                message:data.data
             });
         }
     }else{
-        popup.error({
+        Notification().error({
             message:"Please Try Again Later"
         })
 

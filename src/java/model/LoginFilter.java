@@ -2,6 +2,7 @@ package model;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -23,23 +24,29 @@ public class LogInFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+        Gson gson = new Gson();
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        
+        JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
+        String email = fromJson.get("email").getAsString();
+        String password = fromJson.get("password").getAsString();
+        
+        
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (request.getParameter("email") == null || request.getParameter("email").isBlank()) {
+        if (email == null || email.isBlank()) {
             //no email
             isInvalid = true;
             errorMessage = "Missing Email Address";
 
-        } else if (request.getParameter("password") == null || request.getParameter("password").isBlank()) {
+        } else if (password == null || password.isBlank()) {
             //no password
             isInvalid = true;
             errorMessage = "Missing Password";
 
         } else {
 
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
             if (email.length() > 60) {
                 //email too long
                 isInvalid = true;
@@ -61,6 +68,10 @@ public class LogInFilter implements Filter {
                 errorMessage = "Invalid Password Format";
 
             } else {
+                
+                request.setAttribute("email", email);
+                request.setAttribute("password", password);
+                
                 chain.doFilter(request, response);
             }
 
@@ -68,7 +79,6 @@ public class LogInFilter implements Filter {
 
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-            Gson gson = new Gson();
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }
