@@ -86,16 +86,18 @@ public class LoadAdminData extends HttpServlet {
         messageCriteria.add(Restrictions.eq("message_status", messageStatus));
         ArrayList<Message> messageList = (ArrayList<Message>) messageCriteria.list();
 
-        JsonArray jsonMessages = new JsonArray();
+//        JsonArray jsonMessages = new JsonArray();
         for (Message message : messageList) {
-            JsonObject messageJson = new JsonObject();
-            messageJson.addProperty("id", message.getId()); 
-            messageJson.addProperty("message", message.getMessage()); 
-            messageJson.addProperty("title", message.getTitle());
-            messageJson.addProperty("datetime", String.valueOf(message.getDatetime()));
-            messageJson.addProperty("message_status", message.getMessage_status().getStatus()); 
             
-            jsonMessages.add(messageJson);
+            message.getUser().setAccount_type(null);
+            message.getUser().setEmail(null);
+            message.getUser().setFirst_name(null);
+            message.getUser().setLast_name(null);
+            message.getUser().setPassword(null);
+            message.getUser().setStatus(null);
+            message.getUser().setToken(null);
+            message.getUser().setVerified_status(null);
+
         }
         
         //features
@@ -105,16 +107,16 @@ public class LoadAdminData extends HttpServlet {
         colorCriteria.add(Restrictions.eq("status", status));
         ArrayList<Product_color> colorList = (ArrayList<Product_color>) colorCriteria.list();
 
-        JsonArray jsonColors = new JsonArray();
-        for (Product_color color : colorList) {
-            
-            JsonObject colorJson = new JsonObject();
-            
-            colorJson.addProperty("id", color.getId()); 
-            colorJson.addProperty("color", color.getColor()); 
-            
-            jsonColors.add(colorJson);
-        }
+//        JsonArray jsonColors = new JsonArray();
+//        for (Product_color color : colorList) {
+//            
+//            JsonObject colorJson = new JsonObject();
+//            
+//            colorJson.addProperty("id", color.getId()); 
+//            colorJson.addProperty("color", color.getColor()); 
+//            
+//            jsonColors.add(colorJson);
+//        }
 
         
         //category
@@ -122,16 +124,16 @@ public class LoadAdminData extends HttpServlet {
         categoryCriteria.add(Restrictions.eq("status", status));
         ArrayList<Category> categoryList = (ArrayList<Category>) categoryCriteria.list();
 
-        JsonArray jsonCategory = new JsonArray();
-        for (Category category : categoryList) {
-            
-            JsonObject categoryJson = new JsonObject();
-            
-            categoryJson.addProperty("id", category.getId()); 
-            categoryJson.addProperty("category", category.getCategory()); 
-            
-            jsonCategory.add(categoryJson);
-        }
+//        JsonArray jsonCategory = new JsonArray();
+//        for (Category category : categoryList) {
+//            
+//            JsonObject categoryJson = new JsonObject();
+//            
+//            categoryJson.addProperty("id", category.getId()); 
+//            categoryJson.addProperty("category", category.getCategory()); 
+//            
+//            jsonCategory.add(categoryJson);
+//        }
 
         
         //brand
@@ -139,16 +141,16 @@ public class LoadAdminData extends HttpServlet {
         brandCriteria.add(Restrictions.eq("status", status));
         ArrayList<Brand> brandList = (ArrayList<Brand>) brandCriteria.list();
 
-        JsonArray jsonBrand = new JsonArray();
-        for (Brand brand : brandList) {
-            
-            JsonObject categoryJson = new JsonObject();
-            
-            categoryJson.addProperty("id", brand.getId()); 
-            categoryJson.addProperty("brand", brand.getBrand()); 
-            
-            jsonBrand.add(categoryJson);
-        }
+//        JsonArray jsonBrand = new JsonArray();
+//        for (Brand brand : brandList) {
+//            
+//            JsonObject categoryJson = new JsonObject();
+//            
+//            categoryJson.addProperty("id", brand.getId()); 
+//            categoryJson.addProperty("brand", brand.getBrand()); 
+//            
+//            jsonBrand.add(categoryJson);
+//        }
         
         
         
@@ -157,35 +159,35 @@ public class LoadAdminData extends HttpServlet {
         sizeCriteria.add(Restrictions.eq("status", status));
         ArrayList<Size> sizeList = (ArrayList<Size>) sizeCriteria.list();
 
-        JsonArray jsonSize = new JsonArray();
-        for (Size size : sizeList) {
-            
-            JsonObject sizeJson = new JsonObject();
-            
-            sizeJson.addProperty("id", size.getId()); 
-            sizeJson.addProperty("size", size.getSize()); 
-            
-            jsonSize.add(sizeJson);
-        }
+//        JsonArray jsonSize = new JsonArray();
+//        for (Size size : sizeList) {
+//            
+//            JsonObject sizeJson = new JsonObject();
+//            
+//            sizeJson.addProperty("id", size.getId()); 
+//            sizeJson.addProperty("size", size.getSize()); 
+//            
+//            jsonSize.add(sizeJson);
+//        }
         
         
         
         
-        
+                Gson gson = new Gson();
+
         JsonObject jo = new JsonObject();
         jo.addProperty("sellerCount", sellerCount);
         jo.addProperty("buyerCount", buyerCount);
         jo.addProperty("productCount", productCount);
         jo.addProperty("userName", name);
-        jo.add("messageArr", jsonMessages);
-        jo.add("colorArr", jsonColors);
-        jo.add("categoryArr", jsonCategory);
-        jo.add("brandArr",jsonBrand );
-        jo.add("sizeArr", jsonSize);
+        jo.add("messageArr", gson.toJsonTree(messageList));
+        jo.add("colorArr", gson.toJsonTree(colorList));
+        jo.add("categoryArr", gson.toJsonTree(categoryList));
+        jo.add("brandArr",gson.toJsonTree(brandList) );
+        jo.add("sizeArr", gson.toJsonTree(sizeList));
 
         Response_DTO response_DTO = new Response_DTO(true, jo);
 
-        Gson gson = new Gson();
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));
     }

@@ -47,7 +47,7 @@ async function loadData() {
                 element.querySelector(".mssageTitle").innerHTML = message.title;
                 element.querySelector(".mssageText").innerHTML = message.message;
                 element.querySelector(".mssageDatetime").innerHTML = message.datetime;
-                element.querySelector(".mssageStatus").innerHTML = message.message_status;
+                element.querySelector(".mssageStatus").innerHTML = message.message_status.status;
                 element.querySelector(".msgBtn").setAttribute("data-bs-whatever", message.title);
                 element.querySelector(".msgBtn").setAttribute("msg-id", message.id);
                 element.querySelector(".msgBtn").setAttribute("id", message.id);

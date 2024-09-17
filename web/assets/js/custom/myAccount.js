@@ -1,4 +1,4 @@
-window.addEventListener("load",()=>{
+window.addEventListener("load", () => {
 
     loadData()
 
@@ -19,62 +19,305 @@ async function addNewProduct() {
     formData.append("img2", document.getElementById("img2").files[0]);
     formData.append("img3", document.getElementById("img3").files[0]);
 
-        const response = await fetch("AddNewProduct", {
-            method: "POST",
-            body: formData 
-        });
+    const response = await fetch("AddNewProduct", {
+        method: "POST",
+        body: formData
+    });
 
-        if (response.ok) {
-            const jsonData = await response.json();
-            console.log(jsonData);
+    if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.success) {
+            Notification().success({
+                message: jsonData.data
+            })
         } else {
-            console.error("Failed to submit the form", response.statusText);
+            Notification().error({
+                message: jsonData.data
+            })
         }
+        console.log(jsonData);
+    } else {
+        Notification().error({
+            message: "Faild to Add Product"
+        })
+        console.error("Failed to submit the form", response.statusText);
+    }
 }
 
 async function loadData() {
-    
+
     const response = await fetch("LoadFeatures");
-    if(response.ok){
-        
-        // const jsonData = await response.json();
-        if (response.ok) {
+    if (response.ok) {
 
-            console.log(response)
-            const json = await response.json();
+        const json = await response.json();
 
-            console.log(json)
+        if (json.success) {
 
-            const categoryList = json.categoryList;
-            const colorList = json.colorList;
-            const sizeList = json.sizeList;
-            const brandList = json.brandList;
+            const categoryList = json.data.categoryList;
+            const colorList = json.data.colorList;
+            const sizeList = json.data.sizeList;
+            const brandList = json.data.brandList;
+            const userName = json.data.userName;
+            const isBuyer = json.data.isBuyer;
+            const isSeller = json.data.isSeller;
+
+            let productList;
+            if (json.data.productList != null || json.data.productList != undefined) {
+                productList = json.data.productList;
+                loadMyProducts(productList)
+            }
+
+            if (productList != null || productList != undefined) {
+                const msgToSellerList = json.data.msgToSellerList;
+                loadMessages(msgToSellerList)
+            }
+
+            document.getElementById("userName").innerHTML = userName;
+
+            const orderList = json.data.orderList;
+            if (isBuyer) {
+                document.getElementById("accountType").innerHTML = "Buyer";
+                document.getElementById("oppositeAccountType").innerHTML = "Seller";
+
+                loadPurchasedOrders(orderList)
+
+            } else if (isSeller) {
+
+                document.getElementById("myOrders").style.display = "none";
+                document.getElementById("accountType").innerHTML = "Seller";
+                document.getElementById("oppositeAccountType").innerHTML = "Buyer";
+
+                loadReceivedOrders(orderList)
+
+            }
 
             loadSelectOptions("category", categoryList, ["category"]);
-            loadSelectOptions("size", sizeList,["size"]);
+            loadSelectOptions("size", sizeList, ["size"]);
             loadSelectOptions("color", colorList, ["color"]);
             loadSelectOptions("brand", brandList, ["brand"]);
         } else {
-            console.log("Error");
+            Notification().error({
+                message: json.data
+            })
+        }
+
+    } else {
+        Notification().error({
+            message: "Please Try Again Later"
+        })
+        console.log(response)
+    }
+
+}
+
+function replyToMessage(msgId) {
+    const response = await fetch("AddNewProduct", {
+        method: "POST",
+        body: formData
+    });
+
+    if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.success) {
+            Notification().success({
+                message: jsonData.data
+            })
+        } else {
+            Notification().error({
+                message: jsonData.data
+            })
+        }
+        console.log(jsonData);
+    } else {
+        Notification().error({
+            message: "Faild to Add Product"
+        })
+        console.error("Failed to submit the form", response.statusText);
+    }
+}
+
+function changeOrderStatus(orderId) {
+    const response = await fetch("AddNewProduct", {
+        method: "POST",
+        body: formData
+    });
+
+    if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData.success) {
+            Notification().success({
+                message: jsonData.data
+            })
+        } else {
+            Notification().error({
+                message: jsonData.data
+            })
+        }
+        console.log(jsonData);
+    } else {
+        Notification().error({
+            message: "Faild to Add Product"
+        })
+        console.error("Failed to submit the form", response.statusText);
+    }
+}
+
+async function changeAccountType() {
+
+    let confirmStatus = confirm("Are You Sure You Want to Change Account Type ?")
+    if (confirmStatus) {
+
+        const response = await fetch("BecomeUser");
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            if (jsonData.success) {
+                window.location.reload()
+            } else {
+                Notification().error({
+                    message: jsonData.data
+                })
+            }
+            console.log(jsonData);
+        } else {
+            Notification().error({
+                message: "Please Try Again Later"
+            })
+            console.error(response);
         }
 
     }
+
+}
+
+function loadPurchasedOrders(orderList) {
+
+    let tableBody = document.getElementById("oTableBody");
+    let row = document.getElementById("oTableRow");
+
+    tableBody.innerHTML = "";
+
+    orderList.forEach(item => {
+
+        let element = row.cloneNode(true);
+
+        element.removeAttribute("id");
+        element.querySelector(".oId").innerHTML = item.id;
+        element.querySelector(".oProduct").innerHTML = item.product.name;
+        element.querySelector(".oQty").innerHTML = item.qty;
+        element.querySelector(".oPaid").innerHTML = item.order.total_amount;
+        element.querySelector(".oAddress").innerHTML = item.order.address;
+        element.querySelector(".oOtherText").innerHTML = item.order.text;
+        element.querySelector(".oStatus").innerHTML = item.order.order_status.status;
+
+        tableBody.appendChild(element);
+
+    });
+
+}
+
+function loadReceivedOrders(orderList) {
+
+    let tableBody = document.getElementById("rTableBody");
+    let row = document.getElementById("rTableRow");
+
+    tableBody.innerHTML = "";
+
+    orderList.forEach(item => {
+
+        let element = row.cloneNode(true);
+
+        element.removeAttribute("id");
+        element.querySelector(".rId").innerHTML = item.id;
+        element.querySelector(".rProduct").innerHTML = item.product.name;
+        element.querySelector(".rQty").innerHTML = item.qty;
+        element.querySelector(".rPaid").innerHTML = item.order.total_amount;
+        element.querySelector(".rAddress").innerHTML = item.order.address;
+        element.querySelector(".rOtherText").innerHTML = item.order.text;
+        element.querySelector(".rStatus").innerHTML = item.order.order_status.status;
+        element.querySelector(".rStatusBth").addEventListener("click", () => {
+            changeOrderStatus(item.id)
+        })
+
+        tableBody.appendChild(element);
+
+    });
+
+}
+
+function loadMessages(msgList) {
+
+    let messageTableBody = document.getElementById("mTableBody");
+    let messageRow = document.getElementById("mTableRow");
+
+    messageTableBody.innerHTML = "";
+
+    let count = 1;
+    msgList.forEach(message => {
+
+        let element = messageRow.cloneNode(true);
+
+        element.removeAttribute("id");
+        element.querySelector(".msgCount").innerHTML = count;
+        element.querySelector(".mssageText").innerHTML = message.message;
+        element.querySelector(".mssageDatetime").innerHTML = message.datetime;
+        element.querySelector(".mssageStatus").innerHTML = message.message_status.status;
+        element.querySelector(".mssageProduct").innerHTML = message.product.name;
+        element.querySelector(".msgBtn").setAttribute("data-bs-whatever", message.title);
+        element.querySelector(".msgBtn").setAttribute("id", message.id);
+        element.querySelector(".msgBtn").addEventListener("click", () => {
+            replyToMessage(message.id)
+        })
+        messageTableBody.appendChild(element);
+
+        count++;
+    });
+
+}
+
+function loadMyProducts(productList) {
+
+    let tableBody = document.getElementById("pTableBody");
+    let tableRow = document.getElementById("pTableRow");
+
+    tableBody.innerHTML = "";
+
+    let count = 1;
+    productList.forEach(product => {
+
+        let row = tableRow.cloneNode(true);
+
+        row.removeAttribute("id");
+        row.querySelector(".pCount").innerHTML = count;
+        row.querySelector(".pName").innerHTML = product.name;
+        row.querySelector(".pDesc").innerHTML = product.description;
+        row.querySelector(".pAdded").innerHTML = product.added;
+        row.querySelector(".pUnitPrice").innerHTML = product.unit_price;
+        row.querySelector(".pColor").innerHTML = product.product_color.color;
+        row.querySelector(".pSize").innerHTML = product.size.size;
+        row.querySelector(".pCategory").innerHTML = product.caegory.category;
+        row.querySelector(".pBrand").innerHTML = product.brand.brand;
+        row.querySelector(".pSoldCount").innerHTML = product.sold_count;
+        row.querySelector(".pButton").setAttribute("data-bs-whatever", product.name);
+        row.querySelector(".pButton").addEventListener("click", () => {
+            updateModel(product.id)
+        });
+
+        tableBody.appendChild(row);
+
+        count++;
+
+    });
 
 }
 
 function loadSelectOptions(selectTagId, list, propertyArray) {
     const selectTag = document.getElementById(selectTagId);
 
-    for(var i = 0; i<list.length;i++){
+    for (var i = 0; i < list.length; i++) {
         let optionTag = document.createElement("option");
         optionTag.value = list[i].id;
         optionTag.innerHTML = list[i][propertyArray[0]];
         selectTag.appendChild(optionTag);
     }
-    // list.forEach((item) => {
-    //     let optionTag = document.createElement("option");
-    //     optionTag.value = item.id;
-    //     optionTag.innerHTML = item[propertyArray[0]];
-    //     selectTag.appendChild(optionTag);
-    // });
 }
