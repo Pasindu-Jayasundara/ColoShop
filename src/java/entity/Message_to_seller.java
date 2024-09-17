@@ -42,6 +42,9 @@ public class Message_to_seller implements Serializable {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "reply", nullable = true)
+    private String reply;
+    
     public Message_to_seller() {
     }
 
@@ -99,6 +102,14 @@ public class Message_to_seller implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
     }
 
 }

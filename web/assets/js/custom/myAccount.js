@@ -79,6 +79,10 @@ async function loadData() {
                 document.getElementById("accountType").innerHTML = "Buyer";
                 document.getElementById("oppositeAccountType").innerHTML = "Seller";
 
+                document.getElementById("addN").style.display = "none";
+                document.getElementById("myP").style.display = "none";
+                document.getElementById("msgS").style.display = "none";
+
                 loadPurchasedOrders(orderList)
 
             } else if (isSeller) {
@@ -110,43 +114,84 @@ async function loadData() {
 
 }
 
-function replyToMessage(msgId) {
-    const response = await fetch("AddNewProduct", {
-        method: "POST",
-        body: formData
-    });
+var messageId;
+function openModel(msgId) {
+    const exampleModal = document.getElementById('exampleModal')
+    if (exampleModal) {
+        exampleModal.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const recipient = button.getAttribute('data-bs-whatever')
+            messageId = msgId;
+            // If necessary, you could initiate an Ajax request here
+            // and then do the updating in a callback.
 
-    if (response.ok) {
-        const jsonData = await response.json();
-        if (jsonData.success) {
-            Notification().success({
-                message: jsonData.data
-            })
-        } else {
-            Notification().error({
-                message: jsonData.data
-            })
-        }
-        console.log(jsonData);
-    } else {
-        Notification().error({
-            message: "Faild to Add Product"
+            // Update the modal's content.
+            const modalTitle = exampleModal.querySelector('.modal-title')
+            const modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+            modalTitle.innerHTML = `Reply message To :<br><br> <span class="fs-5" style="color:grey;">${recipient}</span>`
         })
-        console.error("Failed to submit the form", response.statusText);
     }
 }
 
-function changeOrderStatus(orderId) {
-    const response = await fetch("AddNewProduct", {
+async function sendReply() {
+
+    let reply = document.getElementById("reply").value;
+    if (reply.trim() != "") {
+
+        const response = await fetch("ReplyToBuyerMessage", {
+            method: "POST",
+            body: JSON.stringify({
+                id: messageId,
+                text: reply
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            if (jsonData.success) {
+                Notification().success({
+                    message: jsonData.data
+                })
+            } else {
+                Notification().error({
+                    message: jsonData.data
+                })
+            }
+            console.log(jsonData);
+        } else {
+            Notification().error({
+                message: "Faild to Add Product"
+            })
+            console.error("Failed to submit the form", response.statusText);
+        }
+    }
+}
+
+async function changeOrderStatus(orderId) {
+    const response = await fetch("UpdateProductStatus", {
         method: "POST",
-        body: formData
+        body: JSON.stringify({
+            id: orderId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
     });
 
     if (response.ok) {
         const jsonData = await response.json();
         if (jsonData.success) {
+
+            document.getElementById("r" + orderId).innerHTML = jsonData.data.status
+
             Notification().success({
-                message: jsonData.data
+                message: jsonData.data.message
             })
         } else {
             Notification().error({
@@ -156,9 +201,9 @@ function changeOrderStatus(orderId) {
         console.log(jsonData);
     } else {
         Notification().error({
-            message: "Faild to Add Product"
+            message: "Please Try Again Later"
         })
-        console.error("Failed to submit the form", response.statusText);
+        console.error(response.statusText);
     }
 }
 
@@ -235,6 +280,7 @@ function loadReceivedOrders(orderList) {
         element.querySelector(".rAddress").innerHTML = item.order.address;
         element.querySelector(".rOtherText").innerHTML = item.order.text;
         element.querySelector(".rStatus").innerHTML = item.order.order_status.status;
+        element.querySelector(".rStatus").setAttribute("id", "r" + item.id);
         element.querySelector(".rStatusBth").addEventListener("click", () => {
             changeOrderStatus(item.id)
         })
@@ -263,10 +309,10 @@ function loadMessages(msgList) {
         element.querySelector(".mssageDatetime").innerHTML = message.datetime;
         element.querySelector(".mssageStatus").innerHTML = message.message_status.status;
         element.querySelector(".mssageProduct").innerHTML = message.product.name;
-        element.querySelector(".msgBtn").setAttribute("data-bs-whatever", message.title);
+        element.querySelector(".msgBtn").setAttribute("data-bs-whatever", message.message);
         element.querySelector(".msgBtn").setAttribute("id", message.id);
         element.querySelector(".msgBtn").addEventListener("click", () => {
-            replyToMessage(message.id)
+            openModel(message.id)
         })
         messageTableBody.appendChild(element);
 

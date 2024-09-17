@@ -1,9 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.seller;
 
+import com.google.gson.Gson;
+import dto.Response_DTO;
+import entity.Message_status;
+import entity.Message_to_seller;
+import entity.OrderDataTable;
+import entity.Order_status;
+import entity.UserTable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -11,77 +14,74 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Email;
+import model.HibernateUtil;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
-/**
- *
- * @author Asus
- */
 @WebServlet(name = "ReplyToBuyerMessage", urlPatterns = {"/ReplyToBuyerMessage"})
 public class SellerReplyToBuyerMessage extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ReplyToBuyerMessage</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ReplyToBuyerMessage at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        int msgId = (int) request.getAttribute("id");
+        final String reply = (String) request.getAttribute("reply");
+        UserTable seller = (UserTable) request.getSession().getAttribute("user");
+
+        if (seller.getAccount_type().getType().equals("Seller")) {
+
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+            Criteria msgStatusCriteria = hibernateSession.createCriteria(Message_status.class);
+            msgStatusCriteria.add(Restrictions.eq("status", "Replied"));
+            Message_status msgStatus = (Message_status) msgStatusCriteria.uniqueResult();
+
+            String msg = "";
+            boolean isSuccess = false;
+
+            final Message_to_seller sellerMsg = (Message_to_seller) hibernateSession.get(Message_to_seller.class, msgId);
+            if (sellerMsg != null) {
+                sellerMsg.setReply(reply);
+                sellerMsg.setMessage_status(msgStatus);
+
+                Thread emailThred = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        String to = sellerMsg.getUser().getEmail();
+                        String subject = "Reply to your message";
+                        String body = reply;
+
+                        try {
+                            Email.sendEmail(to, subject, body);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+                emailThred.start();
+
+                isSuccess = true;
+                msg = "Reply Send Success";
+            } else {
+                msg = "No Message Found";
+            }
+
+            hibernateSession.update(sellerMsg);
+            hibernateSession.beginTransaction().commit();
+            hibernateSession.close();
+
+            Gson gson = new Gson();
+            Response_DTO response_DTO = new Response_DTO(isSuccess, msg);
+
+            response.setContentType("application/json");
+            response.getWriter().write(gson.toJson(response_DTO));
+
         }
-    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }
