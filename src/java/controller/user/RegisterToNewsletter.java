@@ -19,7 +19,7 @@ public class RegisterToNewsletter extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String email = request.getParameter("email");
+        String email = (String) request.getAttribute("email");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 

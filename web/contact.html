@@ -283,17 +283,19 @@
 						</h4>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
-							<input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="email"
-								placeholder="Your Email Address">
+							<input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="text"
+								placeholder="Message Title" id="title">
 							<img class="how-pos4 pointer-none" src="images/icons/icon-email.png" alt="ICON">
 						</div>
 
 						<div class="bor8 m-b-30">
 							<textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" name="msg"
-								placeholder="How Can We Help?"></textarea>
+								placeholder="How Can We Help?" id="msg"></textarea>
 						</div>
 
-						<button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
+						<button type="button"
+							class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer"
+							onclick="sendMessage()">
 							Submit
 						</button>
 					</form>
@@ -461,12 +463,12 @@
 					<form>
 						<div class="wrap-input1 w-full p-b-4">
 							<input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
-								placeholder="email@example.com">
+								placeholder="email@example.com" id="nEmail">
 							<div class="focus-input1 trans-04"></div>
 						</div>
 
 						<div class="p-t-18">
-							<button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
+							<button type="button" class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04" onclick="addtoNewsL()">
 								Subscribe
 							</button>
 						</div>
@@ -560,7 +562,9 @@
 	<script src="js/map-custom.js"></script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
-
+	<script src="assets/js/custom/header.js"></script>
+<script src="assets/js/custom/footer.js"></script>
+	<script src="assets/js/custom/contact.js"></script>
 </body>
 
 </html>
