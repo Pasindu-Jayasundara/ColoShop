@@ -1,6 +1,7 @@
 package controller.seller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.Brand;
 import entity.Category;
@@ -30,98 +31,85 @@ public class UpdateProduct extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        
         boolean isProductIdOk = false;
         boolean isValid = false;
         Product product = null;
         String message = "";
 
-        if (request.getParameter("productId") == null || request.getParameter("productId").isBlank()) {
+        Gson gson = new Gson();
+
+        String name = (String) request.getAttribute("name");
+        String description = (String)request.getAttribute("description");
+        double unit_price = Double.parseDouble((String)request.getAttribute("unit_price"));
+        double delivery_fee = Double.parseDouble((String) request.getAttribute("delivery_fee"));
+        int product_color_id = Integer.parseInt((String) request.getAttribute("color"));
+        int size_id = Integer.parseInt((String) request.getAttribute("size"));
+        int category_id = Integer.parseInt((String) request.getAttribute("category"));
+        int brand_id = Integer.parseInt((String) request.getAttribute("brand"));
+        String id = (String) request.getAttribute("id");
+
+        if (id.isEmpty()) {
             //no id
-            message="Missing Product Id";
-            
-        } else if (!Validation.isInteger(request.getParameter("productId"))) {
-            //not integer
-            message="Invalid Product Id";
-            
+            message = "Missing Product Id";
+
         } else {
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            if (productId <= 0) {
-                //invalid id
-                message="Incorrect Product Id";
-                
-            } else {
+            int productId = Integer.parseInt(id);
 
-                product = (Product) hibernateSession.load(Product.class, productId);
-                if (product != null) {
-                    isProductIdOk = true;
-                }
+            product = (Product) hibernateSession.load(Product.class, productId);
+            if (product != null) {
+                isProductIdOk = true;
             }
-
         }
 
         if (isProductIdOk) {
-        
-            request.getRequestDispatcher("/UpdateProductImageUpload").include(request, response);
 
-            if ((boolean) request.getAttribute("isImageUpdateSuccess")) {
-                //image uploading success
+//            request.getRequestDispatcher("/UpdateProductImageUpload").include(request, response);
+//            if ((boolean) request.getAttribute("isImageUpdateSuccess")) {
+            //image uploading success
+//                String img1Path = (String) request.getAttribute("img1Path");
+//                String img2Path = (String) request.getAttribute("img2Path");
+//                String img3Path = (String) request.getAttribute("img3Path");
+            Product_color product_color = (Product_color) hibernateSession.load(Product_color.class, product_color_id);
+            Size size = (Size) hibernateSession.load(Size.class, size_id);
+            Brand brand = (Brand) hibernateSession.load(Brand.class, brand_id);
+            Category category = (Category) hibernateSession.load(Category.class, category_id);
 
-                String name = request.getParameter("name");
-                String description = request.getParameter("description");
-                double unit_price = Double.parseDouble(request.getParameter("unit_price"));
-                double delivery_fee = Double.parseDouble(request.getParameter("delivery_fee"));
-                int product_color_id = Integer.parseInt(request.getParameter("product_color_id"));
-                int size_id = Integer.parseInt(request.getParameter("size_id"));
-                int brand_id = Integer.parseInt(request.getParameter("brand_id"));
-                int category_id = Integer.parseInt(request.getParameter("category_id"));
+            UserTable user = (UserTable) request.getSession().getAttribute("user");
 
-                String img1Path = (String) request.getAttribute("img1Path");
-                String img2Path = (String) request.getAttribute("img2Path");
-                String img3Path = (String) request.getAttribute("img3Path");
+            Criteria sellerCriteria = hibernateSession.createCriteria(Seller.class);
+            sellerCriteria.add(Restrictions.eq("user", user));
 
-                Product_color product_color = (Product_color) hibernateSession.load(Product_color.class, product_color_id);
-                Size size = (Size) hibernateSession.load(Size.class, size_id);
-                Brand brand = (Brand) hibernateSession.load(Brand.class, brand_id);
-                Category category = (Category) hibernateSession.load(Category.class, category_id);
+            Seller seller = (Seller) sellerCriteria.uniqueResult();
 
-                UserTable user = (UserTable) request.getSession().getAttribute("user");
+            product.setName(name);
+            product.setDescription(description);
+            product.setUnit_price(unit_price);
+            product.setAdded(new Date());
+            product.setDelivery_fee(delivery_fee);
+            product.setSold_count(0);
+            product.setProduct_color(product_color);
+            product.setSize(size);
+            product.setBrand(brand);
+            product.setSeller(seller);
+            product.setCategory(category);
 
-                Criteria sellerCriteria = hibernateSession.createCriteria(Seller.class);
-                sellerCriteria.add(Restrictions.eq("user", user));
+            hibernateSession.update(product);
+            hibernateSession.beginTransaction().commit();
 
-                Seller seller = (Seller) sellerCriteria.uniqueResult();
-
-                product.setName(name);
-                product.setDescription(description);
-                product.setUnit_price(unit_price);
-                product.setAdded(new Date());
-                product.setImg1(img1Path);
-                product.setImg2(img2Path);
-                product.setImg3(img3Path);
-                product.setDelivery_fee(delivery_fee);
-                product.setSold_count(0);
-                product.setProduct_color(product_color);
-                product.setSize(size);
-                product.setBrand(brand);
-                product.setSeller(seller);
-                product.setCategory(category);
-
-                hibernateSession.update(product);
-                hibernateSession.beginTransaction().commit();
-
-                isValid = true;
-                message = "Product Updating Success";
-
-            } else {
-                // image uploading faild
-                isValid = false;
-                message = "Image Updating Failed";
-            }
+            isValid = true;
+            message = "Product Updating Success";
 
         }
-        
+//        else {
+        // image uploading faild
+//                isValid = false;
+//                message = "Image Updating Failed";
+//            }
+
+//        }
         Response_DTO response_DTO = new Response_DTO(isValid, message);
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
 
         hibernateSession.close();
 

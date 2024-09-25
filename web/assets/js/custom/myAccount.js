@@ -107,6 +107,7 @@ async function loadData() {
             Notification().error({
                 message: json.data
             })
+            // window.location.href = "sign-in.html"
         }
 
     } else {
@@ -179,6 +180,9 @@ async function sendReply() {
     }
 }
 
+// only order has order status, when it change.......
+// one orde can have lotsof order items
+// so........
 async function changeOrderStatus(orderId) {
     const response = await fetch("UpdateProductStatus", {
         method: "POST",
@@ -195,6 +199,9 @@ async function changeOrderStatus(orderId) {
         if (jsonData.success) {
 
             document.getElementById("r" + orderId).innerHTML = jsonData.data.status
+            if (jsonData.data.status == "Delivered") {
+                document.getElementById("pendingOrderCount").innerHTML = parseInt(document.getElementById("pendingOrderCount").innerHTML) - 1
+            }
 
             Notification().success({
                 message: jsonData.data.message
@@ -276,17 +283,18 @@ function loadReceivedOrders(orderList) {
 
     orderList.forEach(item => {
 
+        console.log(item)
         let element = row.cloneNode(true);
 
         element.removeAttribute("id");
         element.querySelector(".rId").innerHTML = item.id;
         element.querySelector(".rProduct").innerHTML = item.product.name;
         element.querySelector(".rQty").innerHTML = item.qty;
-        element.querySelector(".rPaid").innerHTML = item.order.total_amount;
-        element.querySelector(".rAddress").innerHTML = item.order.address;
-        element.querySelector(".rOtherText").innerHTML = item.order.text;
-        element.querySelector(".rStatus").innerHTML = item.order.order_status.status;
-        element.querySelector(".rStatus").setAttribute("id", "r" + item.id);
+        element.querySelector(".rPaid").innerHTML = item.orders.total_amount;
+        element.querySelector(".rAddress").innerHTML = item.orders.address;
+        element.querySelector(".rOtherText").innerHTML = item.orders.text;
+        element.querySelector(".rStatusBth").innerHTML = item.orders.order_status.status;
+        element.querySelector(".rStatusBth").setAttribute("id", "r" + item.id);
         element.querySelector(".rStatusBth").addEventListener("click", () => {
             changeOrderStatus(item.id)
         })
@@ -370,13 +378,13 @@ function openProductModel(pId) {
             exampleModal.querySelector('#updateDF').value = deliveryFee
             exampleModal.querySelector('#updateDESC').value = desc
 
-            if(isFirstTime){
+            if (isFirstTime) {
                 loadSelectOptions("updatecategory", categoryList, ["category"]);
                 loadSelectOptions("updatesize", sizeList, ["size"]);
                 loadSelectOptions("updatecolor", colorList, ["color"]);
                 loadSelectOptions("updatebrand", brandList, ["brand"]);
 
-                isFirstTime=false
+                isFirstTime = false
             }
 
             exampleModal.querySelector('#updatesize').selectedIndex = size
@@ -389,17 +397,15 @@ function openProductModel(pId) {
     }
 }
 
-function loadMyProducts(productList) {
+var tableBody = document.getElementById("pTableBody");
+var tableRow = document.getElementById("pTableRow");
 
-    let tableBody = document.getElementById("pTableBody");
-    let tableRow = document.getElementById("pTableRow");
+function loadMyProducts(productList) {
 
     tableBody.innerHTML = "";
 
     let count = 1;
     productList.forEach(product => {
-
-        console.log(product)
 
         let row = tableRow.cloneNode(true);
 
@@ -450,6 +456,78 @@ function loadSelectOptions(selectTagId, list, propertyArray) {
 }
 
 async function updateProduct() {
+
+    let name = document.getElementById("updatePName").value
+    let unit_price = document.getElementById("updatePrice").value
+    let delivery_fee = document.getElementById("updateDF").value
+    let size = document.getElementById("updateDESC").value
+    let color = document.getElementById("updatesize").value
+    let category = document.getElementById("updatecolor").value
+    let description = document.getElementById("updatecategory").value
+    let brand = document.getElementById("updatebrand").value
+
+    if (name.trim() == ""
+        || unit_price.trim() == ""
+        || delivery_fee.trim() == ""
+        || size.trim() == ""
+        || color.trim() == ""
+        || category.trim() == ""
+        || brand.trim() == ""
+        || description.trim() == ""
+    ) {
+
+        Notification().error({
+            message: "Missing Data"
+        })
+
+    } else {
+
+        const data = {
+            name: document.getElementById("updatePName").value,
+            unit_price: document.getElementById("updatePrice").value,
+            delivery_fee: document.getElementById("updateDF").value,
+            size: document.getElementById("updatesize").value,
+            color: document.getElementById("updatecolor").value,
+            category: document.getElementById("updatecategory").value,
+            description: document.getElementById("updateDESC").value,
+            brand: document.getElementById("updatebrand").value,
+            id: productId
+        }
+
+        console.log(data)
+        const response = await fetch("UpdateProduct", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const jsonData = await response.json();
+            if (jsonData.success) {
+
+                loadData()
+
+                Notification().success({
+                    message: jsonData.data
+                })
+            } else {
+                Notification().error({
+                    message: jsonData.data
+                })
+            }
+            console.log(jsonData);
+        } else {
+            Notification().error({
+                message: "Please Try Again Later"
+            })
+            console.error(response);
+        }
+    }
+}
+
+async function deleteProduct() {
     const formData = new FormData();
 
     formData.append("name", document.getElementById("inputEmail4").value);

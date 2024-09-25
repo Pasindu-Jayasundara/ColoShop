@@ -158,14 +158,18 @@ public class LoadFeatures extends HttpServlet {
 
                 Criteria orderItemCriteria = hiberSession.createCriteria(Order_item.class);
                 orderItemCriteria.add(Restrictions.eq("product", product));
-                Order_item orderItem = (Order_item) orderItemCriteria.uniqueResult();
+                List<Order_item> orderItemList = (List<Order_item>) orderItemCriteria.list();
 
-                if (orderItem != null) {
-                    if (!orderItem.getOrder().getOrder_status().getStatus().equals("Delivered")) {
-                        //not delivered
-                        orderItem.getOrder().setUser(null);
-                        orderList.add(orderItem);
+                if (orderItemList != null) {
+                    for (Order_item order_item : orderItemList) {
+                        
+                        if (!order_item.getOrder().getOrder_status().getStatus().equals("Delivered")) {
+                            //not delivered
+                            order_item.getOrder().setUser(null);
+                            orderList.add(order_item);
+                        }
                     }
+
                 }
 
             }

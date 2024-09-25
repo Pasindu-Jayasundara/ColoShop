@@ -23,8 +23,13 @@
         <filter-name>AddNewProductFilter</filter-name>
         <url-pattern>/AddNewProduct</url-pattern>
     </filter-mapping>
+    
+    <filter>
+        <filter-name>UpdateProductFilter</filter-name>
+        <filter-class>model.user.UpdateProductFilter</filter-class>
+    </filter>
     <filter-mapping>
-        <filter-name>AddNewProductFilter</filter-name>
+        <filter-name>UpdateProductFilter</filter-name>
         <url-pattern>/UpdateProduct</url-pattern>
     </filter-mapping>
     
