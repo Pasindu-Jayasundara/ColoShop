@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import model.Validation;
@@ -52,7 +53,6 @@ public class AddNewProductFilter implements Filter {
         Part img3 = httpServletRequest.getPart("img3");
         String fileName3 = Paths.get(img3.getSubmittedFileName()).getFileName().toString();
 
-        System.out.println(color);
         if (httpServletRequest.getSession().getAttribute("user") == null) {
             isInvalid = true;
             message = "Please Logedin First";

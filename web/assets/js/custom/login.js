@@ -2,10 +2,10 @@ const login = async() => {
 
     const response = await fetch("UserLogin",{
         method:"POST",
-        body:{
+        body:JSON.stringify({
             email:document.getElementById("email").value,
             password:document.getElementById("password").value
-        },
+        }),
         headers:{
             "Content-Type":"application/json"
         }
@@ -20,7 +20,7 @@ const login = async() => {
             window.location="my-account.html";
         }else{
             popup.error({
-                message:data.message
+                message:data.data
             });
         }
     }else{

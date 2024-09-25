@@ -2,6 +2,7 @@ package controller.seller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import dto.Response_DTO;
 import entity.AdminDetailTable;
 import entity.Brand;
 import entity.Category;
@@ -112,37 +113,37 @@ public class LoadFeatures extends HttpServlet {
         }
 
         //product messages
-        List<Message_to_seller> msgToSellerList = null;
+//        List<Message_to_seller> msgToSellerList = null;
+        List<Message_to_seller> msgToSellerList = new ArrayList<>();
         if (productList != null) {
 
             //not replyed message status
             Criteria messageStatusCriteria = hiberSession.createCriteria(Message_status.class);
             messageStatusCriteria.add(Restrictions.ne("id", 3));
-            messageStatusCriteria.setProjection(
-                    Projections.count("id")
-            );
-            Message_status messageStatus = (Message_status) messageStatusCriteria.uniqueResult();
+            List<Message_status> messageStatusList = messageStatusCriteria.list();
 
             Criteria msgToSellerCriteria = hiberSession.createCriteria(Message_to_seller.class);
             msgToSellerCriteria.add(Restrictions.and(
                     Restrictions.eq("seller", seller),
-                    Restrictions.eq("message_status", messageStatus)
+                    Restrictions.in("message_status", messageStatusList)
             ));
             msgToSellerList = msgToSellerCriteria.list();
 
-            for (Message_to_seller message : msgToSellerList) {
+            if (msgToSellerList != null) {
+                for (Message_to_seller message : msgToSellerList) {
 
-                message.setUser(null);
-                message.getSeller().setUser(null);
-                message.getProduct().setSeller(null);
+                    message.setUser(null);
+                    message.getSeller().setUser(null);
+                    message.getProduct().setSeller(null);
+                }
             }
 
         }
 
-        //order status
+        //delivered order status
         Criteria orderStatusCriteria = hiberSession.createCriteria(Order_status.class);
         orderStatusCriteria.add(Restrictions.eq("status", "Delivered"));
-        Order_status orderStatus = (Order_status) orderStatusCriteria.uniqueResult();
+        Order_status deliveredOrderStatus = (Order_status) orderStatusCriteria.uniqueResult();
 
         //orders
         //if seller its others that should be delivered
@@ -173,22 +174,26 @@ public class LoadFeatures extends HttpServlet {
             Criteria orderCriteria = hiberSession.createCriteria(OrderDataTable.class);
             orderCriteria.add(Restrictions.and(
                     Restrictions.eq("user", user),
-                    Restrictions.ne("order_status", orderStatus)
+                    Restrictions.ne("order_status", deliveredOrderStatus)
             ));
             List<OrderDataTable> orderList2 = orderCriteria.list();
 
-            for (OrderDataTable orderDataTable : orderList2) {
-                Criteria orderItemCriteria = hiberSession.createCriteria(Order_item.class);
-                orderItemCriteria.add(Restrictions.eq("order", orderDataTable));
-                List<Order_item> orderItems = orderItemCriteria.list();
+            if (orderList2 != null) {
 
-                for (Order_item item : orderItems) {
-                    
-                    item.getProduct().getSeller().setUser(null);
-                    
-                    orderList.add(item); // Add items to the order list
+                for (OrderDataTable orderDataTable : orderList2) {
+                    Criteria orderItemCriteria = hiberSession.createCriteria(Order_item.class);
+                    orderItemCriteria.add(Restrictions.eq("order", orderDataTable));
+                    List<Order_item> orderItems = orderItemCriteria.list();
+
+                    for (Order_item item : orderItems) {
+
+                        item.getProduct().getSeller().setUser(null);
+
+                        orderList.add(item); // Add items to the order list
+                    }
                 }
             }
+
         }
 
         JsonObject jsonObject = new JsonObject();
@@ -207,8 +212,9 @@ public class LoadFeatures extends HttpServlet {
         }
         jsonObject.add("orderList", gson.toJsonTree(orderList));
 
+        Response_DTO dTO = new Response_DTO(true, gson.toJsonTree(jsonObject));
         response.setContentType("application/json");
-        response.getWriter().write(gson.toJson(jsonObject));
+        response.getWriter().write(gson.toJson(dTO));
 
         hiberSession.close();
 

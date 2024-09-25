@@ -14,6 +14,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.MultipartConfig;
 import model.HibernateUtil;
 import org.hibernate.Session;
 
@@ -29,10 +30,17 @@ public class AddNewProductDBDataFilter implements Filter {
         boolean isInvalid = false;
         String message = "";
 
-        int product_color_id = Integer.parseInt(request.getParameter("product_color_id"));
-        int size_id = Integer.parseInt(request.getParameter("size_id"));
-        int brand_id = Integer.parseInt(request.getParameter("brand_id"));
-        int category_id = Integer.parseInt(request.getParameter("category_id"));
+        String id = (String) request.getAttribute("color");
+        int product_color_id = Integer.parseInt(id);
+
+        String sid = (String) request.getAttribute("size");
+        int size_id = Integer.parseInt(sid);
+
+        String bid = (String) request.getAttribute("brand");
+        int brand_id = Integer.parseInt(bid);
+
+        String cid = (String) request.getAttribute("category");
+        int category_id = Integer.parseInt(cid);
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
@@ -60,6 +68,7 @@ public class AddNewProductDBDataFilter implements Filter {
             message = "Product Category Not Avaliable";
 
         } else {
+
             chain.doFilter(request, response);
         }
 

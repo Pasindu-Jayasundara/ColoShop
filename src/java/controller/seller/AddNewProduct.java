@@ -42,19 +42,19 @@ public class AddNewProduct extends HttpServlet {
 
             String name = (String) request.getAttribute("name");
             String description = (String) request.getAttribute("description");
-            double unit_price =  (double) request.getAttribute("unit_price");
-            double delivery_fee = (double) request.getAttribute("delivery_fee");
-            int status_id = (int) request.getAttribute("status_id");
-            int product_color_id = (int) request.getAttribute("product_color_id");
-            int size_id = (int) request.getAttribute("size_id");
-            int brand_id = (int) request.getAttribute("brand_id");
-            int category_id = (int) request.getAttribute("category_id");
+            double unit_price =  Double.parseDouble((String) request.getAttribute("unit_price"));
+            double delivery_fee = Double.parseDouble((String) request.getAttribute("delivery_fee"));
+//            int status_id = Integer.parseInt((String) request.getAttribute("status_id"));
+            int product_color_id = Integer.parseInt((String) request.getAttribute("color"));
+            int size_id = Integer.parseInt((String) request.getAttribute("size"));
+            int brand_id = Integer.parseInt((String) request.getAttribute("brand"));
+            int category_id = Integer.parseInt((String) request.getAttribute("category"));
             
             String img1Path = (String) request.getAttribute("img1Path");
             String img2Path = (String) request.getAttribute("img2Path");
             String img3Path = (String) request.getAttribute("img3Path");
             
-            Status status = (Status) hibernateSession.load(Status.class, status_id);
+            Status status = (Status) hibernateSession.load(Status.class, 1);
             Product_color product_color = (Product_color) hibernateSession.load(Product_color.class, product_color_id);
             Size size = (Size) hibernateSession.load(Size.class, size_id);
             Brand brand = (Brand) hibernateSession.load(Brand.class, brand_id);

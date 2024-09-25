@@ -20,8 +20,8 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = (String) request.getAttribute("email");
+        String password = (String) request.getAttribute("password");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Criteria userCriteria = hibernateSession.createCriteria(UserTable.class);
@@ -45,7 +45,7 @@ public class UserLogin extends HttpServlet {
                 request.getSession().setAttribute("user", user);
                 
                 //sync session cart and user cart
-                request.getRequestDispatcher("/SyncSessionCartAndUserCart").include(request, response);
+                request.getRequestDispatcher("/SyncSessionAndUserCart").include(request, response);
                 
                 message = "Login Success";
                 isSuccess = true;

@@ -43,6 +43,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="assets/css/notification.css">
 </head>
 
 <body>
@@ -116,7 +118,7 @@
                         <form class="row g-3" id="productForm">
                             <div class="col-4">
                                 <label for="inputEmail4" class="form-label">Name</label>
-                                <input type="email" class="form-control" id="inputEmail4">
+                                <input type="text" class="form-control" id="inputEmail4">
                             </div>
 
                             <div class="col-3">
@@ -267,7 +269,7 @@
                                     <td class="pSoldCount text-center"></td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-dark pButton" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal" data-bs-whatever="a">Update</button>
+                                            data-bs-target="#exampleModal2" data-bs-whatever="a">Update</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -304,7 +306,7 @@
                                     <td class="mssageStatus"></td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-dark msgBtn" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal" data-bs-whatever="a" msg-id="" >Reply</button>
+                                            data-bs-target="#exampleModal" data-bs-whatever="a" msg-id="">Reply</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -379,6 +381,73 @@
         </div>
     </div>
 
+    <!-- update product -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel2">Update Product : </h1>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3" id="productForm">
+                        <div class="col-4">
+                            <label for="inputEmail4" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="updatePName">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="inputAddress" class="form-label">Unit Price</label>
+                            <input type="number" min="0" class="form-control" id="updatePrice" placeholder="">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputAddress2" class="form-label">Delivery Fee</label>
+                            <input type="number" min="0" class="form-control" id="updateDF" placeholder="">
+                        </div>
+                        <div class="col-12">
+                            <label for="inputPassword4" class="form-label">Description</label>
+                            <textarea rows="5" class="form-control" id="updateDESC"></textarea>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="updatesize" class="form-label">Size</label>
+                            <select id="updatesize" class="form-select">
+                                <option value="0" selected>Choose...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="updatecolor" class="form-label">Color</label>
+                            <select id="updatecolor" class="form-select">
+                                <option value="0">Choose...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="updatecategory" class="form-label">Category</label>
+                            <select id="updatecategory" class="form-select">
+                                <option value="0" selected>Choose...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="updatebrand" class="form-label">Brand</label>
+                            <select id="updatebrand" class="form-select">
+                                <option value="0" selected>Choose...</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-danger" id="" onclick="deleteProduct()">Delete Product</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-dark" id="" onclick="updateProduct()">Update Product</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -394,6 +463,7 @@
             .checkbox()
             ;
     </SCript>
+    <script src="assets/js/custom/notification.js"></script>
     <script src="assets/js/custom/myAccount.js"></script>
 </body>
 
