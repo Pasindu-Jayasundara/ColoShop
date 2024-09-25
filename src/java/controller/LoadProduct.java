@@ -113,7 +113,8 @@ public class LoadProduct extends HttpServlet {
             String sortBy = (String) request.getAttribute("sortBy");
 
             if (sortBy.equals("default")) {
-                productCriteria.addOrder(Order.desc("RAND()"));
+//                productCriteria.addOrder(Order.desc("RAND()"));
+                productCriteria.add(Restrictions.sqlRestriction("1=1 order by rand()"));
 
             } else if (sortBy.equals("new")) {
                 productCriteria.addOrder(Order.desc("id"));
@@ -127,7 +128,7 @@ public class LoadProduct extends HttpServlet {
             }
 
         } else {
-            productCriteria.addOrder(Order.desc("RAND()"));
+            productCriteria.add(Restrictions.sqlRestriction("1=1 order by rand()"));
         }
 
         //search

@@ -35,11 +35,11 @@ public class AddNewOptionFilter implements Filter {
             boolean isError = false;
             String message = "";
 
-            if (type.isBlank()) {
+            if (type.isEmpty()) {
                 message = "Missing Type";
                 isError = true;
 
-            } else if (option.isBlank()) {
+            } else if (option.isEmpty()) {
                 message = "Missing New Option";
                 isError = true;
 

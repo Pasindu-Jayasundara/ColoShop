@@ -5,6 +5,7 @@ import dto.Response_DTO;
 import entity.Product_color;
 import entity.Status;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +22,8 @@ public class DeleteColor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int colorId = (int) request.getAttribute("id");
+        String id = (String) request.getAttribute("id");
+        int colorId = Integer.parseInt(id);
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;
@@ -33,7 +35,7 @@ public class DeleteColor extends HttpServlet {
             if (productColor.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
-                statusCriteria.add(Restrictions.eq("status", "De-Active"));
+                statusCriteria.add(Restrictions.eq("name", "De-Active"));
                 Status deActiveStatus = (Status) statusCriteria.uniqueResult();
 
                 productColor.setStatus(deActiveStatus);
@@ -48,11 +50,19 @@ public class DeleteColor extends HttpServlet {
             message = "Product Color not Found";
         }
 
+        Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
+        statusCriteria.add(Restrictions.eq("name", "Active"));
+        Status activeStatus = (Status) statusCriteria.uniqueResult();
+        
+        //color
+        Criteria colorCriteria = hibernateSession.createCriteria(Product_color.class);
+        colorCriteria.add(Restrictions.eq("status", activeStatus));
+        ArrayList<Product_color> colorList = (ArrayList<Product_color>) colorCriteria.list();
+        
         hibernateSession.close();
-
-        Response_DTO response_DTO = new Response_DTO(isDone, message);
+        
         Gson gson = new Gson();
-
+        Response_DTO response_DTO = new Response_DTO(true, gson.toJsonTree(colorList));
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));
     } 

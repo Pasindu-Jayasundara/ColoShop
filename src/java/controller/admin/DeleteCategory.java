@@ -5,6 +5,7 @@ import dto.Response_DTO;
 import entity.Category;
 import entity.Status;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +22,8 @@ public class DeleteCategory extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int categoryId = (int) request.getAttribute("categoryId");
+        String id = (String) request.getAttribute("id");
+        int categoryId = Integer.parseInt(id);
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;
@@ -33,7 +35,7 @@ public class DeleteCategory extends HttpServlet {
             if (category.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
-                statusCriteria.add(Restrictions.eq("status", "De-Active"));
+                statusCriteria.add(Restrictions.eq("name", "De-Active"));
                 Status deActiveStatus = (Status) statusCriteria.uniqueResult();
 
                 category.setStatus(deActiveStatus);
@@ -48,10 +50,19 @@ public class DeleteCategory extends HttpServlet {
             message = "Category not Found";
         }
 
-        hibernateSession.close();
+        Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
+        statusCriteria.add(Restrictions.eq("status", "Active"));
+        Status activeStatus = (Status) statusCriteria.uniqueResult();
 
-        Response_DTO response_DTO = new Response_DTO(isDone, message);
+        //category
+        Criteria categoryCriteria = hibernateSession.createCriteria(Category.class);
+        categoryCriteria.add(Restrictions.eq("status", activeStatus));
+        ArrayList<Category> categoryList = (ArrayList<Category>) categoryCriteria.list();
+        
+        hibernateSession.close();
+        
         Gson gson = new Gson();
+        Response_DTO response_DTO = new Response_DTO(isDone, gson.toJsonTree(categoryList));
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));

@@ -35,12 +35,12 @@ public class LogInFilter implements Filter {
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (email == null || email.isBlank()) {
+        if (email == null || email.isEmpty()) {
             //no email
             isInvalid = true;
             errorMessage = "Missing Email Address";
 
-        } else if (password == null || password.isBlank()) {
+        } else if (password == null || password.isEmpty()) {
             //no password
             isInvalid = true;
             errorMessage = "Missing Password";

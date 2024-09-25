@@ -35,6 +35,7 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<!--===============================================================================================-->
+	<link rel="stylesheet" href="assets/css/notification.css">
 </head>
 
 <body class="animsition">
@@ -299,8 +300,12 @@
 					<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
 						<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
 						<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						Search
+						Text
 					</div>
+					&nbsp;&nbsp;
+					<button class="btn btn-dark" onclick="loadProduct();">Apply Filter</button>
+
+
 				</div>
 
 				<!-- Search product -->
@@ -311,14 +316,17 @@
 						</button>
 
 						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
-							placeholder="Search" id="searchText" onkeydown="searchText(event)">
+							placeholder="Input Search Text" id="searchText" onkeyup="searchText(event)">
+
+
 					</div>
 				</div>
 
 				<!-- Filter -->
 				<div class="dis-none panel-filter w-full p-t-10">
-					<div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+					<div class="wrap-filter bg6 d-flex flex-row p-3">
 
+						<!-- flex-w  w-full p-lr-40 p-t-27 p-lr-10-sm -->
 						<!-- sort by -->
 						<div class="filter-col1 p-r-15 p-b-27">
 							<div class="mtext-102 cl2 p-b-15">
@@ -327,25 +335,29 @@
 
 							<ul>
 								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04" onclick="applySort(event,'Default')">
+									<a href="#" class="filter-link stext-106 trans-04"
+										onclick="applySort(event,'Default')">
 										Default
 									</a>
 								</li>
 
 								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active" onclick="applySort(event,'New')">
-										New
+									<!-- filter-link-active -->
+									<a href="#" class="filter-link stext-106 trans-04" onclick="applySort(event,'New')">
+										New Products
 									</a>
 								</li>
 
 								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04" onclick="applySort(event,'PriceASC')">
+									<a href="#" class="filter-link stext-106 trans-04"
+										onclick="applySort(event,'PriceASC')">
 										Price: Low to High
 									</a>
 								</li>
 
 								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04" onclick="applySort(event,'PriceDESC')">
+									<a href="#" class="filter-link stext-106 trans-04"
+										onclick="applySort(event,'PriceDESC')">
 										Price: High to Low
 									</a>
 								</li>
@@ -360,7 +372,7 @@
 
 							<ul id="categoryParent">
 								<li class="p-b-6" id="categoryLi">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active lia">
+									<a href="#" class="filter-link stext-106 trans-04 lia">
 										All
 									</a>
 								</li>
@@ -375,7 +387,7 @@
 
 							<ul id="brandParent">
 								<li class="p-b-6" id="brandLi">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active lia">
+									<a href="#" class="filter-link stext-106 trans-04 lia">
 										All
 									</a>
 								</li>
@@ -390,12 +402,12 @@
 
 							<ul id="colorParent">
 								<li class="p-b-6" id="colorLi">
-									<span class="fs-15 lh-12 m-r-6" style="color: #222;">
+									<span class="fs-15 lh-12 m-r-6 colorC" style="color: #22222200;">
 										<i class="zmdi zmdi-circle"></i>
 									</span>
 
-									<a href="#" class="filter-link stext-106 trans-04">
-										Black
+									<a href="#" class="filter-link stext-106 trans-04 lia">
+										Any Color
 									</a>
 								</li>
 							</ul>
@@ -409,8 +421,9 @@
 
 							<div class="flex-w p-t-4 m-r--5" id="sizeParent">
 								<a href="#"
-									class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5" id="sizeA">
-									Fashion
+									class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5"
+									id="sizeA">
+									All
 								</a>
 							</div>
 						</div>
@@ -425,7 +438,7 @@
 					<!-- Block2 -->
 					<div class="block2">
 						<div class="block2-pic hov-img0">
-							<img src="images/product-01.jpg" alt="IMG-PRODUCT">
+							<img src="images/product-01.jpg" alt="IMG-PRODUCT" class="productImage">
 
 							<a href="#"
 								class="productElementATag block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
@@ -449,7 +462,7 @@
 								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 addToWishlist">
 									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
 										alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l"
+									<img class="icon-heart2 dis-block trans-04 ab-t-l "
 										src="images/icons/icon-heart-02.png" alt="ICON">
 								</a>
 							</div>
@@ -461,9 +474,23 @@
 
 			<!-- Load more -->
 			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-					Load More
-				</a>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination" id="pgParent">
+						<li class="page-item" id="pgPrevious">
+							<span class="page-link text-dark" href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</span>
+						</li>
+						<li class="page-item" id="pgChild">
+							<a class="page-link text-dark paginationNum" href="#">1</a>
+						</li>
+						<li class="page-item" id="pgNext">
+							<span class="page-link text-dark" href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</span>
+						</li>
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</section>
@@ -895,7 +922,7 @@
 	<script src="js/main.js"></script>
 	<script src="assets/js/custom/header.js"></script>
 	<script src="assets/js/custom/footer.js"></script>
-	<!-- <script src="assets/js/custom/index.js"></script> -->
+	<script src="assets/js/custom/notification.js"></script>
 	<script src="assets/js/custom/product.js"></script>
 </body>
 

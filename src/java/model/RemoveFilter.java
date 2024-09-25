@@ -35,11 +35,11 @@ public class RemoveFilter implements Filter {
             boolean isError = false;
             String message = "";
 
-            if (id.isBlank()) {
+            if (id.isEmpty()) {
                 message = "Missing Id";
                 isError = true;
 
-            } else if (Validation.isInteger(id)) {
+            } else if (!Validation.isInteger(id)) {
                 //not a number
                 isError = true;
                 message = "Not a Number";

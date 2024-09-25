@@ -48,7 +48,7 @@ public class LoadAdminData extends HttpServlet {
         sellerCriteria.setProjection(
                 Projections.count("id")
         );
-        String sellerCount = (String) sellerCriteria.uniqueResult();
+        Long sellerCount = (Long) sellerCriteria.uniqueResult();
 
         // total users
         Criteria userCriteria = hibernateSession.createCriteria(UserTable.class);
@@ -56,10 +56,10 @@ public class LoadAdminData extends HttpServlet {
         userCriteria.setProjection(
                 Projections.count("id")
         );
-        String userCount = (String) userCriteria.uniqueResult();
+        Long userCount = (Long) userCriteria.uniqueResult();
 
         // total buyers
-        int buyerCount = Integer.parseInt(userCount) - Integer.parseInt(sellerCount);
+        Long buyerCount = userCount - sellerCount;
 
         // total products
         Criteria productCriteria = hibernateSession.createCriteria(Product.class);
@@ -67,7 +67,7 @@ public class LoadAdminData extends HttpServlet {
         productCriteria.setProjection(
                 Projections.count("id")
         );
-        String productCount = (String) productCriteria.uniqueResult();
+        Long productCount = (Long) productCriteria.uniqueResult();
 
         //username
         AdminDetailTable admin = (AdminDetailTable) request.getSession().getAttribute("admin");
@@ -76,19 +76,15 @@ public class LoadAdminData extends HttpServlet {
         //not replyed message status
         Criteria messageStatusCriteria = hibernateSession.createCriteria(Message_status.class);
         messageStatusCriteria.add(Restrictions.ne("id", 3));
-        messageStatusCriteria.setProjection(
-                Projections.count("id")
-        );
-        Message_status messageStatus = (Message_status) messageStatusCriteria.uniqueResult();
+        List<Message_status> messageStatusList = (List<Message_status>) messageStatusCriteria.list();
 
         // message
         Criteria messageCriteria = hibernateSession.createCriteria(Message.class);
-        messageCriteria.add(Restrictions.eq("message_status", messageStatus));
+        messageCriteria.add(Restrictions.in("message_status", messageStatusList));
         ArrayList<Message> messageList = (ArrayList<Message>) messageCriteria.list();
 
-//        JsonArray jsonMessages = new JsonArray();
         for (Message message : messageList) {
-            
+
             message.getUser().setAccount_type(null);
             message.getUser().setEmail(null);
             message.getUser().setFirst_name(null);
@@ -99,81 +95,29 @@ public class LoadAdminData extends HttpServlet {
             message.getUser().setVerified_status(null);
 
         }
-        
+
         //features
-        
         //color
         Criteria colorCriteria = hibernateSession.createCriteria(Product_color.class);
         colorCriteria.add(Restrictions.eq("status", status));
         ArrayList<Product_color> colorList = (ArrayList<Product_color>) colorCriteria.list();
 
-//        JsonArray jsonColors = new JsonArray();
-//        for (Product_color color : colorList) {
-//            
-//            JsonObject colorJson = new JsonObject();
-//            
-//            colorJson.addProperty("id", color.getId()); 
-//            colorJson.addProperty("color", color.getColor()); 
-//            
-//            jsonColors.add(colorJson);
-//        }
-
-        
         //category
         Criteria categoryCriteria = hibernateSession.createCriteria(Category.class);
         categoryCriteria.add(Restrictions.eq("status", status));
         ArrayList<Category> categoryList = (ArrayList<Category>) categoryCriteria.list();
 
-//        JsonArray jsonCategory = new JsonArray();
-//        for (Category category : categoryList) {
-//            
-//            JsonObject categoryJson = new JsonObject();
-//            
-//            categoryJson.addProperty("id", category.getId()); 
-//            categoryJson.addProperty("category", category.getCategory()); 
-//            
-//            jsonCategory.add(categoryJson);
-//        }
-
-        
         //brand
         Criteria brandCriteria = hibernateSession.createCriteria(Brand.class);
         brandCriteria.add(Restrictions.eq("status", status));
         ArrayList<Brand> brandList = (ArrayList<Brand>) brandCriteria.list();
 
-//        JsonArray jsonBrand = new JsonArray();
-//        for (Brand brand : brandList) {
-//            
-//            JsonObject categoryJson = new JsonObject();
-//            
-//            categoryJson.addProperty("id", brand.getId()); 
-//            categoryJson.addProperty("brand", brand.getBrand()); 
-//            
-//            jsonBrand.add(categoryJson);
-//        }
-        
-        
-        
         //size
         Criteria sizeCriteria = hibernateSession.createCriteria(Size.class);
         sizeCriteria.add(Restrictions.eq("status", status));
         ArrayList<Size> sizeList = (ArrayList<Size>) sizeCriteria.list();
 
-//        JsonArray jsonSize = new JsonArray();
-//        for (Size size : sizeList) {
-//            
-//            JsonObject sizeJson = new JsonObject();
-//            
-//            sizeJson.addProperty("id", size.getId()); 
-//            sizeJson.addProperty("size", size.getSize()); 
-//            
-//            jsonSize.add(sizeJson);
-//        }
-        
-        
-        
-        
-                Gson gson = new Gson();
+        Gson gson = new Gson();
 
         JsonObject jo = new JsonObject();
         jo.addProperty("sellerCount", sellerCount);
@@ -183,7 +127,7 @@ public class LoadAdminData extends HttpServlet {
         jo.add("messageArr", gson.toJsonTree(messageList));
         jo.add("colorArr", gson.toJsonTree(colorList));
         jo.add("categoryArr", gson.toJsonTree(categoryList));
-        jo.add("brandArr",gson.toJsonTree(brandList) );
+        jo.add("brandArr", gson.toJsonTree(brandList));
         jo.add("sizeArr", gson.toJsonTree(sizeList));
 
         Response_DTO response_DTO = new Response_DTO(true, jo);

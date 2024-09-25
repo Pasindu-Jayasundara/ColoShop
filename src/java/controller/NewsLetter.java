@@ -32,13 +32,13 @@ public class NewsLetter extends HttpServlet {
 
         final String text = (String) request.getAttribute("text");
 
-        boolean isInvalid = false;
+        boolean isOk= true;
         String errorMessage = "";
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         Criteria newsLetterCriteria = hibernateSession.createCriteria(Newsletter.class);
-        final ArrayList<Newsletter> list = (ArrayList<Newsletter>) newsLetterCriteria.list();
+        final List<Newsletter> list = (List<Newsletter>) newsLetterCriteria.list();
 
         if (!list.isEmpty()) {
             //found emails
@@ -65,22 +65,20 @@ public class NewsLetter extends HttpServlet {
             });
             emailThred.start();
 
-            errorMessage = "NewsLeteer Send";
+            errorMessage = "NewsLetter Send";
         } else {
             //cannot find message
-            errorMessage = "Cannot Find Message";
-            isInvalid = true;
+            errorMessage = "No Subscribers";
+            isOk = false;
         }
 
         hibernateSession.close();
 
-        if (isInvalid) {
-            Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-            Gson gson = new Gson();
+        Response_DTO response_DTO = new Response_DTO(isOk, errorMessage);
+        Gson gson = new Gson();
 
-            response.setContentType("application/json");
-            response.getWriter().write(gson.toJson(response_DTO));
-        }
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(response_DTO));
 
     }
 

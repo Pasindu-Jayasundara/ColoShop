@@ -5,13 +5,13 @@ async function sendMessage() {
 
     if (titleM.trim() == "") {
 
-        Notification().error({
+        new Notification().error({
             message: "Missing Title"
         })
 
     } else if (msgM.trim() == "") {
 
-        Notification().error({
+        new Notification().error({
             message: "Missing Message"
         })
 
@@ -31,17 +31,17 @@ async function sendMessage() {
         if (response.ok) {
             const jsonData = await response.json();
             if (jsonData.success) {
-                Notification().success({
+                new Notification().success({
                     message: jsonData.data
                 })
             } else {
-                Notification().error({
+                new Notification().error({
                     message: jsonData.data
                 })
             }
             console.log(jsonData);
         } else {
-            Notification().error({
+            new Notification().error({
                 message: "Please Try Again Later"
             })
             console.error(response.statusText);

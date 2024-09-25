@@ -41,7 +41,7 @@ public class ReplyToUserMessage extends HttpServlet {
                        
             //message table
             Criteria messageStatusCriteria = hibernateSession.createCriteria(Message_status.class);
-            messageStatusCriteria.add(Restrictions.eq("id", "3"));//replied
+            messageStatusCriteria.add(Restrictions.eq("id", 3));//replied
             
             Message_status messageStatus = (Message_status) messageStatusCriteria.uniqueResult();
             

@@ -2,16 +2,16 @@ const login = async() => {
 
     const response = await fetch("AdminLogin",{
         method:"POST",
-        body:{
+        body:JSON.stringify({
             email:document.getElementById("email").value,
             password:document.getElementById("password").value
-        },
+        }),
         headers:{
             "Content-Type":"application/json"
         }
     });
 
-    const popup = Notification();
+    const popup = new Notification();
 
     if (response.ok) {
 
@@ -24,7 +24,7 @@ const login = async() => {
             });
         }
     }else{
-        Notification().error({
+        new Notification().error({
             message:"Please Try Again Later"
         })
 

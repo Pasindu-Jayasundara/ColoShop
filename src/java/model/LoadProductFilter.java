@@ -30,7 +30,7 @@ public class LoadProductFilter implements Filter {
             try {
                 resultCount = Integer.parseInt(request.getParameter("productCount"));
                 request.setAttribute("productCount", resultCount);
-                chain.doFilter(request, response);
+//                chain.doFilter(request, response);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -88,25 +88,28 @@ public class LoadProductFilter implements Filter {
 
         //sort
         boolean isSortFound = false;
-        if (request.getParameter("sortBy") != null && !request.getParameter("sortBy").isBlank()) {
+        if (request.getParameter("sortBy") != null && !request.getParameter("sortBy").isEmpty()) {
 
             String sortBy = request.getParameter("sortBy").toLowerCase();
             if (sortBy.equals("default")) {
                 isSortFound = true;
-                request.setAttribute("sortBy", request.getParameter(sortBy));
+                request.setAttribute("sortBy", sortBy);
 
             } else if (sortBy.equals("new")) {
                 isSortFound = true;
-                request.setAttribute("sortBy", request.getParameter(sortBy));
+                request.setAttribute("sortBy", sortBy);
 
             } else if (sortBy.equals("priceasc")) {
                 isSortFound = true;
-                request.setAttribute("sortBy", request.getParameter(sortBy));
+                request.setAttribute("sortBy", sortBy);
 
             } else if (sortBy.equals("pricedesc")) {
                 isSortFound = true;
-                request.setAttribute("sortBy", request.getParameter(sortBy));
+                request.setAttribute("sortBy", sortBy);
 
+            }else{
+                isSortFound = true;
+                request.setAttribute("sortBy", sortBy);
             }
 
         }
@@ -114,8 +117,8 @@ public class LoadProductFilter implements Filter {
 
         //search
         boolean isSearchFound = false;
-        if (request.getParameter("search") != null && !request.getParameter("search").isBlank()) {
-            if (!request.getParameter("search").isBlank()) {
+        if (request.getParameter("search") != null && !request.getParameter("search").isEmpty()) {
+            if (!request.getParameter("search").isEmpty()) {
                 isSearchFound = true;
                 request.setAttribute("search", request.getParameter("search"));
             }

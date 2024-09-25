@@ -79,10 +79,14 @@ const loadProduct = async () => {
                 //get product element
                 let element = productElement.cloneNode(true);
                 element.querySelector(".productName").innerHTML = product.name;
+                element.querySelector(".productName").href = "product-detail.html?product="+product.id;
                 element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
                 element.querySelector(".productElementATag").addEventListener("click", (e) => {
                     e.preventDefault();
                     loadQuickView(product.id);
+                });
+                element.querySelector(".productClick").addEventListener("click", (e) => {
+                    window.location.href="product-detail.html?product="+product.id;
                 });
 
                 element.classList.replace("women", product.category.category);
@@ -213,14 +217,14 @@ const addToCart = async () => {
                 button: "OK",
             });
         } else {
-            Notification().error({
+             Notification().error({
                 message: data.data
             })
         }
 
 
     } else {
-        Notification().error({
+         Notification().error({
             message: "Please Try Again Latter"
         })
         console.log(response)
@@ -283,19 +287,19 @@ const addToWishlist = async (productId) => {
         // console.log(data)
         if (data.success) {
 
-            Notification().success({
+            new Notification().success({
                 message: data.data
             })
 
         } else {
-            Notification().error({
+             Notification().error({
                 message: data.data
             })
         }
 
 
     } else {
-        Notification().error({
+         Notification().error({
             message: "Please Try Again Latter"
         })
         console.log(response)

@@ -53,11 +53,11 @@ public class AddNewProductFilter implements Filter {
         String fileName3 = Paths.get(img3.getSubmittedFileName()).getFileName().toString();
 
         System.out.println(color);
-//        if (httpServletRequest.getSession().getAttribute("user") == null) {
-//            isInvalid = true;
-//            message = "Please Logedin First";
-//
-//        } else 
+        if (httpServletRequest.getSession().getAttribute("user") == null) {
+            isInvalid = true;
+            message = "Please Logedin First";
+
+        } else 
             if (name.trim().equals("")) {
             isInvalid = true;
             message = "Missing Name";
@@ -104,28 +104,28 @@ public class AddNewProductFilter implements Filter {
 
         } else {
 
-            if (Validation.isDouble(unit_price) &&Validation.isInteger(unit_price)) {
+            if (!Validation.isDouble(unit_price) && !Validation.isInteger(unit_price)) {
                 isInvalid = true;
                 message = "Unit Price Not a Double";
 
-            } else if (Validation.isDouble(delivery_fee)&&Validation.isInteger(unit_price)) {
+            } else if (!Validation.isDouble(delivery_fee)&&!Validation.isInteger(unit_price)) {
                 isInvalid = true;
                 message = "Delivery Fee Not a Double";
 
             } 
-            else if (Validation.isInteger(color)) {
+            else if (!Validation.isInteger(color)) {
                 isInvalid = true;
                 message = "Product Color Not a Number";
 
-            } else if (Validation.isInteger(size)) {
+            } else if (!Validation.isInteger(size)) {
                 isInvalid = true;
                 message = "Size Not a Number";
 
-            } else if (Validation.isInteger(brand)) {
+            } else if (!Validation.isInteger(brand)) {
                 isInvalid = true;
                 message = "Brand Not a Number";
 
-            } else if (Validation.isInteger(category)) {
+            } else if (!Validation.isInteger(category)) {
                 isInvalid = true;
                 message = "Category Not a Number";
 //

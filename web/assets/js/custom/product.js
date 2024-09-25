@@ -1,12 +1,12 @@
-window.addEventListener("load",()=>{
+window.addEventListener("load", () => {
     loadProduct();
 })
 
 var sortBy = "Default";
-var color = "Any"
-var category = "Any"
-var brand = "Any"
-var size = "Any"
+var color = ""
+var category = ""
+var brand = ""
+var size = ""
 var search = ""
 const applySort = (e, sortType) => {
     e.preventDefault();
@@ -39,149 +39,188 @@ const searchText = (e) => {
     if (txt.length > 5 && txt.trim() != "") {
         search = txt
     }
-
 };
+
+const arr = [];
+const arrBrand = [];
+const arrSize = [];
+const arrColor = [];
 
 var smallCategoryElement;
 var isSmallFirstTime = true;
-const loadSmallCategories = (categoryName, cId) => {
+const loadSmallCategories = (categoryArr) => {
 
     // outside
     const parent = document.getElementById("category-small-container");
     smallCategoryElement = document.getElementById("smallCategoryElement");
 
-    if (isSmallFirstTime) {
-        parent.innerHTML = "";
-        isSmallFirstTime = false;
-    }
+    categoryArr.forEach(obj => {
+        if (isSmallFirstTime) {
+            parent.innerHTML = "";
+            isSmallFirstTime = false;
+        }
 
-    let element = smallCategoryElement.cloneNode(true);
-    element.innerHTML = categoryName;
-    element.setAttribute("data-filter", "." + categoryName);
+        let element = smallCategoryElement.cloneNode(true);
+        element.innerHTML = obj.category;
+        element.setAttribute("data-filter", "." + obj.category);
 
-    parent.appendChild(element);
+        parent.appendChild(element);
 
-    // filter area
-    loadFilterCategories(categoryName, cId)
+    })
+    loadFilterCategories(categoryArr)
+
 };
 
 var filterCategoryElement;
 var isFilterFirstTime = true;
-const loadFilterCategories = (categoryName, cId) => {
+const loadFilterCategories = (categoryArr) => {
 
     // filter area
     const parentInFIlter = document.getElementById("categoryParent");
     filterCategoryElement = document.getElementById("categoryLi");
 
-    if (isFilterFirstTime) {
-        parentInFIlter.innerHTML = "";
-        filterCategoryElement.addEventListener("click", (e) => {
-            applyCategory(event, 0)
+    categoryArr.forEach(obj => {
+
+        if (isFilterFirstTime) {
+            parentInFIlter.innerHTML = "";
+            let filterLiElement = filterCategoryElement.cloneNode(true);
+            filterLiElement.addEventListener("click", (e) => {
+                applyCategory(e, 0)
+            });
+            parentInFIlter.appendChild(filterLiElement);
+            isFilterFirstTime = false;
+        }
+
+        let filterLiElement = filterCategoryElement.cloneNode(true);
+        filterLiElement.removeAttribute("id");
+        filterLiElement.querySelector(".lia").innerHTML = obj.category;
+        filterLiElement.querySelector(".lia").addEventListener("load", (e) => {
+            applyCategory(e, obj.id)
         });
-        parentInFIlter.innerHTML = filterCategoryElement;
-        isFilterFirstTime = false;
-    }
+        filterLiElement.setAttribute("data-filter", "." + obj.category);
 
-    let filterLiElement = filterCategoryElement.cloneNode(true);
-    filterLiElement.removeAttribute("id");
-    filterLiElement.querySelector(".lia").innerHTML = categoryName;
-    filterLiElement.querySelector(".lia").addEventListener("load", (e, cId) => {
-        applyCategory(event, cId)
-    });
-    filterLiElement.setAttribute("data-filter", "." + categoryName);
+        parentInFIlter.appendChild(filterLiElement);
+    })
 
-    parentInFIlter.appendChild(filterLiElement);
 };
 
 var filterBrandElement;
 var isBrandFilterFirstTime = true;
-const loadFilterBrands = (brandName, bId) => {
+const loadFilterBrands = (brandArr) => {
 
     // filter area
     const parent = document.getElementById("brandParent");
     filterBrandElement = document.getElementById("brandLi");
 
-    if (isBrandFilterFirstTime) {
-        parent.innerHTML = "";
-        filterBrandElement.addEventListener("click", (e) => {
-            applyBrand(event, 0)
+    brandArr.forEach(obj => {
+
+        if (isBrandFilterFirstTime) {
+            parent.innerHTML = "";
+            let element = filterBrandElement.cloneNode(true);
+            element.addEventListener("click", (e) => {
+                applyBrand(e, 0)
+            });
+            parent.appendChild(element);
+            isBrandFilterFirstTime = false;
+        }
+
+        let element = filterBrandElement.cloneNode(true);
+        element.removeAttribute("id");
+        element.querySelector(".lia").innerHTML = obj.brand;
+        element.querySelector(".lia").addEventListener("load", (e) => {
+            applyBrand(e, obj.id)
         });
-        parent.innerHTML = filterBrandElement;
-        isBrandFilterFirstTime = false;
-    }
+        element.setAttribute("data-filter", "." + obj.brand);
 
-    let element = filterBrandElement.cloneNode(true);
-    element.removeAttribute("id");
-    element.querySelector(".lia").innerHTML = brandName;
-    element.querySelector(".lia").addEventListener("load", (e, bId) => {
-        applyBrand(event, bId)
+        parent.appendChild(element);
     });
-    element.setAttribute("data-filter", "." + brandName);
 
-    parent.appendChild(element);
 };
 
 var filterSizeElement;
 var isSizeFilterFirstTime = true;
-const loadFilterSizes = (sizeName, sId) => {
+const loadFilterSizes = (sizeArr) => {
 
     // filter area
     const parent = document.getElementById("sizeParent");
     filterSizeElement = document.getElementById("sizeA");
 
-    if (isSizeFilterFirstTime) {
-        parent.innerHTML = "";
-        filterSizeElement.addEventListener("click", (e) => {
-            applySize(event, 0)
+    sizeArr.forEach((obj) => {
+
+        if (isSizeFilterFirstTime) {
+            parent.innerHTML = "";
+            let element = filterSizeElement.cloneNode(true);
+            element.addEventListener("click", (e) => {
+                applySize(e, 0)
+            });
+            parent.appendChild(element);
+            isSizeFilterFirstTime = false;
+        }
+
+        let element = filterSizeElement.cloneNode(true);
+        element.removeAttribute("id");
+        element.innerHTML = obj.size;
+        element.addEventListener("load", (e) => {
+            applySize(e, obj.id)
         });
-        parent.innerHTML = filterSizeElement;
-        isSizeFilterFirstTime = false;
-    }
+        element.setAttribute("data-filter", "." + obj.size);
 
-    let element = filterSizeElement.cloneNode(true);
-    element.removeAttribute("id");
-    element.innerHTML = sizeName;
-    element.addEventListener("load", (e, sId) => {
-        applySize(event, sId)
+        parent.appendChild(element);
     });
-    element.setAttribute("data-filter", "." + sizeName);
 
-    parent.appendChild(element);
 };
 
 var filterColorElement;
 var isColorFilterFirstTime = true;
-const loadFilterColors = (colorName, cId) => {
+const loadFilterColors = (colorArr) => {
+
+    const parent = document.getElementById("colorParent");
+    filterColorElement = document.getElementById("colorLi");
 
     // filter area
-    const parent = document.getElementById("brandParent");
-    filterColorElement = document.getElementById("brandLi");
+    colorArr.forEach(obj => {
 
-    if (isColorFilterFirstTime) {
-        parent.innerHTML = "";
-        filterColorElement.addEventListener("click", (e) => {
-            applyColor(event, 0)
+        if (isColorFilterFirstTime) {
+            parent.innerHTML = "";
+            let element = filterColorElement.cloneNode(true);
+            element.addEventListener("click", (e) => {
+                applyColor(e, 0)
+            });
+            parent.appendChild(element);
+            isColorFilterFirstTime = false;
+        }
+
+        let element = filterColorElement.cloneNode(true);
+        element.removeAttribute("id");
+        element.querySelector(".colorC").style.color = obj.color
+        element.querySelector(".lia").innerHTML = obj.color;
+        element.querySelector(".lia").addEventListener("load", (e) => {
+            applyColor(e, obj.id)
         });
-        parent.innerHTML = filterColorElement;
-        isColorFilterFirstTime = false;
-    }
+        element.setAttribute("data-filter", "." + obj.color);
 
-    let element = filterColorElement.cloneNode(true);
-    element.removeAttribute("id");
-    element.querySelector(".lia").innerHTML = colorName;
-    element.querySelector(".lia").addEventListener("load", (e, cId) => {
-        applyColor(event, cId)
+        parent.appendChild(element);
     });
-    element.setAttribute("data-filter", "." + colorName);
-
-    parent.appendChild(element);
 };
 
-const arr = [];
-var isProductFirstTime = true;
+// const arr = [];
+// const arrBrand = [];
+// const arrSize = [];
+// const arrColor = [];
+var isFiltertFirstTime = true;
 const productArr = [];
 var productCount = 30;
+
+var loadFrom = 0
+var loadTo = 20
+
+var parent = document.getElementById("productContainer");
+var productElement = document.getElementById("productElement");
 const loadProduct = async () => {
+
+    Notification().info({
+        message: "Applying Filters ..."
+    })
 
     const response = await fetch("LoadProduct?productCount=" + productCount + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
     if (response.ok) {
@@ -190,71 +229,87 @@ const loadProduct = async () => {
         if (data.success) {
 
             const productData = data.data;
+            parent.innerHTML = "";
 
-            let parent = document.getElementById("productContainer");
-            let productElement = document.getElementById("productElement");
-
+            // load features to array
             for (var i = 1; i <= productData.length; i++) {
 
                 let product = productData[i - 1];
-                // console.log(product);
-
                 productArr.push(product);
 
-                //category
-                if (!arr.includes(product.category.category)) {
-                    loadSmallCategories(product.category.category, product.category.id);
+                // if (isProductFirstTime) {
 
-                    arr.push(product.category.category);
+                //category
+                let categoryFound = false;
+                arr.forEach(obj => {
+                    if (obj.id == product.category.id) {
+                        categoryFound = true;
+                        return;
+                    }
+                })
+                if (!categoryFound) {
+                    let obj = {
+                        id: product.category.id,
+                        category: product.category.category
+                    }
+                    arr.push(obj);
                 }
 
                 //brand
-                if (!arrBrand.includes(product.brand.brand)) {
-                    loadFilterBrands(product.brand.brand,product.brand.id)
-                    arrBrand.push(product.category.category);
+                let brandFound = false;
+                arrBrand.forEach(obj => {
+                    if (obj.id == product.brand.id) {
+                        brandFound = true;
+                        return;
+                    }
+                })
+                if (!brandFound) {
+                    let obj = {
+                        id: product.brand.id,
+                        brand: product.brand.brand
+                    }
+                    arrBrand.push(obj);
                 }
 
                 //size
-                if (!arrSize.includes(product.size.size)) {
-                    loadFilterSizes(product.size.size, product.size.id);
-
-                    arrSize.push(product.size.size);
+                let sizeFound = false;
+                arrSize.forEach(obj => {
+                    if (obj.id == product.size.id) {
+                        sizeFound = true;
+                        return;
+                    }
+                })
+                if (!sizeFound) {
+                    let obj = {
+                        id: product.size.id,
+                        size: product.size.size
+                    }
+                    arrSize.push(obj);
                 }
 
                 //color
-                if (!arrColor.includes(product.product_color.color)) {
-                    loadSmallCategories(product.product_color.color, product.product_color.id);
-
-                    arrColor.push(product.product_color.color);
+                let colorFound = false;
+                arrColor.forEach(obj => {
+                    if (obj.id == product.product_color.id) {
+                        colorFound = true;
+                        return;
+                    }
+                })
+                if (!colorFound) {
+                    let obj = {
+                        id: product.product_color.id,
+                        color: product.product_color.color
+                    }
+                    arrColor.push(obj);
                 }
 
-
-                if (isProductFirstTime) {
-                    parent.innerHTML = "";
-                    isProductFirstTime = false;
-                }
-
-                //get product element
-                let element = productElement.cloneNode(true);
-                element.querySelector(".productName").innerHTML = product.name;
-                element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
-                element.querySelector(".productElementATag").addEventListener("click", (e) => {
-                    e.preventDefault();
-                    loadQuickView(product.id);
-                });
-
-                element.classList.replace("women", product.category.category);
-                element.removeAttribute("style");
-                element.querySelector(".addToWishlist").addEventListener("click", (e) => {
-                    e.preventDefault();
-                    addToWishlist(product.id)
-                });
-
-                parent.appendChild(element);
-
-                // console.log(element)
-
+                // parent.innerHTML = "";
+                // isProductFirstTime = false;
+                // }
             }
+
+            //load for page
+            loadProductCards()
 
             //from main.js
             $('.js-show-modal1').on('click', function (e) {
@@ -310,6 +365,18 @@ const loadProduct = async () => {
                 addToCart();
             });
 
+            // load filters
+            if (isFiltertFirstTime) {
+
+                loadSmallCategories(arr);
+                loadFilterBrands(arrBrand)
+                loadFilterSizes(arrSize);
+                loadFilterColors(arrColor);
+                isFiltertFirstTime = false;
+            }
+
+            pagination()
+
         } else {
             Notification().error({
                 message: data.data
@@ -323,6 +390,46 @@ const loadProduct = async () => {
     }
 
 };
+
+// var isProductFirstTime = true;
+function loadProductCards() {
+
+    parent.innerHTML = ""
+    if (productArr.length > loadFrom) {
+
+        if (productArr.length < loadTo) {
+            loadTo = productArr.length
+        }
+        for (let x = loadFrom; x < loadTo; x++) {
+
+
+            let product = productArr[x];
+
+            console.log(product)
+            // console.log(product)
+            //get product element
+            let element = productElement.cloneNode(true);
+            element.querySelector(".productName").innerHTML = product.name;
+            element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
+            element.querySelector(".productElementATag").addEventListener("click", (e) => {
+                e.preventDefault();
+                loadQuickView(product.id);
+            });
+
+            element.classList.replace("women", product.category.category);
+            element.removeAttribute("style");
+            element.querySelector(".addToWishlist").addEventListener("click", (e) => {
+                e.preventDefault();
+                addToWishlist(product.id)
+            });
+            element.querySelector(".productImage").src = product.img1;
+
+            parent.appendChild(element);
+
+        }
+    }
+
+}
 
 var addToCartProductId;
 const loadQuickView = (productId) => {
@@ -426,3 +533,38 @@ const addToWishlist = async (productId) => {
 
 
 };
+
+var currentPage = 1
+var pgParent = document.getElementById("pgParent")
+var pgPrevious = document.getElementById("pgPrevious")
+var pgNext = document.getElementById("pgNext")
+var pgChild = document.getElementById("pgChild")
+function pagination() {
+
+    let pages = Math.ceil(productArr.length / 20);
+
+
+    pgParent.innerHTML = ""
+    pgParent.appendChild(pgPrevious)
+
+    for (let i = 1; i <= pages; i++) {
+
+        let element = pgChild.cloneNode(true)
+        element.querySelector(".paginationNum").innerHTML = i;
+        // element.href=window.location.href.split("?")[0]+"?page="+currentPage
+        element.addEventListener("click", () => {
+            currentPage = i
+            element.style.backgroundColor = "black"
+
+            loadFrom = (currentPage * 20) + 1
+            loadTo = loadFrom + 20
+
+            loadProductCards()
+        })
+
+        pgParent.appendChild(element)
+    }
+    pgParent.appendChild(pgNext)
+
+
+}

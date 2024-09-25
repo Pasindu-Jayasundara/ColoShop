@@ -21,8 +21,8 @@ public class AdminLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         Gson gson = new Gson();
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = (String) request.getAttribute("email");
+        String password = (String) request.getAttribute("password");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Criteria adminCriteria = hibernateSession.createCriteria(AdminDetailTable.class);

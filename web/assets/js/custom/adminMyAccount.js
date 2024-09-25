@@ -17,15 +17,16 @@ async function loadData() {
         if (jsonData.success) {
             const data = jsonData.data;
 
+            console.log(data)
             const sellerCount = data.sellerCount;
             const buyerCount = data.buyerCount;
             const productCount = data.productCount;
             const userName = data.userName;
             const messageArr = data.messageArr;
-            const colorArr = data.colorArr;
-            const brandArr = data.brandArr;
-            const categoryArr = data.categoryArr;
-            const sizeArr = data.sizeArr;
+            colorArr = data.colorArr;
+            brandArr = data.brandArr;
+            categoryArr = data.categoryArr;
+            sizeArr = data.sizeArr;
 
             document.getElementById("sellerCount").innerHTML = sellerCount;
             document.getElementById("buyerCount").innerHTML = buyerCount;
@@ -60,6 +61,7 @@ async function loadData() {
             Notification().error({
                 message: jsonData.data
             })
+            window.location.href = "admin-sign-in.html"
         }
 
 
@@ -67,6 +69,7 @@ async function loadData() {
         Notification().error({
             message: "Please Try Again Later"
         })
+        window.location.href = "admin-sign-in.html"
         console.log(response)
     }
 
@@ -76,13 +79,13 @@ function loadSelectOptionTable() {
 
     let option = document.getElementById("featureList").value;
     if (option == 1) {//color
-        loadTable(colorArr, color)
+        loadTable(colorArr, "color")
     } else if (option == 2) {//size
-        loadTable(sizeArr, size)
+        loadTable(sizeArr, "size")
     } else if (option == 3) {//category
-        loadTable(categoryArr, category)
+        loadTable(categoryArr, "category")
     } else if (option == 4) {//brand
-        loadTable(brandArr, brand)
+        loadTable(brandArr, "brand")
     } else {
         Notification().error({
             message: "Invalid Selection"
@@ -91,10 +94,10 @@ function loadSelectOptionTable() {
 
 }
 
-function loadTable(array, receiveName) {
+let tableBody = document.getElementById("manageTableBody");
+let row = document.getElementById("manageRow");
 
-    let tableBody = document.getElementById("manageTableBody");
-    let row = document.getElementById("manageRow");
+function loadTable(array, receivedName) {
 
     tableBody.innerHTML = "";
 
@@ -105,10 +108,10 @@ function loadTable(array, receiveName) {
 
         element.removeAttribute("id");
         element.querySelector(".msgCount").innerHTML = count;
-        element.querySelector(".avaliableOption").innerHTML = arrElement.receiveName;
+        element.querySelector(".avaliableOption").innerHTML = arrElement[receivedName];
 
         element.querySelector(".msgBtn").addEventListener("click", () => {
-            remove(arrElement.id, receiveName)
+            remove(arrElement.id, receivedName)
         });
         tableBody.appendChild(element);
 
@@ -123,10 +126,10 @@ async function remove(elementid, ofWhat) {
 
         const response = await fetch("Remove", {
             method: "POST",
-            body: {
+            body: JSON.stringify({
                 id: elementid,
                 of: ofWhat
-            },
+            }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -138,6 +141,30 @@ async function remove(elementid, ofWhat) {
 
             const data = await response.json();
             if (data.success) {
+
+                let optionDataArr = data.data
+
+                if (ofWhat == "color") {
+                    colorArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 1
+                    loadTable(colorArr, "color")
+
+                } else if (ofWhat == "size") {
+                    sizeArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 2
+                    loadTable(sizeArr, "size")
+
+                } else if (ofWhat == "category") {
+                    categoryArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 3
+                    loadTable(categoryArr, "category")
+
+                } else if (ofWhat == "brand") {
+                    brandArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 4
+                    loadTable(brandArr, "brand")
+
+                }
 
                 popup.success({
                     message: "Removing Success"
@@ -163,39 +190,46 @@ async function remove(elementid, ofWhat) {
 var msgId;
 async function sendReply() {
 
-    const response = await fetch("ReplyToUserMessage", {
-        method: "POST",
-        body: {
-            id: msgId,
-            text: document.getElementById("replyText").value
-        },
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+    if (msgId != undefined && document.getElementById("message-text").value.trim() != "") {
 
-    const popup = Notification();
+        const response = await fetch("ReplyToUserMessage", {
+            method: "POST",
+            body: JSON.stringify({
+                id: msgId,
+                text: document.getElementById("message-text").value
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    if (response.ok) {
+        const popup = Notification();
 
-        const data = await response.json();
-        if (data.success) {
+        if (response.ok) {
 
-            popup.success({
-                message: "Reply Send Successfully"
-            })
+            const data = await response.json();
+            if (data.success) {
 
+                popup.success({
+                    message: "Reply Send Successfully"
+                })
+
+            } else {
+                popup.error({
+                    message: data.data
+                });
+            }
         } else {
             popup.error({
-                message: data.data
-            });
+                message: "Please Try Again Later"
+            })
+
+            console.log(response)
         }
     } else {
-        popup.error({
-            message: "Please Try Again Later"
+        Notification().info({
+            message: "Missing Data"
         })
-
-        console.log(response)
     }
 
 }
@@ -225,9 +259,9 @@ async function sendNews() {
 
     const response = await fetch("NewsLetter", {
         method: "POST",
-        body: {
+        body: JSON.stringify({
             text: document.getElementById("exampleFormControlTextarea1").value
-        },
+        }),
         headers: {
             "Content-Type": "application/json"
         }
@@ -290,9 +324,7 @@ async function saveOption() {
     let of = document.getElementById("addNewFeatureList").value
     let newOption = document.getElementById("newOption").value
 
-
-
-    const popup = Notification();
+    const popup = new Notification();
 
     if (of.trim() == "") {
         popup.error({
@@ -313,7 +345,7 @@ async function saveOption() {
             typeText = "category"
         } else if (of == 4) {
             typeText = "brand"
-        }else{
+        } else {
             popup.error({
                 message: "Invalid Type"
             });
@@ -322,10 +354,10 @@ async function saveOption() {
 
         const response = await fetch("AddNewOption", {
             method: "POST",
-            body: {
+            body: JSON.stringify({
                 type: typeText,
                 option: newOption
-            },
+            }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -336,8 +368,32 @@ async function saveOption() {
             const data = await response.json();
             if (data.success) {
 
+                let optionDataArr = data.data
+
+                if (typeText == "color") {
+                    colorArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 1
+                    loadTable(colorArr, "color")
+
+                } else if (typeText == "size") {
+                    sizeArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 2
+                    loadTable(sizeArr, "size")
+
+                } else if (typeText == "category") {
+                    categoryArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 3
+                    loadTable(categoryArr, "category")
+
+                } else if (typeText == "brand") {
+                    brandArr = optionDataArr
+                    document.getElementById("featureList").selectedIndex = 4
+                    loadTable(brandArr, "brand")
+
+                }
+
                 popup.success({
-                    message: "Reply Send Successfully"
+                    message: "New Option Adding Success"
                 })
 
             } else {

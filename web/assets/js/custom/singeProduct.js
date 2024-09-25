@@ -1,4 +1,3 @@
-
 window.addEventListener("load", () => {
 
     let url = window.location.href;
@@ -246,7 +245,7 @@ const addToCart = async() => {
 };
 
 var cartListElement;
-const loadCart = async()=>{
+const loadCart2 = async()=>{
 
     const response = await fetch("LoadCart");
     if(response.ok){

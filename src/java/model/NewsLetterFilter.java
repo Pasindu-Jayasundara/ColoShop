@@ -34,7 +34,7 @@ public class NewsLetterFilter implements Filter {
 
         if (httpServletRequest.getSession(false).getAttribute("admin") != null) {
             //already loged in
-            if (text == null || text.isBlank()) {
+            if (text == null || text.isEmpty()) {
                 //missing reply
                 isInvalid = true;
                 errorMessage = "Missing Reply Text";

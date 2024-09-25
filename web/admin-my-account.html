@@ -46,6 +46,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+
+    <link rel="stylesheet" href="assets/css/notification.css">
 </head>
 
 <body>
@@ -60,7 +62,7 @@
         <div>
             <div class="wrap-icon-header flex-w flex-r-m">
                 <img class="ui avatar image" src="images/avatar.jpg">
-                <span>Username</span>
+                <span id="userName">Username</span>
                 <span class="btn btn-dark ms-4" onclick="logOut();">LogOut</span>
             </div>
         </div>
@@ -73,7 +75,7 @@
                 <div class="content">
                     <div class="header">Total Buyers</div>
                     <div class="meta">by today</div>
-                    <div class="description">
+                    <div class="description" id="buyerCount">
                         <!-- Elliot Fu is a film-maker from New York. -->
                     </div>
                 </div>
@@ -82,7 +84,7 @@
                 <div class="content">
                     <div class="header">Total Sellers</div>
                     <div class="meta">buy today</div>
-                    <div class="description">
+                    <div class="description" id="sellerCount">
                         <!-- Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying. -->
                     </div>
                 </div>
@@ -91,7 +93,7 @@
                 <div class="content">
                     <div class="header">Total Products</div>
                     <div class="meta">by today</div>
-                    <div class="description">
+                    <div class="description" id="productCount">
                         <!-- Jenny is a student studying Media Management at the New School -->
                     </div>
                 </div>
@@ -148,7 +150,7 @@
                                     <td class="mssageStatus"></td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-dark msgBtn" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal" data-bs-whatever="a" msg-id=""
+                                            data-bs-target="#exampleModal" data-bs-whatever="a" id=""
                                             onclick="openModel()">Reply</button>
                                     </td>
                                 </tr>
@@ -192,9 +194,7 @@
                                     <td class="msgCount text-center"></td>
                                     <td class="avaliableOption"></td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-dark msgBtn" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal" data-bs-whatever="a"
-                                            msg-id="">Remove</button>
+                                        <button type="button" class="btn btn-dark msgBtn">Remove</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -217,7 +217,7 @@
                     <form>
                         <div class="mb-3">
                             <label for="addNewFeatureList" class="col-form-label">Type:</label>
-                            <select class="form-select col-2" aria-label="Default select example" id="addNewFeatureList"></select>
+                            <select class="form-select col-4" aria-label="Default select example" id="addNewFeatureList">
                                 <option value="0" selected>Choose</option>
                                 <option value="1">Color</option>
                                 <option value="2">Size</option>
@@ -277,6 +277,7 @@
         $('.ui.checkbox').checkbox();
     </SCript>
 
+<script src="assets/js/custom/notification.js"></script>
 
     <script src="assets/js/custom/adminMyAccount.js"></script>
 </body>

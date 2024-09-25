@@ -5,6 +5,7 @@ import dto.Response_DTO;
 import entity.Size;
 import entity.Status;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +22,8 @@ public class DeleteSize extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int sizeId = (int) request.getAttribute("sizeId");
+        String id = (String) request.getAttribute("id");
+        int sizeId = Integer.parseInt(id);
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         boolean isDone = true;
@@ -33,7 +35,7 @@ public class DeleteSize extends HttpServlet {
             if (size.getStatus().getName().equals("Active")) {
 
                 Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
-                statusCriteria.add(Restrictions.eq("status", "De-Active"));
+                statusCriteria.add(Restrictions.eq("name", "De-Active"));
                 Status deActiveStatus = (Status) statusCriteria.uniqueResult();
 
                 size.setStatus(deActiveStatus);
@@ -48,10 +50,19 @@ public class DeleteSize extends HttpServlet {
             message = "Product Size not Found";
         }
 
+        Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
+        statusCriteria.add(Restrictions.eq("status", "Active"));
+        Status activeStatus = (Status) statusCriteria.uniqueResult();
+        
+        //size
+        Criteria sizeCriteria = hibernateSession.createCriteria(Size.class);
+        sizeCriteria.add(Restrictions.eq("status", activeStatus));
+        ArrayList<Size> sizeList = (ArrayList<Size>) sizeCriteria.list();
+        
         hibernateSession.close();
-
-        Response_DTO response_DTO = new Response_DTO(isDone, message);
+        
         Gson gson = new Gson();
+        Response_DTO response_DTO = new Response_DTO(true, gson.toJsonTree(sizeList));
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(response_DTO));

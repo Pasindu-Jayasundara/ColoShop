@@ -37,12 +37,12 @@ public class ReplyToUserMessageFilter implements Filter {
 
         if (httpServletRequest.getSession(false).getAttribute("admin") != null) {
             //already loged in
-            if (id == null || id.isBlank()) {
+            if (id == null || id.isEmpty()) {
                 // missing message id
                 isInvalid = true;
                 errorMessage = "Missing Message Id";
 
-            } else if (text == null || text.isBlank()) {
+            } else if (text == null || text.isEmpty()) {
                 //missing reply
                 isInvalid = true;
                 errorMessage = "Missing Reply Text";
@@ -51,15 +51,15 @@ public class ReplyToUserMessageFilter implements Filter {
 
                 int messageId = Integer.parseInt(id);
 
-                if (messageId > 0) {
+                if (messageId <= 0) {
                     //invalid message id
                     isInvalid = true;
                     errorMessage = "Invalid Message Id";
 
                 } else {
                     
-                    request.setAttribute("id", id);
-                    request.setAttribute("text", text);
+                    request.setAttribute("messageId", id);
+                    request.setAttribute("reply", text);
                     
                     chain.doFilter(request, response);
                 }
