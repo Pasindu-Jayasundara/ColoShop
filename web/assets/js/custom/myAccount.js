@@ -180,9 +180,7 @@ async function sendReply() {
     }
 }
 
-// only order has order status, when it change.......
-// one orde can have lotsof order items
-// so........
+
 async function changeOrderStatus(orderId) {
     const response = await fetch("UpdateProductStatus", {
         method: "POST",
@@ -274,33 +272,81 @@ function loadPurchasedOrders(orderList) {
 
 }
 
+var rtableBody = document.getElementById("rTableBody");
+var row = document.getElementById("rTableRow");
+
 function loadReceivedOrders(orderList) {
 
-    let tableBody = document.getElementById("rTableBody");
-    let row = document.getElementById("rTableRow");
+    rtableBody.innerHTML = "";
+    let previousOrderIdArr = [];
+    let element;
 
-    tableBody.innerHTML = "";
+    orderList.forEach(arrElement => {
 
-    orderList.forEach(item => {
+        console.log(arrElement)
+        let isNew = true;
 
-        console.log(item)
-        let element = row.cloneNode(true);
+        previousOrderIdArr.forEach(id => {
 
-        element.removeAttribute("id");
-        element.querySelector(".rId").innerHTML = item.id;
-        element.querySelector(".rProduct").innerHTML = item.product.name;
-        element.querySelector(".rQty").innerHTML = item.qty;
-        element.querySelector(".rPaid").innerHTML = item.orders.total_amount;
-        element.querySelector(".rAddress").innerHTML = item.orders.address;
-        element.querySelector(".rOtherText").innerHTML = item.orders.text;
-        element.querySelector(".rStatusBth").innerHTML = item.orders.order_status.status;
-        element.querySelector(".rStatusBth").setAttribute("id", "r" + item.id);
-        element.querySelector(".rStatusBth").addEventListener("click", () => {
-            changeOrderStatus(item.id)
-        })
+            if (id == arrElement.orders.id) {
 
-        tableBody.appendChild(element);
+                // item
+                let ulTag = document.getElementById("ul" + id)
+                let ulLiTag = document.getElementById("li" + id)
 
+                let newLiTag = ulLiTag.cloneNode(true);
+                newLiTag.innerHTML = arrElement.product.name
+
+                ulTag.appendChild(newLiTag)
+
+                // qty
+                let qtyulTag = document.getElementById("qtyul" + id)
+                let qtyulLiTag = document.getElementById("qtyli" + id)
+
+                let qtynewLiTag = qtyulLiTag.cloneNode(true);
+                qtynewLiTag.innerHTML = arrElement.qty
+
+                qtyulTag.appendChild(qtynewLiTag)
+
+
+                isNew = false
+                return;
+            }
+        });
+        if (isNew) {
+
+            element = row.cloneNode(true);
+
+            let txt;
+            if (arrElement.orders.text == undefined) {
+                txt = "-"
+            } else {
+                txt = arrElement.orders.text
+            }
+            element.removeAttribute("id");
+            element.querySelector(".rId").innerHTML = arrElement.orders.id;
+            element.querySelector(".rPaid").innerHTML = arrElement.orders.total_amount;
+            element.querySelector(".rAddress").innerHTML = arrElement.orders.address;
+            element.querySelector(".rOtherText").innerHTML = txt;
+            element.querySelector(".rStatusBth").innerHTML = arrElement.orders.order_status.status;
+            element.querySelector(".rStatusBth").setAttribute("id", "r" + arrElement.orders.id);
+            element.querySelector(".rStatusBth").addEventListener("click", () => {
+                changeOrderStatus(arrElement.orders.id)
+            })
+
+            //qty
+            element.querySelector(".rOtyLi").innerHTML = arrElement.qty;
+            element.querySelector(".rOtyLi").setAttribute("id", "qtyli" + arrElement.orders.id)
+            element.querySelector(".rOtyParent").setAttribute("id", "qtyul" + arrElement.orders.id)
+
+            //item
+            element.querySelector(".rItemsLi").innerHTML = arrElement.product.name;
+            element.querySelector(".rItemsLi").setAttribute("id", "li" + arrElement.orders.id)
+            element.querySelector(".rItemsParent").setAttribute("id", "ul" + arrElement.orders.id)
+            previousOrderIdArr.push(arrElement.orders.id);
+
+            rtableBody.appendChild(element);
+        }
     });
 
     document.getElementById("pendingOrderCount").innerHTML = orderList.length
@@ -409,7 +455,7 @@ function loadMyProducts(productList) {
 
         let row = tableRow.cloneNode(true);
 
-        row.removeAttribute("id");
+        row.setAttribute("id","row"+product.id);
         row.querySelector(".pCount").innerHTML = count;
         row.querySelector(".pName").innerHTML = product.name;
         row.querySelector(".pDesc").innerHTML = product.description;
@@ -528,31 +574,27 @@ async function updateProduct() {
 }
 
 async function deleteProduct() {
-    const formData = new FormData();
 
-    formData.append("name", document.getElementById("inputEmail4").value);
-    formData.append("unit_price", document.getElementById("inputAddress").value);
-    formData.append("delivery_fee", document.getElementById("inputAddress2").value);
-    formData.append("size", document.getElementById("size").value);
-    formData.append("color", document.getElementById("color").value);
-    formData.append("category", document.getElementById("category").value);
-    formData.append("description", document.getElementById("inputPassword4").value);
-    formData.append("brand", document.getElementById("brand").value);
-    formData.append("img1", document.getElementById("img1").files[0]);
-    formData.append("img2", document.getElementById("img2").files[0]);
-    formData.append("img3", document.getElementById("img3").files[0]);
-
-    const response = await fetch("AddNewProduct", {
+    const response = await fetch("DeleteProduct", {
         method: "POST",
-        body: formData
+        body: JSON.stringify({
+            id:productId
+        }),
+        headers:{
+            "Content-Type":"application/json"
+        }
     });
 
     if (response.ok) {
+
         const jsonData = await response.json();
         if (jsonData.success) {
+
             Notification().success({
                 message: jsonData.data
             })
+
+            tableBody.removeChild(document.getElementById("row"+productId))
         } else {
             Notification().error({
                 message: jsonData.data
@@ -561,8 +603,8 @@ async function deleteProduct() {
         console.log(jsonData);
     } else {
         Notification().error({
-            message: "Faild to Add Product"
+            message: "Please Try Again Later"
         })
-        console.error("Failed to submit the form", response.statusText);
+        console.error(response);
     }
 }

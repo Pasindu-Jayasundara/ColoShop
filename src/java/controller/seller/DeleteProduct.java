@@ -21,7 +21,7 @@ public class DeleteProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int productId = Integer.parseInt(request.getParameter("productId"));
+        int productId = Integer.parseInt((String)request.getAttribute("id"));
 
         boolean isDone = false;
         String message = "";
@@ -29,7 +29,7 @@ public class DeleteProduct extends HttpServlet {
         Session hibernaSession = HibernateUtil.getSessionFactory().openSession();
 
         Criteria statusCriteria = hibernaSession.createCriteria(Status.class);
-        statusCriteria.add(Restrictions.eq("status", "Active"));
+        statusCriteria.add(Restrictions.eq("name", "Active"));
         Status activeStatus = (Status) statusCriteria.uniqueResult();
 
         Criteria productCriteria = hibernaSession.createCriteria(Product.class);
@@ -43,8 +43,9 @@ public class DeleteProduct extends HttpServlet {
         if (product != null) {
             //have product
 
-            statusCriteria.add(Restrictions.eq("status", "De-Active"));
-            Status deActiveStatus = (Status) statusCriteria.uniqueResult();
+            Criteria deActiveStatusCriteria = hibernaSession.createCriteria(Status.class);
+            deActiveStatusCriteria.add(Restrictions.eq("name", "De-Active"));
+            Status deActiveStatus = (Status) deActiveStatusCriteria.uniqueResult();
 
             product.setStatus(deActiveStatus);
             hibernaSession.update(product);

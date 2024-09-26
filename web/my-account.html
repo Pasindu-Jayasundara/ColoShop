@@ -205,7 +205,7 @@
                             <thead class="full-width">
                                 <tr>
                                     <th>Order Id</th>
-                                    <th>Product</th>
+                                    <th>Items</th>
                                     <th>Quantity</th>
                                     <th>Paid</th>
                                     <th>Address</th>
@@ -216,8 +216,16 @@
                             <tbody id="rTableBody">
                                 <tr id="rTableRow">
                                     <td class="rId"></td>
-                                    <td class="rProduct"></td>
-                                    <td class="rQty"></td>
+                                    <td class="rItems pb-4">
+                                        <ul class="ui list rItemsParent">
+                                            <li class="rItemsLi">Gaining Access</li>
+                                        </ul>
+                                    </td>
+                                    <td class="rQty">
+                                        <ul class="ui list rOtyParent">
+                                            <li class="rOtyLi">Gaining Access</li>
+                                        </ul>
+                                    </td>
                                     <td class="rPaid"></td>
                                     <td class="rAddress"></td>
                                     <td class="rOtherText"></td>
@@ -436,11 +444,13 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <div>
-                        <button type="button" class="btn btn-danger" id="" onclick="deleteProduct()">Delete Product</button>
+                        <button type="button" class="btn btn-danger" id="" onclick="deleteProduct()">Delete
+                            Product</button>
                     </div>
                     <div>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-dark" id="" onclick="updateProduct()">Update Product</button>
+                        <button type="button" class="btn btn-dark" id="" onclick="updateProduct()">Update
+                            Product</button>
                     </div>
 
                 </div>
