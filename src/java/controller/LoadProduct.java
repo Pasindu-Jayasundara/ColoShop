@@ -46,7 +46,7 @@ public class LoadProduct extends HttpServlet {
 
         //brand
         if (isBrandFound) {
-            String brandId = (String) request.getAttribute("brandId");
+            int brandId = Integer.parseInt((String) request.getAttribute("brandId"));
 
             Criteria brandCriteria = hibernateSession.createCriteria(Brand.class);
             brandCriteria.add(Restrictions.and(
@@ -62,7 +62,7 @@ public class LoadProduct extends HttpServlet {
 
         //category
         if (isCategoryFound) {
-            String categoryId = (String) request.getAttribute("categoryId");
+            int categoryId = Integer.parseInt((String) request.getAttribute("categoryId"));
 
             Criteria categoryCriteria = hibernateSession.createCriteria(Category.class);
             categoryCriteria.add(Restrictions.and(
@@ -78,7 +78,7 @@ public class LoadProduct extends HttpServlet {
 
         //color
         if (isColorFound) {
-            String colorId = (String) request.getAttribute("colorId");
+            int colorId = Integer.parseInt((String) request.getAttribute("colorId"));
 
             Criteria colorCriteria = hibernateSession.createCriteria(Product_color.class);
             colorCriteria.add(Restrictions.and(
@@ -88,13 +88,13 @@ public class LoadProduct extends HttpServlet {
             Product_color color = (Product_color) colorCriteria.uniqueResult();
 
             if (color != null) {
-                productCriteria.add(Restrictions.eq("color", color));
+                productCriteria.add(Restrictions.eq("product_color", color));
             }
         }
 
         //size
         if (isSizeFound) {
-            String id = (String) request.getAttribute("sizeId");
+            int id = Integer.parseInt((String) request.getAttribute("sizeId"));
 
             Criteria criteria = hibernateSession.createCriteria(Size.class);
             criteria.add(Restrictions.and(
@@ -135,7 +135,7 @@ public class LoadProduct extends HttpServlet {
         if (isSearchFound) {
             String txt = (String) request.getAttribute("search");
 
-            if (!txt.isBlank()) {
+            if (!txt.isEmpty()) {
                 productCriteria.add(Restrictions.or(
                         Restrictions.like("name", txt, MatchMode.ANYWHERE),
                         Restrictions.like("description", txt, MatchMode.ANYWHERE)

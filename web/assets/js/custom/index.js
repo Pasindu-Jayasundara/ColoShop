@@ -210,6 +210,7 @@ const addToCart = async () => {
         let data = await response.json();
         // console.log(data)
         if (data.success) {
+
             swal({
                 title: "Success",
                 text: data.data,

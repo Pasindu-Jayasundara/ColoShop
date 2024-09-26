@@ -41,6 +41,17 @@ const searchText = (e) => {
     }
 };
 
+function resetFilter() {
+    sortBy = "Default";
+    color = ""
+    category = ""
+    brand = ""
+    size = ""
+    search = ""
+    document.getElementById("searchText").value = ""
+    loadProduct()
+}
+
 const arr = [];
 const arrBrand = [];
 const arrSize = [];
@@ -72,29 +83,25 @@ const loadSmallCategories = (categoryArr) => {
 };
 
 var filterCategoryElement;
-var isFilterFirstTime = true;
 const loadFilterCategories = (categoryArr) => {
 
     // filter area
     const parentInFIlter = document.getElementById("categoryParent");
     filterCategoryElement = document.getElementById("categoryLi");
 
-    categoryArr.forEach(obj => {
+    parentInFIlter.innerHTML = "";
+    let filterLiElement = filterCategoryElement.cloneNode(true);
+    filterLiElement.addEventListener("click", (e) => {
+        applyCategory(e, 0)
+    });
+    parentInFIlter.appendChild(filterLiElement);
 
-        if (isFilterFirstTime) {
-            parentInFIlter.innerHTML = "";
-            let filterLiElement = filterCategoryElement.cloneNode(true);
-            filterLiElement.addEventListener("click", (e) => {
-                applyCategory(e, 0)
-            });
-            parentInFIlter.appendChild(filterLiElement);
-            isFilterFirstTime = false;
-        }
+    categoryArr.forEach(obj => {
 
         let filterLiElement = filterCategoryElement.cloneNode(true);
         filterLiElement.removeAttribute("id");
         filterLiElement.querySelector(".lia").innerHTML = obj.category;
-        filterLiElement.querySelector(".lia").addEventListener("load", (e) => {
+        filterLiElement.querySelector(".lia").addEventListener("click", (e) => {
             applyCategory(e, obj.id)
         });
         filterLiElement.setAttribute("data-filter", "." + obj.category);
@@ -105,30 +112,31 @@ const loadFilterCategories = (categoryArr) => {
 };
 
 var filterBrandElement;
-var isBrandFilterFirstTime = true;
 const loadFilterBrands = (brandArr) => {
 
     // filter area
     const parent = document.getElementById("brandParent");
     filterBrandElement = document.getElementById("brandLi");
 
-    brandArr.forEach(obj => {
+    // if (isBrandFilterFirstTime) {
+    parent.innerHTML = "";
+    let element = filterBrandElement.cloneNode(true);
+    element.removeAttribute("id")
+    element.addEventListener("click", (e) => {
+        applyBrand(e, 0)
+    });
+    parent.appendChild(element);
+    // isBrandFilterFirstTime = false;
+    // }
 
-        if (isBrandFilterFirstTime) {
-            parent.innerHTML = "";
-            let element = filterBrandElement.cloneNode(true);
-            element.addEventListener("click", (e) => {
-                applyBrand(e, 0)
-            });
-            parent.appendChild(element);
-            isBrandFilterFirstTime = false;
-        }
+    brandArr.forEach(obj => {
 
         let element = filterBrandElement.cloneNode(true);
         element.removeAttribute("id");
         element.querySelector(".lia").innerHTML = obj.brand;
-        element.querySelector(".lia").addEventListener("load", (e) => {
-            applyBrand(e, obj.id)
+        element.querySelector(".lia").addEventListener("click", (e) => {
+            let id = obj.id
+            applyBrand(e, id)
         });
         element.setAttribute("data-filter", "." + obj.brand);
 
@@ -138,29 +146,28 @@ const loadFilterBrands = (brandArr) => {
 };
 
 var filterSizeElement;
-var isSizeFilterFirstTime = true;
 const loadFilterSizes = (sizeArr) => {
 
     // filter area
     const parent = document.getElementById("sizeParent");
     filterSizeElement = document.getElementById("sizeA");
 
-    sizeArr.forEach((obj) => {
+    // if (isSizeFilterFirstTime) {
+    parent.innerHTML = "";
+    let element = filterSizeElement.cloneNode(true);
+    element.addEventListener("click", (e) => {
+        applySize(e, 0)
+    });
+    parent.appendChild(element);
+    // isSizeFilterFirstTime = false;
+    // }
 
-        if (isSizeFilterFirstTime) {
-            parent.innerHTML = "";
-            let element = filterSizeElement.cloneNode(true);
-            element.addEventListener("click", (e) => {
-                applySize(e, 0)
-            });
-            parent.appendChild(element);
-            isSizeFilterFirstTime = false;
-        }
+    sizeArr.forEach((obj) => {
 
         let element = filterSizeElement.cloneNode(true);
         element.removeAttribute("id");
         element.innerHTML = obj.size;
-        element.addEventListener("load", (e) => {
+        element.addEventListener("click", (e) => {
             applySize(e, obj.id)
         });
         element.setAttribute("data-filter", "." + obj.size);
@@ -171,30 +178,27 @@ const loadFilterSizes = (sizeArr) => {
 };
 
 var filterColorElement;
-var isColorFilterFirstTime = true;
 const loadFilterColors = (colorArr) => {
 
     const parent = document.getElementById("colorParent");
     filterColorElement = document.getElementById("colorLi");
 
+    parent.innerHTML = "";
+    let element = filterColorElement.cloneNode(true);
+    element.addEventListener("click", (e) => {
+        applyColor(e, 0)
+    });
+    parent.appendChild(element);
+    // isColorFilterFirstTime = false;
+
     // filter area
     colorArr.forEach(obj => {
-
-        if (isColorFilterFirstTime) {
-            parent.innerHTML = "";
-            let element = filterColorElement.cloneNode(true);
-            element.addEventListener("click", (e) => {
-                applyColor(e, 0)
-            });
-            parent.appendChild(element);
-            isColorFilterFirstTime = false;
-        }
 
         let element = filterColorElement.cloneNode(true);
         element.removeAttribute("id");
         element.querySelector(".colorC").style.color = obj.color
         element.querySelector(".lia").innerHTML = obj.color;
-        element.querySelector(".lia").addEventListener("load", (e) => {
+        element.querySelector(".lia").addEventListener("click", (e) => {
             applyColor(e, obj.id)
         });
         element.setAttribute("data-filter", "." + obj.color);
@@ -203,12 +207,9 @@ const loadFilterColors = (colorArr) => {
     });
 };
 
-// const arr = [];
-// const arrBrand = [];
-// const arrSize = [];
-// const arrColor = [];
+
 var isFiltertFirstTime = true;
-const productArr = [];
+var productArr = [];
 var productCount = 30;
 
 var loadFrom = 0
@@ -221,7 +222,7 @@ const loadProduct = async () => {
     Notification().info({
         message: "Applying Filters ..."
     })
-
+    console.log("LoadProduct?productCount=" + productCount + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search)
     const response = await fetch("LoadProduct?productCount=" + productCount + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
     if (response.ok) {
 
@@ -230,6 +231,7 @@ const loadProduct = async () => {
 
             const productData = data.data;
             parent.innerHTML = "";
+            productArr = []
 
             // load features to array
             for (var i = 1; i <= productData.length; i++) {
@@ -391,7 +393,6 @@ const loadProduct = async () => {
 
 };
 
-// var isProductFirstTime = true;
 function loadProductCards() {
 
     parent.innerHTML = ""
@@ -422,7 +423,8 @@ function loadProductCards() {
                 e.preventDefault();
                 addToWishlist(product.id)
             });
-            element.querySelector(".productImage").src = product.img1;
+            const trimmedPath = product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+            element.querySelector(".productImage").src = trimmedPath;
 
             parent.appendChild(element);
 
@@ -442,6 +444,23 @@ const loadQuickView = (productId) => {
             document.getElementById("modelProductDesc").innerHTML = productObject.description;
             document.getElementById("modelProductSize").innerHTML = productObject.size.size;
             document.getElementById("modelProductColor").innerHTML = productObject.product_color.color;
+
+            const trimmedPath = productObject.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+            const trimmedPath2 = productObject.img2.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+            const trimmedPath3 = productObject.img3.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+
+            document.getElementById("img1").src = trimmedPath
+            document.getElementById("img1a").href = trimmedPath
+            console.log(document.getElementById("img1th"))
+            document.getElementById("img1th").setAttribute("data-thumb", trimmedPath)
+
+            document.getElementById("img2").src = trimmedPath2
+            document.getElementById("img2a").href = trimmedPath2
+            document.getElementById("img2t").setAttribute("data-thumb", trimmedPath2)
+
+            document.getElementById("img3").src = trimmedPath3
+            document.getElementById("img3a").href = trimmedPath3
+            document.getElementById("img3t").setAttribute("data-thumb", trimmedPath3)
 
             addToCartProductId = productId;
 
@@ -469,14 +488,17 @@ const addToCart = async () => {
         // console.log(response);
 
         let data = await response.json();
-        // console.log(data)
+
         if (data.success) {
-            swal({
-                title: "Success",
-                text: data.data,
-                icon: "success",
-                button: "OK",
-            });
+            // swal({
+            //     title: "Success",
+            //     text: data.data,
+            //     icon: "success",
+            //     button: "OK",
+            // });
+            Notification().success({
+                message: data.data
+            })
         } else {
             Notification().error({
                 message: data.data

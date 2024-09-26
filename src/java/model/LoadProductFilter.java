@@ -49,7 +49,7 @@ public class LoadProductFilter implements Filter {
         //brand
         boolean isBrandFound = false;
         if (request.getParameter("brand") != null && Validation.isInteger(request.getParameter("brand"))) {
-            if (Validation.isInteger(request.getParameter("brand"))) {
+            if (Integer.parseInt(request.getParameter("brand")) > 0) {
                 isBrandFound = true;
                 request.setAttribute("brandId", request.getParameter("brand"));
             }
@@ -59,7 +59,8 @@ public class LoadProductFilter implements Filter {
         //category
         boolean isCategoryFound = false;
         if (request.getParameter("category") != null && Validation.isInteger(request.getParameter("category"))) {
-            if (Validation.isInteger(request.getParameter("category"))) {
+
+            if (Integer.parseInt(request.getParameter("category")) > 0) {
                 isCategoryFound = true;
                 request.setAttribute("categoryId", request.getParameter("category"));
             }
@@ -69,7 +70,8 @@ public class LoadProductFilter implements Filter {
         //color
         boolean isColorFound = false;
         if (request.getParameter("color") != null && Validation.isInteger(request.getParameter("color"))) {
-            if (Validation.isInteger(request.getParameter("color"))) {
+
+            if (Integer.parseInt(request.getParameter("color")) > 0) {
                 isColorFound = true;
                 request.setAttribute("colorId", request.getParameter("color"));
             }
@@ -79,7 +81,8 @@ public class LoadProductFilter implements Filter {
         //size
         boolean isSizeFound = false;
         if (request.getParameter("size") != null && Validation.isInteger(request.getParameter("size"))) {
-            if (Validation.isInteger(request.getParameter("size"))) {
+
+            if (Integer.parseInt(request.getParameter("size")) > 0) {
                 isSizeFound = true;
                 request.setAttribute("sizeId", request.getParameter("size"));
             }
@@ -107,9 +110,6 @@ public class LoadProductFilter implements Filter {
                 isSortFound = true;
                 request.setAttribute("sortBy", sortBy);
 
-            }else{
-                isSortFound = true;
-                request.setAttribute("sortBy", sortBy);
             }
 
         }
