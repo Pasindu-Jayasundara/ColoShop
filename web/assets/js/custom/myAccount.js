@@ -73,6 +73,7 @@ async function loadData() {
 
             if (productList != null || productList != undefined) {
                 const msgToSellerList = json.data.msgToSellerList;
+                console.log(msgToSellerList)
                 loadMessages(msgToSellerList)
             }
 
@@ -86,6 +87,9 @@ async function loadData() {
                 document.getElementById("addN").style.display = "none";
                 document.getElementById("myP").style.display = "none";
                 document.getElementById("msgS").style.display = "none";
+                document.getElementById("or").style.display = "none";
+                document.getElementById("totalProducts").style.display = "none";
+                document.getElementById("msg").style.display = "none";
 
                 loadPurchasedOrders(orderList)
 
@@ -228,7 +232,7 @@ async function changeAccountType() {
         if (response.ok) {
             const jsonData = await response.json();
             if (jsonData.success) {
-                window.location.reload()
+                logOut()
             } else {
                 Notification().error({
                     message: jsonData.data
@@ -246,29 +250,73 @@ async function changeAccountType() {
 
 }
 
+let otableBody = document.getElementById("oTableBody");
+let orow = document.getElementById("oTableRow");
+
 function loadPurchasedOrders(orderList) {
 
-    let tableBody = document.getElementById("oTableBody");
-    let row = document.getElementById("oTableRow");
+    otableBody.innerHTML = "";
 
-    tableBody.innerHTML = "";
+    let previousOrderIdArr = [];
+    let element;
 
     orderList.forEach(item => {
 
-        let element = row.cloneNode(true);
+        let isNew = true;
+        previousOrderIdArr.forEach(id => {
 
-        element.removeAttribute("id");
-        element.querySelector(".oId").innerHTML = item.id;
-        element.querySelector(".oProduct").innerHTML = item.product.name;
-        element.querySelector(".oQty").innerHTML = item.qty;
-        element.querySelector(".oPaid").innerHTML = item.order.total_amount;
-        element.querySelector(".oAddress").innerHTML = item.order.address;
-        element.querySelector(".oOtherText").innerHTML = item.order.text;
-        element.querySelector(".oStatus").innerHTML = item.order.order_status.status;
+            if (id == item.orders.id) {
 
-        tableBody.appendChild(element);
+                // item
+                let ulTag = document.getElementById("ul" + id)
+                let ulLiTag = document.getElementById("li" + id)
 
+                let newLiTag = ulLiTag.cloneNode(true);
+                newLiTag.innerHTML = item.product.name
+
+                ulTag.appendChild(newLiTag)
+
+                // qty
+                let qtyulTag = document.getElementById("qtyul" + id)
+                let qtyulLiTag = document.getElementById("qtyli" + id)
+
+                let qtynewLiTag = qtyulLiTag.cloneNode(true);
+                qtynewLiTag.innerHTML = item.qty
+
+                qtyulTag.appendChild(qtynewLiTag)
+
+
+                isNew = false
+                return;
+            }
+        });
+
+        if (isNew) {
+            element = orow.cloneNode(true);
+
+            element.removeAttribute("id");
+            element.querySelector(".oId").innerHTML = item.id;
+            element.querySelector(".oPaid").innerHTML = item.orders.total_amount;
+            element.querySelector(".oAddress").innerHTML = item.orders.address;
+            element.querySelector(".oOtherText").innerHTML = item.orders.text;
+            element.querySelector(".oStatus").innerHTML = item.orders.order_status.status;
+
+            //qty
+            element.querySelector(".rOtyLi").innerHTML = item.qty;
+            element.querySelector(".rOtyLi").setAttribute("id", "qtyli" + item.orders.id)
+            element.querySelector(".rOtyParent").setAttribute("id", "qtyul" + item.orders.id)
+
+            //item
+            element.querySelector(".rItemsLi").innerHTML = item.product.name;
+            element.querySelector(".rItemsLi").setAttribute("id", "li" + item.orders.id)
+            element.querySelector(".rItemsParent").setAttribute("id", "ul" + item.orders.id)
+
+            otableBody.appendChild(element);
+
+            previousOrderIdArr.push(item.orders.id);
+        }
     });
+    document.getElementById("pendingOrderCount").innerHTML = orderList.length
 
 }
 
@@ -283,7 +331,6 @@ function loadReceivedOrders(orderList) {
 
     orderList.forEach(arrElement => {
 
-        console.log(arrElement)
         let isNew = true;
 
         previousOrderIdArr.forEach(id => {
@@ -353,6 +400,7 @@ function loadReceivedOrders(orderList) {
 }
 
 function loadMessages(msgList) {
+    console.log(msgList)
 
     let messageTableBody = document.getElementById("mTableBody");
     let messageRow = document.getElementById("mTableRow");
@@ -362,6 +410,7 @@ function loadMessages(msgList) {
     let count = 1;
     msgList.forEach(message => {
 
+        console.log(message)
         let element = messageRow.cloneNode(true);
 
         element.removeAttribute("id");
@@ -455,7 +504,7 @@ function loadMyProducts(productList) {
 
         let row = tableRow.cloneNode(true);
 
-        row.setAttribute("id","row"+product.id);
+        row.setAttribute("id", "row" + product.id);
         row.querySelector(".pCount").innerHTML = count;
         row.querySelector(".pName").innerHTML = product.name;
         row.querySelector(".pDesc").innerHTML = product.description;
@@ -578,10 +627,10 @@ async function deleteProduct() {
     const response = await fetch("DeleteProduct", {
         method: "POST",
         body: JSON.stringify({
-            id:productId
+            id: productId
         }),
-        headers:{
-            "Content-Type":"application/json"
+        headers: {
+            "Content-Type": "application/json"
         }
     });
 
@@ -593,8 +642,9 @@ async function deleteProduct() {
             Notification().success({
                 message: jsonData.data
             })
+            document.getElementById("totalProductCount").innerHTML = parseInt(document.getElementById("totalProductCount").innerHTML) - 1
 
-            tableBody.removeChild(document.getElementById("row"+productId))
+            tableBody.removeChild(document.getElementById("row" + productId))
         } else {
             Notification().error({
                 message: jsonData.data
@@ -606,5 +656,31 @@ async function deleteProduct() {
             message: "Please Try Again Later"
         })
         console.error(response);
+    }
+}
+
+async function logOut() {
+    const response = await fetch("LogOut");
+
+    const popup = Notification();
+
+    if (response.ok) {
+
+        const data = await response.json();
+        if (data.success) {
+
+            window.location = "sign-in.html";
+
+        } else {
+            popup.error({
+                message: data.data
+            });
+        }
+    } else {
+        popup.error({
+            message: "Please Try Again Later"
+        })
+
+        console.log(response)
     }
 }

@@ -37,7 +37,7 @@ public class BecomeSeller extends HttpServlet {
 
         //add to seller table
         Criteria statusCriteria = hibernateSession.createCriteria(Status.class);
-        statusCriteria.add(Restrictions.eq("status", "Active"));
+        statusCriteria.add(Restrictions.eq("name", "Active"));
         Status status = (Status) statusCriteria.uniqueResult();
 
         Criteria sellerCriteria = hibernateSession.createCriteria(Seller.class);

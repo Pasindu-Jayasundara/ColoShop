@@ -117,21 +117,22 @@ public class LoadFeatures extends HttpServlet {
         List<Message_to_seller> msgToSellerList = new ArrayList<>();
         if (productList != null) {
 
-            //not replyed message status
+            //replyed message status
             Criteria messageStatusCriteria = hiberSession.createCriteria(Message_status.class);
-            messageStatusCriteria.add(Restrictions.ne("id", 3));
-            List<Message_status> messageStatusList = messageStatusCriteria.list();
+            messageStatusCriteria.add(Restrictions.eq("id", 3));
+            Message_status replyiedStatus = (Message_status) messageStatusCriteria.uniqueResult();
 
             Criteria msgToSellerCriteria = hiberSession.createCriteria(Message_to_seller.class);
             msgToSellerCriteria.add(Restrictions.and(
                     Restrictions.eq("seller", seller),
-                    Restrictions.in("message_status", messageStatusList)
+                    Restrictions.ne("message_status", replyiedStatus)
             ));
+
             msgToSellerList = msgToSellerCriteria.list();
 
             if (msgToSellerList != null) {
-                for (Message_to_seller message : msgToSellerList) {
 
+                for (Message_to_seller message : msgToSellerList) {
                     message.setUser(null);
                     message.getSeller().setUser(null);
                     message.getProduct().setSeller(null);
@@ -185,8 +186,9 @@ public class LoadFeatures extends HttpServlet {
             if (orderList2 != null) {
 
                 for (OrderDataTable orderDataTable : orderList2) {
+                    
                     Criteria orderItemCriteria = hiberSession.createCriteria(Order_item.class);
-                    orderItemCriteria.add(Restrictions.eq("order", orderDataTable));
+                    orderItemCriteria.add(Restrictions.eq("orders", orderDataTable));
                     List<Order_item> orderItems = orderItemCriteria.list();
 
                     for (Order_item item : orderItems) {

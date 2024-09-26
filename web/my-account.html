@@ -57,7 +57,7 @@
             </a>
             <div class="inline field ms-4 pt-2">
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" tabindex="0" class="hidden" onclick="changeAccountType()">
+                    <input type="checkbox" tabindex="0" class="hidden" onchange="changeAccountType()">
                     <label>Become <span id="oppositeAccountType"></span></label>
                 </div>
             </div>
@@ -66,7 +66,7 @@
             <div class="wrap-icon-header flex-w flex-r-m">
                 <img class="ui avatar image" src="images/avatar.jpg">
                 <span id="userName">Username</span>
-                <span class="btn btn-dark ms-4">LogOut</span>
+                <span class="btn btn-dark ms-4" onclick="logOut()">LogOut</span>
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" id="totalProducts">
                 <div class="content">
                     <div class="header">Total Products</div>
                     <div class="meta">by today</div>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" id="msg">
                 <div class="content">
                     <div class="header">Messages</div>
                     <div class="meta">by today</div>
@@ -192,7 +192,7 @@
                     </div>
                 </div>
             </div>
-            <div class="accordion-item">
+            <div class="accordion-item" id="or">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -335,7 +335,7 @@
                             <thead class="full-width">
                                 <tr>
                                     <th>Order Id</th>
-                                    <th>Product</th>
+                                    <th>Items</th>
                                     <th>Quantity</th>
                                     <th>Paid</th>
                                     <th>Address</th>
@@ -346,8 +346,16 @@
                             <tbody id="oTableBody">
                                 <tr id="oTableRow">
                                     <td class="oId"></td>
-                                    <td class="oProduct"></td>
-                                    <td class="oQty"></td>
+                                    <td class="rItems pb-4">
+                                        <ul class="ui list rItemsParent">
+                                            <li class="rItemsLi">Gaining Access</li>
+                                        </ul>
+                                    </td>
+                                    <td class="rQty">
+                                        <ul class="ui list rOtyParent">
+                                            <li class="rOtyLi">Gaining Access</li>
+                                        </ul>
+                                    </td>
                                     <td class="oPaid"></td>
                                     <td class="oAddress"></td>
                                     <td class="oOtherText"></td>
