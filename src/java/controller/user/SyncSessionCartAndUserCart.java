@@ -20,7 +20,7 @@ public class SyncSessionCartAndUserCart extends HttpServlet {
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-        ArrayList<Product> newCartProduct = null;
+        ArrayList<Product> newCartProduct = new ArrayList<>();
         ArrayList<Product> sessionCartProductList = (ArrayList<Product>) request.getSession().getAttribute("userSessionCart");
 
         if (sessionCartProductList != null) {
@@ -28,7 +28,7 @@ public class SyncSessionCartAndUserCart extends HttpServlet {
             for (Product product : sessionCartProductList) {
 
                 int productId = product.getId();
-                Cart cartProduct = (Cart) hibernateSession.load(Cart.class, productId);
+                Cart cartProduct = (Cart) hibernateSession.get(Cart.class, productId);
                 if (cartProduct == null) {
                     //cart doesnot have this product
                     // add to cart
@@ -41,9 +41,12 @@ public class SyncSessionCartAndUserCart extends HttpServlet {
         hibernateSession.close();
         request.getSession().removeAttribute("userSessionCart");
 
-        if (newCartProduct != null) {
+        if (!newCartProduct.isEmpty()) {
             //have new products to be added
+            
             request.setAttribute("newCartProduct", newCartProduct);
+            request.setAttribute("isLoggedIn",true);
+            request.setAttribute("isOnlyOneProduct",false);
             request.getRequestDispatcher("/AddToCart").include(request, response);
         }
 

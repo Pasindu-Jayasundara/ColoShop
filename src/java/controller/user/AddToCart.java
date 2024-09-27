@@ -61,27 +61,20 @@ public class AddToCart extends HttpServlet {
             if (isNewTOCart) {
                 productList = (ArrayList<Product>) request.getSession().getAttribute("userSessionCart");
                 boolean add = productList.add(product);
-                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-                System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+
                 if (add) {
                     message = "Product Successfully Added";
                 } else {
                     message = "Product Adding Faild";
 
                 }
-                System.out.println("sssssssssssssssssssssssssssssssss");
-                System.out.println("sssssssssssssssssssssssssssssssss");
-                System.out.println("sssssssssssssssssssssssssssssssss");
-                System.out.println("sssssssssssssssssssssssssssssssss");
             }
 
         } else if (isLoggedIn && isOnlyOneProduct) {
             //logged in user
             //have only one product id
             //add to db cart
-            int productId = Integer.parseInt(request.getParameter("productId"));
+            int productId = (int) request.getAttribute("productId");
             UserTable user = (UserTable) request.getSession().getAttribute("user");
 
             if (hibernateSession.get(Cart.class, productId) == null) {
@@ -105,9 +98,10 @@ public class AddToCart extends HttpServlet {
             //logged in user
             //have arraylist of cart objects
             //add to db cart
+            
             UserTable user = (UserTable) request.getSession().getAttribute("user");
 
-            ArrayList<Product> productArrayList = (ArrayList<Product>) request.getSession().getAttribute("userSessionCart");
+            ArrayList<Product> productArrayList = (ArrayList<Product>) request.getAttribute("newCartProduct");
             for (Product product : productArrayList) {
 
                 Cart cart = new Cart();

@@ -1,6 +1,8 @@
 package controller.user;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.Cart;
 import entity.UserTable;
@@ -26,13 +28,14 @@ public class LoadCart extends HttpServlet {
         boolean isLoggedIn = (boolean) request.getAttribute("isLoggedIn");
         if (isLoggedIn) {
             // logged in get from , user cart
-            int userId = ((UserTable) request.getSession().getAttribute("user")).getId();
+            
+            UserTable userTable = ((UserTable) request.getSession().getAttribute("user"));
 
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
             Criteria cartCriteria = hibernateSession.createCriteria(Cart.class);
-            cartCriteria.add(Restrictions.eq("id", userId));
+            cartCriteria.add(Restrictions.eq("user", userTable));
 
-            List<Cart> cartList = cartCriteria.list();
+            ArrayList<Cart> cartList =  (ArrayList<Cart>) cartCriteria.list();
 
             Gson gson = new Gson();
 
@@ -40,7 +43,11 @@ public class LoadCart extends HttpServlet {
             if (cartList.isEmpty()) {
                 response_DTO = new Response_DTO(false, "No Cart Data");
             } else {
-                response_DTO = new Response_DTO(true, gson.toJsonTree(cartList));
+                JsonObject jo = new JsonObject();
+                jo.add("cartList",gson.toJsonTree(cartList));
+                jo.addProperty("isLoggedIn", isLoggedIn);
+                
+                response_DTO = new Response_DTO(true, gson.toJsonTree(jo));
             }
 
             hibernateSession.close();
@@ -58,7 +65,11 @@ public class LoadCart extends HttpServlet {
             if (cartList==null || cartList.isEmpty()) {
                 response_DTO = new Response_DTO(false, "No Cart Data");
             } else {
-                response_DTO = new Response_DTO(true, gson.toJsonTree(cartList));
+                JsonObject jo = new JsonObject();
+                jo.add("cartList",gson.toJsonTree(cartList));
+                jo.addProperty("isLoggedIn", isLoggedIn);
+                
+                response_DTO = new Response_DTO(true, gson.toJsonTree(jo));
             }
 
             response.setContentType("application/json");

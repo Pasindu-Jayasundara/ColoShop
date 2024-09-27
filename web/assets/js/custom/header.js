@@ -5,35 +5,70 @@ const loadCart = async () => {
     if (response.ok) {
 
         const jsonData = await response.json();
-        const data = jsonData.data;
-        // console.log(data);
+        if (jsonData.success) {
 
-        let cartListParent = document.getElementById("cartSideBarContainer");
+            const data = jsonData.data;
+            // console.log(data);
 
-        let cartProductTotal = 0;
-        cartListParent.innerHTML = "";
+            let cartListParent = document.getElementById("cartSideBarContainer");
 
-        data.forEach((productObj) => {
+            let cartProductTotal = 0;
+            cartListParent.innerHTML = "";
 
-            // console.log(productObj);
+            let isLoggedIn = data.isLoggedIn
 
-            let element = cartListElement.cloneNode(true);
-            element.removeAttribute("id");
-            element.querySelector(".cartProductName").innerHTML = productObj.name;
-            element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + productObj.unit_price;
+            data.cartList.forEach((productObj) => {
 
-            const trimmedPath = productObj.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
-            element.querySelector("#cartImg").src = trimmedPath;
+                console.log("productObj");
+                console.log(productObj);
 
-            cartListParent.appendChild(element);
+                let element = cartListElement.cloneNode(true);
+                element.removeAttribute("id");
 
-            cartProductTotal += productObj.unit_price;
 
-        });
+                let trimmedPath;
+                if (!isLoggedIn) {
 
-        document.getElementById("cartProductTotal").innerHTML = "Total: " + cartProductTotal;
-        document.querySelectorAll(".cartProductCount").forEach(el=>{
-            el.setAttribute("data-notify", data.length);
-        })
+                    trimmedPath = productObj.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+
+                    element.querySelector(".cartProductName").innerHTML = productObj.name;
+                    element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + productObj.unit_price;
+
+                    cartProductTotal += productObj.unit_price;
+
+                } else if (isLoggedIn) {
+
+                    trimmedPath = productObj.product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+
+                    element.querySelector(".cartProductName").innerHTML = productObj.product.name;
+                    element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + productObj.product.unit_price;
+
+                    cartProductTotal += productObj.product.unit_price;
+
+                }
+
+                element.querySelector("#cartImg").src = trimmedPath;
+
+                cartListParent.appendChild(element);
+
+
+            });
+
+            document.getElementById("cartProductTotal").innerHTML = "Total: " + cartProductTotal;
+            document.querySelectorAll(".cartProductCount").forEach(el => {
+
+                el.removeAttribute("data-notify")
+                el.setAttribute("data-notify", data.cartList.length);
+            })
+
+            if (data.length == 0) {
+                document.getElementById("cartProductTotal").innerHTML = "Total: 00.00";
+            }
+        } else {
+            console.log(response)
+        }
+
+    } else {
+        console.log(response)
     }
 };
