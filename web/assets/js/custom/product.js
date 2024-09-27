@@ -470,6 +470,7 @@ const loadQuickView = (productId) => {
 
 };
 
+var cartData;
 const addToCart = async () => {
 
     const data = {
@@ -496,6 +497,7 @@ const addToCart = async () => {
             //     icon: "success",
             //     button: "OK",
             // });
+            cartData = data.data
             Notification().success({
                 message: data.data
             })
@@ -589,4 +591,14 @@ function pagination() {
     pgParent.appendChild(pgNext)
 
 
+}
+
+function showAlert() {
+    // swal("", "success");
+    swal({
+        title: "Success",
+        text: cartData,
+        icon: "success",
+        button: "OK",
+    });
 }

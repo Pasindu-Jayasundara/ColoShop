@@ -111,14 +111,14 @@ async function loadData() {
             Notification().error({
                 message: json.data
             })
-            // window.location.href = "sign-in.html"
+            window.location.href = "sign-in.html"
         }
 
     } else {
         Notification().error({
             message: "Please Try Again Later"
         })
-        // window.location.href = "sign-in.html"
+        window.location.href = "sign-in.html"
 
         console.log(response)
     }
