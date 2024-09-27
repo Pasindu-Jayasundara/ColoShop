@@ -412,6 +412,7 @@ function loadProductCards() {
             //get product element
             let element = productElement.cloneNode(true);
             element.querySelector(".productName").innerHTML = product.name;
+            element.querySelector(".productName").href="product-detail.html?product="+product.id;
             element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
             element.querySelector(".productElementATag").addEventListener("click", (e) => {
                 e.preventDefault();

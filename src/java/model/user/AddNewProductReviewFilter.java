@@ -1,6 +1,7 @@
 package model.user;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -23,7 +24,11 @@ public class AddNewProductReviewFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+        Gson gson = new Gson();
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        
+        String review = gson.fromJson(httpServletRequest.getReader(),JsonObject.class).get("txt").getAsString();
+        String productId = gson.fromJson(httpServletRequest.getReader(),JsonObject.class).get("id").getAsString();
 
         boolean isInvalid = false;
         String errorMessage = "";
@@ -35,32 +40,35 @@ public class AddNewProductReviewFilter implements Filter {
 
         } else {
 
-            if (request.getParameter("productId") == null || request.getParameter("productId").isBlank()) {
-                //no product id
-                isInvalid = true;
-                errorMessage = "Missing Product Id";
-
-            } else if (request.getParameter("reviewText") == null || request.getParameter("reviewText").isBlank()) {
+//            if (request.getParameter("productId") == null || request.getParameter("productId").isBlank()) {
+//                //no product id
+//                isInvalid = true;
+//                errorMessage = "Missing Product Id";
+//
+//            } else 
+                if (review.isEmpty()) {
                 //no review text
                 isInvalid = true;
                 errorMessage = "Missing Review Text";
 
             } else {
 
-                String productId = request.getParameter("productId");
                 if (!Validation.isInteger(productId)) {
                     //not a integer
                     isInvalid = true;
                     errorMessage = "Invalid Product Id";
 
                 } else {
-                    int pId = Integer.parseInt(request.getParameter("productId"));
+                    int pId = Integer.parseInt(productId);
                     if (pId <= 0) {
                         //invalid id
                         isInvalid = true;
                         errorMessage = "Incorrect Product Id";
 
                     } else {
+                        
+                        request.setAttribute("id", pId);
+                        request.setAttribute("review", review);
                         chain.doFilter(request, response);
                     }
                 }
@@ -71,7 +79,6 @@ public class AddNewProductReviewFilter implements Filter {
 
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-            Gson gson = new Gson();
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }

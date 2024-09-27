@@ -22,38 +22,42 @@ public class DeleteProductReview extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         UserTable user = (UserTable) request.getSession().getAttribute("user");
-        String reviewId = request.getParameter("reviewId");
+        if (user != null) {
 
-        boolean isDone = false;
-        String message = "";
+            int reviewId = (int) request.getAttribute("id");
 
-        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
-        Criteria reviewCriteria = hibernateSession.createCriteria(Review.class);
-        reviewCriteria.add(Restrictions.and(
-                Restrictions.eq("id", reviewId),
-                Restrictions.eq("user", user)
-        ));
+            boolean isDone = false;
+            String message = "";
 
-        Review review = (Review) reviewCriteria.uniqueResult();
-        if (review != null) {
-            //review avaliable
-            //delete review
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+            Criteria reviewCriteria = hibernateSession.createCriteria(Review.class);
+            reviewCriteria.add(Restrictions.and(
+                    Restrictions.eq("id", reviewId),
+                    Restrictions.eq("user", user)
+            ));
 
-            hibernateSession.delete(review);
-            hibernateSession.beginTransaction().commit();
+            Review review = (Review) reviewCriteria.uniqueResult();
+            if (review != null) {
+                //review avaliable
+                //delete review
 
-            message = "Review Delete Success";
+                hibernateSession.delete(review);
+                hibernateSession.beginTransaction().commit();
 
-        } else {
-            //no review
-            message = "Review Not Avaliable";
+                isDone=true;
+                message = "Review Delete Success";
+
+            } else {
+                //no review
+                message = "Review Not Avaliable";
+            }
+
+            Response_DTO response_DTO = new Response_DTO(isDone, message);
+            Gson gson = new Gson();
+
+            response.setContentType("application/json");
+            response.getWriter().write(gson.toJson(response_DTO));
         }
-
-        Response_DTO response_DTO = new Response_DTO(isDone, message);
-        Gson gson = new Gson();
-
-        response.setContentType("application/json");
-        response.getWriter().write(gson.toJson(response_DTO));
 
     }
 

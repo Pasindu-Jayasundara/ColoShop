@@ -13,7 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter(urlPatterns = {"/LoadSingleProduct","/loadSimilarProduct"})
+@WebFilter(urlPatterns = {"/LoadSingleProduct","/loadSimilarProduct","/LoadReview","/DeleteReview"})
 public class LoadSingleProductFilter implements Filter {
 
     @Override
@@ -53,7 +53,7 @@ public class LoadSingleProductFilter implements Filter {
         } else {
             //no id
             isInvalid = true;
-            message = "Cannot Find Product Id";
+            message = "Cannot Find Id";
         }
 
         if (isInvalid) {

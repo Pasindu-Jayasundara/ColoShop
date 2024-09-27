@@ -36,6 +36,14 @@ public class LoadCart extends HttpServlet {
             cartCriteria.add(Restrictions.eq("user", userTable));
 
             ArrayList<Cart> cartList =  (ArrayList<Cart>) cartCriteria.list();
+            if(cartList!=null && !cartList.isEmpty()){
+                
+                for (Cart cart : cartList) {
+                    
+                    cart.getProduct().setSeller(null);
+                    
+                }
+            }
 
             Gson gson = new Gson();
 

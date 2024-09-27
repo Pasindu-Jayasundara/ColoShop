@@ -49,7 +49,7 @@ public class AddToWishlist extends HttpServlet {
                 isSuccess = true;
                 message = "Product Successfully Added To The Wishlist";
             } else {
-                isSuccess = false;
+                isSuccess = true;
                 message = "Already In Wishlist";
             }
 

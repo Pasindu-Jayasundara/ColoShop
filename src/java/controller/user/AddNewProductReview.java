@@ -26,8 +26,8 @@ public class AddNewProductReview extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int productId = Integer.parseInt(request.getParameter("productId"));
-        String reviewText = request.getParameter("reviewText");
+        int productId = (int) request.getAttribute("id");
+        String reviewText = (String) request.getAttribute("review");
 
         UserTable user = (UserTable) request.getSession().getAttribute("user");
 
