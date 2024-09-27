@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "AddToCart", urlPatterns = {"/AddToCart"})
 public class AddToCart extends HttpServlet {
@@ -82,14 +84,24 @@ public class AddToCart extends HttpServlet {
 
                 Product product = (Product) hibernateSession.get(Product.class, productId);
 
-                Cart cart = new Cart();
-                cart.setProduct(product);
-                cart.setUser(user);
+                Criteria cartCriteria = hibernateSession.createCriteria(Cart.class);
+                cartCriteria.add(Restrictions.eq("product", product));
+                Cart cartFound = (Cart) cartCriteria.uniqueResult();
 
-                hibernateSession.save(cart);
-                hibernateSession.beginTransaction().commit();
+                if (cartFound == null) {
+                    Cart cart = new Cart();
+                    cart.setProduct(product);
+                    cart.setUser(user);
 
-                message = "Product Successfully Added";
+                    hibernateSession.save(cart);
+                    hibernateSession.beginTransaction().commit();
+
+                    message = "Product Successfully Added";
+
+                } else {
+                    message = "Already In Cart";
+                }
+
             } else {
                 message = "Product Already In Cart";
             }
@@ -98,7 +110,7 @@ public class AddToCart extends HttpServlet {
             //logged in user
             //have arraylist of cart objects
             //add to db cart
-            
+
             UserTable user = (UserTable) request.getSession().getAttribute("user");
 
             ArrayList<Product> productArrayList = (ArrayList<Product>) request.getAttribute("newCartProduct");

@@ -42,9 +42,11 @@ public class AddToWishlistFilter implements Filter {
                     message = "Invalid Product Id";
                 } else {
 
+                    isSuccess = true;
+
                     request.setAttribute("pId", pId);
                     chain.doFilter(request, response);
-                    
+
                 }
 
             }

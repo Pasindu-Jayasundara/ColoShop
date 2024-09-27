@@ -19,9 +19,6 @@ const loadCart = async () => {
 
             data.cartList.forEach((productObj) => {
 
-                console.log("productObj");
-                console.log(productObj);
-
                 let element = cartListElement.cloneNode(true);
                 element.removeAttribute("id");
 

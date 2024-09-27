@@ -504,10 +504,11 @@ const addToCart = async () => {
                 //     icon: "success",
                 //     button: "OK",
                 // });
+                loadCart()
+
                 Notification().success({
                     message: data.data
                 })
-                loadCart()
             } else {
                 Notification().error({
                     message: data.data

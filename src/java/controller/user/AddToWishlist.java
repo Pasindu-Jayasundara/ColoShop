@@ -23,7 +23,7 @@ public class AddToWishlist extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int productId = (int) request.getAttribute("pId");
+        int productId = Integer.parseInt((String) request.getAttribute("pId"));
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
         String message = "";
@@ -35,7 +35,7 @@ public class AddToWishlist extends HttpServlet {
             Criteria wishlistCriteria = hibernateSession.createCriteria(Wishlist.class);
             wishlistCriteria.add(Restrictions.eq("product", product));
             Wishlist w = (Wishlist) wishlistCriteria.uniqueResult();
-            if (w != null) {
+            if (w == null) {
 
                 UserTable user = (UserTable) request.getSession().getAttribute("user");
 

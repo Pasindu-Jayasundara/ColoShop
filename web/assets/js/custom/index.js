@@ -44,6 +44,9 @@ const loadSmallCategories = (categoryName) => {
 const arr = [];
 var isProductFirstTime = true;
 const productArr = [];
+
+var parent = document.getElementById("productContainer");
+var productElement = document.getElementById("productElement");
 const loadProduct = async () => {
 
     const response = await fetch("LoadProduct?productCount=30");
@@ -53,9 +56,6 @@ const loadProduct = async () => {
         if (data.success) {
 
             const productData = data.data;
-
-            let parent = document.getElementById("productContainer");
-            let productElement = document.getElementById("productElement");
 
             for (var i = 1; i <= productData.length; i++) {
 
@@ -79,21 +79,26 @@ const loadProduct = async () => {
                 //get product element
                 let element = productElement.cloneNode(true);
                 element.querySelector(".productName").innerHTML = product.name;
-                element.querySelector(".productName").href = "product-detail.html?product="+product.id;
+                element.querySelector(".productName").href = "product-detail.html?product=" + product.id;
                 element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
+
+                let trimmedPath = product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+                element.querySelector(".pImg").src = trimmedPath;
+
                 element.querySelector(".productElementATag").addEventListener("click", (e) => {
                     e.preventDefault();
                     loadQuickView(product.id);
                 });
                 element.querySelector(".productClick").addEventListener("click", (e) => {
-                    window.location.href="product-detail.html?product="+product.id;
+                    window.location.href = "product-detail.html?product=" + product.id;
                 });
 
                 element.classList.replace("women", product.category.category);
                 element.removeAttribute("style");
                 element.querySelector(".addToWishlist").addEventListener("click", (e) => {
                     e.preventDefault();
-                    addToWishlist(product.id)
+                    let id = product.id
+                    addToWishlist(id)
                 });
 
                 parent.appendChild(element);
@@ -156,6 +161,8 @@ const loadProduct = async () => {
                 addToCart();
             });
 
+            loadCart()
+
         } else {
             Notification().error({
                 message: data.data
@@ -184,6 +191,26 @@ const loadQuickView = (productId) => {
 
             addToCartProductId = productId;
 
+            const trimmedPath = productObject.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+            const trimmedPath2 = productObject.img2.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+            const trimmedPath3 = productObject.img3.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+
+            document.getElementById("img1").src = trimmedPath
+            document.getElementById("img1a").href = trimmedPath
+            document.querySelector(".img1th").setAttribute("data-thumb", trimmedPath)
+
+            document.getElementById("img2").src = trimmedPath2
+            document.getElementById("img2a").href = trimmedPath2
+            document.querySelector(".img2th").setAttribute("data-thumb", trimmedPath2)
+
+            document.getElementById("img3").src = trimmedPath3
+            document.getElementById("img3a").href = trimmedPath3
+            document.querySelector(".img3th").setAttribute("data-thumb", trimmedPath3)
+
+            document.getElementById("quickViewAddToWishlist").addEventListener("click", () => {
+                addToWishlist(productId)
+            })
+
             return;
         }
     });
@@ -211,21 +238,26 @@ const addToCart = async () => {
         // console.log(data)
         if (data.success) {
 
-            swal({
-                title: "Success",
-                text: data.data,
-                icon: "success",
-                button: "OK",
-            });
+            // swal({
+            //     title: "Success",
+            //     text: data.data,
+            //     icon: "success",
+            //     button: "OK",
+            // });
+
+            loadCart()
+            Notification().success({
+                message: data.data
+            })
         } else {
-             Notification().error({
+            Notification().error({
                 message: data.data
             })
         }
 
 
     } else {
-         Notification().error({
+        Notification().error({
             message: "Please Try Again Latter"
         })
         console.log(response)
@@ -272,35 +304,35 @@ const addToCart = async () => {
 
 const addToWishlist = async (productId) => {
 
-    const response = await fetch("AddToWishlist",{
-        method:"POST",
-        body:JSON.stringify({
-            pId:productId
+    const response = await fetch("AddToWishlist", {
+        method: "POST",
+        body: JSON.stringify({
+            pId: productId
         }),
-        headers:{
-            "Content-Type":"application/json"
+        headers: {
+            "Content-Type": "application/json"
         }
     });
     if (response.ok) {
-        // console.log(response);
+        // console.log("response");
+        // console.log(await response.text());
 
         let data = await response.json();
-        // console.log(data)
         if (data.success) {
 
-            new Notification().success({
+            Notification().success({
                 message: data.data
             })
 
         } else {
-             Notification().error({
+            Notification().error({
                 message: data.data
             })
         }
 
 
     } else {
-         Notification().error({
+        Notification().error({
             message: "Please Try Again Latter"
         })
         console.log(response)
