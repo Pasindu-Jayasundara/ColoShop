@@ -378,6 +378,7 @@ const loadProduct = async () => {
             }
 
             pagination()
+            loadCart()
 
         } else {
             Notification().error({
@@ -439,6 +440,8 @@ const loadQuickView = (productId) => {
     productArr.forEach((productObject) => {
         if (productObject.id == productId) {
 
+            addToCartProductId = productId;
+
             document.getElementById("modelProductName").innerHTML = productObject.name;
             document.getElementById("modelProductPrice").innerHTML = productObject.unit_price;
             document.getElementById("modelProductDesc").innerHTML = productObject.description;
@@ -451,18 +454,19 @@ const loadQuickView = (productId) => {
 
             document.getElementById("img1").src = trimmedPath
             document.getElementById("img1a").href = trimmedPath
-            console.log(document.getElementById("img1th"))
-            document.getElementById("img1th").setAttribute("data-thumb", trimmedPath)
+            document.querySelector(".img1th").setAttribute("data-thumb", trimmedPath)
 
             document.getElementById("img2").src = trimmedPath2
             document.getElementById("img2a").href = trimmedPath2
-            document.getElementById("img2t").setAttribute("data-thumb", trimmedPath2)
+            document.querySelector(".img2th").setAttribute("data-thumb", trimmedPath2)
 
             document.getElementById("img3").src = trimmedPath3
             document.getElementById("img3a").href = trimmedPath3
-            document.getElementById("img3t").setAttribute("data-thumb", trimmedPath3)
+            document.querySelector(".img3th").setAttribute("data-thumb", trimmedPath3)
 
-            addToCartProductId = productId;
+            document.getElementById("quickViewAddToWishlist").addEventListener("click", () => {
+                addToWishlist(productId)
+            })
 
             return;
         }
@@ -473,48 +477,57 @@ const loadQuickView = (productId) => {
 var cartData;
 const addToCart = async () => {
 
-    const data = {
-        "productId": addToCartProductId
-    }
+    if (addToCartProductId) {
 
-    const response = await fetch("AddToCart", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json"
+        const data = {
+            "productId": addToCartProductId
         }
-    });
 
-    if (response.ok) {
-        // console.log(response);
+        const response = await fetch("AddToCart", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-        let data = await response.json();
+        if (response.ok) {
+            // console.log(response);
 
-        if (data.success) {
-            // swal({
-            //     title: "Success",
-            //     text: data.data,
-            //     icon: "success",
-            //     button: "OK",
-            // });
-            cartData = data.data
-            Notification().success({
-                message: data.data
-            })
+            let data = await response.json();
+            cartData = data
+
+            if (data.success) {
+                // swal({
+                //     title: "Success",
+                //     text: data.data,
+                //     icon: "success",
+                //     button: "OK",
+                // });
+                Notification().success({
+                    message: data.data
+                })
+                loadCart()
+            } else {
+                Notification().error({
+                    message: data.data
+                })
+            }
+
+
         } else {
             Notification().error({
-                message: data.data
+                message: "Please Try Again Latter"
             })
+            console.log(response)
         }
-
 
     } else {
         Notification().error({
-            message: "Please Try Again Latter"
+            message: "Missing Id"
         })
-        console.log(response)
+        console.log(addToCartProductId)
     }
-
 
 
 };
@@ -595,10 +608,13 @@ function pagination() {
 
 function showAlert() {
     // swal("", "success");
-    swal({
-        title: "Success",
-        text: cartData,
-        icon: "success",
-        button: "OK",
-    });
+    if(cartData!=null && cartData!=undefined){
+        swal({
+            title: cartData.success,
+            text: cartData.data,
+            icon: cartData.success ? "success" : "error",
+            button: "OK",
+        });
+    }
+
 }
