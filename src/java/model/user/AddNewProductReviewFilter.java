@@ -26,9 +26,10 @@ public class AddNewProductReviewFilter implements Filter {
 
         Gson gson = new Gson();
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        
-        String review = gson.fromJson(httpServletRequest.getReader(),JsonObject.class).get("txt").getAsString();
-        String productId = gson.fromJson(httpServletRequest.getReader(),JsonObject.class).get("id").getAsString();
+
+        JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
+        String review = fromJson.get("txt").getAsString();
+        String productId = fromJson.get("id").getAsString();
 
         boolean isInvalid = false;
         String errorMessage = "";
@@ -46,7 +47,7 @@ public class AddNewProductReviewFilter implements Filter {
 //                errorMessage = "Missing Product Id";
 //
 //            } else 
-                if (review.isEmpty()) {
+            if (review.isEmpty()) {
                 //no review text
                 isInvalid = true;
                 errorMessage = "Missing Review Text";
@@ -66,7 +67,7 @@ public class AddNewProductReviewFilter implements Filter {
                         errorMessage = "Incorrect Product Id";
 
                     } else {
-                        
+
                         request.setAttribute("id", pId);
                         request.setAttribute("review", review);
                         chain.doFilter(request, response);

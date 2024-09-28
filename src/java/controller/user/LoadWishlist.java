@@ -27,7 +27,7 @@ public class LoadWishlist extends HttpServlet {
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Criteria wishlistCriteria = hibernateSession.createCriteria(Wishlist.class);
         
-        wishlistCriteria.add(Restrictions.eq("user", user.getId()));
+        wishlistCriteria.add(Restrictions.eq("user", user));
         
         Gson gson = new Gson();
         Response_DTO response_DTO;

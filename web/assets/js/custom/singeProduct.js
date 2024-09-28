@@ -14,7 +14,12 @@ var pId;
 
 const loadSingleProduct = async (productId) => {
 
-    let pid = productId.split("#")[0];
+    let pid;
+    if (productId.includes("#")) {
+        pid = productId.split("#")[0];
+    } else {
+       pid= productId
+    }
     const data = {
         "id": pid
     }
@@ -81,7 +86,12 @@ const reviewChild = document.getElementById("reviewChild")
 const newReview = document.getElementById("newReview")
 const loadReview = async (productId) => {
 
-    let pid = productId.split("#")[0];
+    let pid;
+    if (productId.includes("#")) {
+        pid = productId.split("#")[0];
+    } else {
+       pid= productId
+    }
 
     reviewParent.innerHTML = ""
 
@@ -429,7 +439,13 @@ async function addNewReview() {
         let url = window.location.href;
         const splitArr = url.split("?");
 
-        let productId = splitArr[1].split("=")[1].split("#")[0];
+        let pid = splitArr[1].split("=")[1];
+        let productId
+        if (pid.includes("#")) {
+            productId = pid.split("#")[0];
+        } else {
+            productId= pid
+        }
 
         const response = await fetch("AddNewReview", {
             method: "POST",
@@ -444,6 +460,9 @@ async function addNewReview() {
         if (response.ok) {
 
             let data = await response.json();
+            console.log("data")
+            console.log(data)
+
             if (data.success) {
 
                 Notification().success({

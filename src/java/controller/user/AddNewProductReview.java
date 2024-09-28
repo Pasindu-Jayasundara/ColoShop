@@ -49,23 +49,37 @@ public class AddNewProductReview extends HttpServlet {
             orderLoop:
             for (OrderDataTable order : orderList) {
                 //get order items of these orders
-
+System.out.println("bbbbbbbbbbbbbbbb");
+System.out.println("bbbbbbbbbbbbbbbb");
+System.out.println("bbbbbbbbbbbbbbbb");
+System.out.println("bbbbbbbbbbbbbbbb");
                 Criteria orderItemCriteria = hibernateSession.createCriteria(Order_item.class);
                 orderItemCriteria.add(Restrictions.and(
-                        Restrictions.eq("order", order),
+                        Restrictions.eq("orders", order),
                         Restrictions.eq("product", product)
                 ));
 
                 List<Order_item> orderItemList = orderItemCriteria.list();
                 if (!orderItemList.isEmpty()) {
                     //have order items
-
+System.out.println("cccccccccccccccccc");
+System.out.println("cccccccccccccccccc");
+System.out.println("cccccccccccccccccc");
+System.out.println("cccccccccccccccccc");
                     for (Order_item order_item : orderItemList) {
                         //check product id match to this id
 
+                        System.out.println("dddddddddddddddddddddddd");
+                        System.out.println("dddddddddddddddddddddddd");
+                        System.out.println("dddddddddddddddddddddddd");
+                        System.out.println("dddddddddddddddddddddddd");
                         if (order_item.getProduct().getId() == productId) {
                             //have bought this product
 
+                            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeee");
+                            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeee");
+                            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeee");
+                            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeee");
                             Review review = new Review();
                             review.setReview(reviewText);
                             review.setDatetime(new Date());
@@ -87,6 +101,8 @@ public class AddNewProductReview extends HttpServlet {
 
                     }
 
+                }else{
+                    message="You Need To Buy This Product First";
                 }
                 
             }
