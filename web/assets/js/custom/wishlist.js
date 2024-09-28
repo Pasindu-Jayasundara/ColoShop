@@ -1,4 +1,4 @@
-window.addEventListener("load",()=>{
+window.addEventListener("load", () => {
 
     loadWishlist()
 
@@ -19,40 +19,48 @@ const loadWishlist = async () => {
 
             let parent = document.getElementById("productContainer");
             let productElement = document.getElementById("productElement");
+                    parent.innerHTML = "";
 
             for (var i = 1; i <= productData.length; i++) {
 
                 let product = productData[i - 1];
-                // console.log(product);
+                console.log(product);
 
                 productArr.push(product);
 
-                if (!arr.includes(product.category.category)) {
-                    loadBigCategories(product.category.category);
-                    loadSmallCategories(product.category.category);
+                if (!arr.includes(product.product.category.category)) {
+                    // loadBigCategories(product.product.category.category);
+                    // loadSmallCategories(product.product.category.category);
 
-                    arr.push(product.category.category);
+                    arr.push(product.product.category.category);
                 }
 
-                if (isProductFirstTime) {
-                    parent.innerHTML = "";
-                    isProductFirstTime = false;
-                }
+                // if (isProductFirstTime) {
+                //     parent.innerHTML = "";
+                //     isProductFirstTime = false;
+                // }
 
                 //get product element
                 let element = productElement.cloneNode(true);
-                element.querySelector(".productName").innerHTML = product.name;
-                element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
+                element.querySelector(".productName").innerHTML = product.product.name;
+                element.querySelector(".productPrice").innerHTML = "Rs. " + product.product.unit_price;
+
+                const trimmedPath = product.product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+                element.querySelector(".pimg").src = trimmedPath;
                 element.querySelector(".productElementATag").addEventListener("click", (e) => {
                     e.preventDefault();
-                    loadQuickView(product.id);
+                    window.location.href="product-detail.html?product="+product.product.id
                 });
 
-                element.classList.replace("women", product.category.category);
+                element.classList.replace("women", product.product.category.category);
                 element.removeAttribute("style");
                 element.querySelector(".addToWishlist").addEventListener("click", (e) => {
                     e.preventDefault();
-                    addToWishlist(product.id)
+                    removeFromWishlist(product.product.id)
+                });
+
+                element.querySelector(".productName").addEventListener("click", (e) => {
+                    window.location.href = "product-detail.html?product=" + product.product.id;
                 });
 
                 parent.appendChild(element);
@@ -115,10 +123,13 @@ const loadWishlist = async () => {
                 addToCart();
             });
 
+            loadCart()
+
         } else {
             Notification().error({
                 message: data.data
             })
+            window.history.back()
         }
     } else {
         new Notification().error({
@@ -129,52 +140,29 @@ const loadWishlist = async () => {
 
 };
 
-var addToCartProductId;
-const loadQuickView = (productId) => {
+const removeFromWishlist = async (productId) => {
 
-    productArr.forEach((productObject) => {
-        if (productObject.id == productId) {
-
-            document.getElementById("modelProductName").innerHTML = productObject.name;
-            document.getElementById("modelProductPrice").innerHTML = productObject.unit_price;
-            document.getElementById("modelProductDesc").innerHTML = productObject.description;
-            document.getElementById("modelProductSize").innerHTML = productObject.size.size;
-            document.getElementById("modelProductColor").innerHTML = productObject.product_color.color;
-
-            addToCartProductId = productId;
-
-            return;
-        }
-    });
-
-};
-
-const addToCart = async () => {
-
-    const data = {
-        "productId": addToCartProductId
-    }
-
-    const response = await fetch("AddToCart", {
+    const response = await fetch("DeleteFromWishList", {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+            id: productId
+        }),
         headers: {
             "Content-Type": "application/json"
         }
     });
-
     if (response.ok) {
-        // console.log(response);
+        // console.log("response");
+        // console.log(await response.text());
 
         let data = await response.json();
-        // console.log(data)
         if (data.success) {
-            swal({
-                title: "Success",
-                text: data.data,
-                icon: "success",
-                button: "OK",
-            });
+
+            Notification().success({
+                message: data.data
+            })
+
+            loadWishlist()
         } else {
             Notification().error({
                 message: data.data
@@ -188,7 +176,6 @@ const addToCart = async () => {
         })
         console.log(response)
     }
-
 
 
 };

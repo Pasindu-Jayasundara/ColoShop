@@ -5,6 +5,7 @@ import dto.Response_DTO;
 import entity.UserTable;
 import entity.Wishlist;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,13 +33,16 @@ public class LoadWishlist extends HttpServlet {
         Gson gson = new Gson();
         Response_DTO response_DTO;
         
-        List<Wishlist> wishList = wishlistCriteria.list();
+        ArrayList<Wishlist> wishList = (ArrayList<Wishlist>) wishlistCriteria.list();
         
-        if (wishList.isEmpty()) {
+        if (wishList==null) {
             //no data
             response_DTO = new Response_DTO(false, "No Items");
             
         } else {
+            for (Wishlist wishlist : wishList) {
+                wishlist.setUser(null);
+            }
             response_DTO = new Response_DTO(true, gson.toJsonTree(wishList));
         }
         
