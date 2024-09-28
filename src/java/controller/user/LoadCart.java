@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "LoadCart", urlPatterns = {"/LoadCart"})
@@ -34,6 +35,7 @@ public class LoadCart extends HttpServlet {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
             Criteria cartCriteria = hibernateSession.createCriteria(Cart.class);
             cartCriteria.add(Restrictions.eq("user", userTable));
+            cartCriteria.addOrder(Order.desc("id"));
 
             ArrayList<Cart> cartList =  (ArrayList<Cart>) cartCriteria.list();
             if(cartList!=null && !cartList.isEmpty()){

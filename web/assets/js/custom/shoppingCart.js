@@ -2,10 +2,15 @@ window.addEventListener("load", () => {
     loadCartData();
 });
 
+const popup = Notification();
+
 var cartListElement;
 var buyArr = [];
+var allProductArr = []
 var totalValue;
 var deliveryFee = 0;
+var delElement
+
 const loadCartData = async () => {
 
     const response = await fetch("LoadCart");
@@ -16,7 +21,7 @@ const loadCartData = async () => {
 
         let columnNames = document.getElementById("columnName");
         let cartListParent = document.getElementById("tableRowParent");
-        cartListElement = document.getElementById("cartListElement");
+        cartListElement = document.getElementById("cle");
 
         let cartProductTotal = 0;
         cartListParent.innerHTML = "";
@@ -24,132 +29,266 @@ const loadCartData = async () => {
         cartListParent.appendChild(columnNames);
 
         if (data.success) {
-            data.data.forEach((productObj) => {
+            let list = data.data.cartList
+            list.forEach((productObj) => {
 
                 // console.log(productObj);
 
                 let element = cartListElement.cloneNode(true);
                 element.removeAttribute("id");
-                element.querySelector(".tableProductName").innerHTML = productObj.name;
+                element.setAttribute("id", "cpr" + productObj.product.id);
+                element.querySelector(".tableProductName").innerHTML = productObj.product.name;
+                element.querySelector(".tableRoductPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2
+                    }
+                ).format(productObj.product.unit_price);
 
-                element.querySelector(".tableRoductPrice").innerHTML = "Rs. " + productObj.unit_price;
-                element.querySelector(".tableRoductPrice").setAttribute("id", "changeProductUnitPrice" + productObj.id);
+                let trimmedPath = productObj.product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
+                element.querySelector(".proimg").src = trimmedPath;
 
-                element.querySelector(".tableProductTotal").innerHTML = "Rs. " + productObj.unit_price;
-                element.querySelector(".tableDisplayQty").setAttribute("id", "changeProductQty" + productObj.id);
-                element.querySelector(".tableProductTotal").setAttribute("id", "changeProductPrice" + productObj.id);
+                element.querySelector(".deleteFromCart").addEventListener("click", () => {
+
+                    if (delElement != document.getElementById("cpr" + productObj.product.id)) {
+                        if (delElement != undefined) {
+                            delElement.style.backgroundColor = "white"
+                        }
+                        delElement = document.getElementById("cpr" + productObj.product.id)
+                        delElement.style.backgroundColor = "grey"
+
+                    } else {
+                        if (delElement != undefined) {
+                            if (delElement.style.backgroundColor == "grey") {
+                                delElement.style.backgroundColor = "white"
+                            } else {
+                                delElement.style.backgroundColor = "grey"
+                            }
+                        }
+                    }
+                    addToDeleteArr(productObj.product.id);
+                });
+
+                element.querySelector(".tableRoductPrice").setAttribute("id", "changeProductUnitPrice" + productObj.product.id);
+                element.querySelector(".tableProductTotal").innerHTML = "Rs. " + new Intl.NumberFormat(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2
+                    }
+                ).format(productObj.product.unit_price);
+                element.querySelector(".tableDisplayQty").setAttribute("id", "changeProductQty" + productObj.product.id);
+                element.querySelector(".tableProductTotal").setAttribute("id", "changeProductPrice" + productObj.product.id);
 
 
                 // decrease qty
                 element.querySelector(".tableProductCountMinus").addEventListener("click", () => {
 
-                    value = parseInt(document.getElementById("changeProductQty" + productObj.id).value);
+                    value = parseInt(document.getElementById("changeProductQty" + productObj.product.id).value);
                     if (value > 1) {
                         value -= 1;
-                        document.getElementById("changeProductQty" + productObj.id).value = value;
+                        document.getElementById("changeProductQty" + productObj.product.id).value = value;
 
-                        document.getElementById("changeProductPrice" + productObj.id).innerHTML = "Rs. " + value * productObj.unit_price;
-
-                        buyArr.forEach((obj) => {
-                            if (obj.id == productObj.id) {
-                                obj.qty = parseInt(obj.qty) - 1
+                        document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
+                            "en-US",
+                            {
+                                minimumFractionDigits: 2
                             }
-                        });
+                        ).format(value * productObj.product.unit_price);
+
+
+                        // Update the qty in allProductArr
+                        let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
+                        if (foundInAllProducts) {
+                            foundInAllProducts.qty = parseInt(foundInAllProducts.qty) - 1;
+                        }
+
+                        // Update the qty in buyArr if the product already exists
+                        let foundInBuyArr = buyArr.find(buyObj => buyObj.id === productObj.product.id);
+                        if (foundInBuyArr) {
+                            foundInBuyArr.qty = parseInt(foundInBuyArr.qty) - 1;
+
+                            updateTable()
+                        }
 
                         // document.getElementById("cartProductTotal").innerHTML = "Rs. " + value * productObj.unit_price;
 
-                        total();
-                        finaltotal();
+                        // total();
+                        // finaltotal();
 
                     }
                 });
 
-                deliveryFee += productObj.delivery_fee;
-                document.getElementById("cartProductDeliveryFee").innerHTML = "Rs. " + deliveryFee;
+                // deliveryFee += productObj.product.delivery_fee;
+                // document.getElementById("cartProductDeliveryFee").innerHTML = "Rs. " + deliveryFee;
 
 
 
-                buyArr.push({
-                    id: productObj.id,
-                    unitPrice: productObj.unit_price,
-                    deliveryFee: productObj.delivery_fee
+                // buyArr.push({
+                allProductArr.push({
+                    id: productObj.product.id,
+                    unitPrice: productObj.product.unit_price,
+                    deliveryFee: productObj.product.delivery_fee,
+                    qty: 1,
+                    name: productObj.product.name
                 });
 
                 // increase qty
                 element.querySelector(".tableProductCountPlus").addEventListener("click", () => {
 
-                    let value = parseInt(document.getElementById("changeProductQty" + productObj.id).value);
+                    let value = parseInt(document.getElementById("changeProductQty" + productObj.product.id).value);
                     value += 1;
-                    document.getElementById("changeProductQty" + productObj.id).value = value;
+                    document.getElementById("changeProductQty" + productObj.product.id).value = value;
 
-                    document.getElementById("changeProductPrice" + productObj.id).innerHTML = "Rs. " + value * productObj.unit_price;
-
-                    buyArr.forEach((obj) => {
-                        if (obj.id == productObj.id) {
-                            obj.qty = parseInt(obj.qty) + 1
+                    document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
+                        "en-US",
+                        {
+                            minimumFractionDigits: 2
                         }
-                    });
+                    ).format(value * productObj.product.unit_price);
 
-                    total();
-                    finaltotal();
+                    // Update the qty in allProductArr
+                    let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
+                    if (foundInAllProducts) {
+                        foundInAllProducts.qty = parseInt(foundInAllProducts.qty) + 1;
+                    }
+
+                    // Update the qty in buyArr if the product already exists
+                    let foundInBuyArr = buyArr.find(buyObj => buyObj.id === productObj.product.id);
+                    if (foundInBuyArr) {
+                        foundInBuyArr.qty = parseInt(foundInBuyArr.qty) + 1;
+
+                        updateTable()
+                    }
+
+
+
+
+                    // total();
+                    // finaltotal();
 
                     // document.getElementById("cartProductTotal").innerHTML = "Rs. " + value * productObj.unit_price;
 
                 });
 
-                // delete
-                element.querySelector(".checkBox").setAttribute("id", "cb" + productObj.id);
-                element.querySelector(".checkBox").addEventListener("click", () => {
+                // purchase
+                element.querySelector(".checkBox").setAttribute("id", "cb" + productObj.product.id);
+                element.querySelector(".checkBox").addEventListener("click", (event) => {
 
-                    addToDeleteArr(productObj.id);
+                    if (event.target.checked) {
+                        if (!buyArr.some(item => item.id === productObj.product.id)) {
 
+                            let foundObj = allProductArr.find(obj => obj.id === productObj.product.id);
+
+                            if (foundObj) {
+
+                                buyArr.push(foundObj);
+                                updateTable()
+                            }
+                        }
+                    } else {
+                        buyArr = buyArr.filter(item => item.id !== productObj.product.id);
+
+                        updateTable()
+                    }
+
+                    console.log(buyArr);
                 });
-
 
 
                 cartListParent.appendChild(element);
 
-                cartProductTotal += productObj.unit_price;
+                // cartProductTotal += productObj.product.unit_price;
 
             });
-            document.getElementById("cartProductTotal").innerHTML = "Rs. " + cartProductTotal;
-            finaltotal();
+            // document.getElementById("cartProductTotal").innerHTML = "Rs. " + cartProductTotal;
+            // finaltotal();
         }
 
+        loadCart()
 
     }
 };
 
-function total() {
+//table
+var body = document.getElementById("pTBody")
+var tr = document.getElementById("ptTr")
 
-    let tot = 0;
-    buyArr.forEach((obj) => {
+function updateTable() {
 
-        let value = parseInt(document.getElementById("changeProductQty" + obj.id).value);
-        tot += value * obj.unitPrice;
+    body.innerHTML = ""
 
-    });
+    let subtotal = 0.0
+    let deliveryFee = 0.0
+    let total = 0.0
 
-    document.getElementById("cartProductTotal").innerHTML = "Rs. " + tot;
+    buyArr.forEach(item => {
+
+        let element = tr.cloneNode(true)
+        element.removeAttribute("id")
+        element.setAttribute("id", "tr" + item.id)
+        element.querySelector(".ptrname").innerHTML = item.name
+        element.querySelector(".ptrqty").innerHTML = item.qty
+        element.querySelector(".ptrprice").innerHTML = new Intl.NumberFormat(
+            "en-US",
+            {
+                minimumFractionDigits: 2
+            }
+        ).format(item.qty * item.unitPrice)
+        
+        element.querySelector(".ptrdf").innerHTML = new Intl.NumberFormat(
+            "en-US",
+            {
+                minimumFractionDigits: 2
+            }
+        ).format(item.deliveryFee)
+
+        body.appendChild(element)
+
+        subtotal += item.qty * item.unitPrice
+        deliveryFee += item.deliveryFee
+    })
+    total = subtotal + deliveryFee
+
+    document.querySelector(".cartProductTotal").innerHTML = "Rs. "+new Intl.NumberFormat(
+        "en-US",
+        {
+            minimumFractionDigits: 2
+        }
+    ).format(total)
 
 }
 
-function finaltotal() {
+// function total() {
+//     console.log("total")
+//     let tot = 0;
+//     buyArr.forEach((obj) => {
 
-    let tot = 0;
-    buyArr.forEach((obj) => {
+//         let value = parseInt(document.getElementById("changeProductQty" + obj.id).value);
+//         tot += value * obj.unitPrice;
 
-        let value = parseInt(document.getElementById("changeProductQty" + obj.id).value);
-        tot += value * obj.unitPrice;
-        tot += obj.deliveryFee;
+//     });
 
-    });
+//     document.getElementById("cartProductTotal").innerHTML = "Rs. " + tot;
 
-    document.getElementById("fulTotal").innerHTML = "Rs. " + tot;
+// }
 
-}
+// function finaltotal() {
+
+//     let tot = 0;
+//     buyArr.forEach((obj) => {
+
+//         let value = parseInt(document.getElementById("changeProductQty" + obj.id).value);
+//         tot += value * obj.unitPrice;
+//         tot += obj.deliveryFee;
+
+//     });
+
+//     document.getElementById("fulTotal").innerHTML = "Rs. " + tot;
+
+// }
 
 var deleteArr = undefined;
+var prevEl
 const addToDeleteArr = (proId) => {
 
     if (deleteArr == undefined) {//no
@@ -161,9 +300,21 @@ const addToDeleteArr = (proId) => {
             </button>
         `;
 
+        prevEl = document.getElementById("cpr" + proId)
+
+    } else if (deleteArr != undefined && prevEl != document.getElementById("cpr" + proId)) {//no
+
+        deleteArr = proId;
+        document.getElementById("deleteContainer").innerHTML = `
+            <button type="button" onclick="deleteFromCart(${proId})" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" id="deleteProduct">
+                Delete Product
+            </button>
+        `;
+
+        prevEl = document.getElementById("cpr" + proId)
+
     } else {
         deleteArr = undefined;
-
         document.getElementById("deleteContainer").innerHTML = "";
     }
 };
@@ -208,24 +359,11 @@ var text = "";
 var address = "";
 const checkSignIn = async () => {
 
-    const response = await fetch("CheckSignIn", {
-        method: "POST",
-        body: JSON.stringify({
-            address: document.getElementById("address").value,
-            text: document.getElementById("otherText").value
-        }),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+    const response = await fetch("CheckSignIn");
     if (response.ok) {
 
         const jsonData = await response.json();
-        if (jsonData.data.isLoggedIn) {
-
-            text = jsonData.data.text;
-            address = jsonData.data.address;
-
+        if (jsonData.data.isSignedIn) {
             return true;
         } else {
             return false;
@@ -239,10 +377,11 @@ async function procedToCheckout() {
     const isLoggedIn = await checkSignIn();
     if (isLoggedIn) {
 
-        if (!text) {
-            // wrong text
-        } else if (!address) {
+        if (address.trim() == "") {
             //wrong address
+            popup.info({
+                message: "Please Fill The Address"
+            });
         } else {
 
             // Payment completed. It can be a successful failure.
@@ -252,7 +391,7 @@ async function procedToCheckout() {
                 popup.success({
                     message: "Thank you, Payment completed!"
                 });
-                window.location = "index.html";
+                // window.location = "index.html";
             };
 
             // Payment window closed
@@ -267,12 +406,18 @@ async function procedToCheckout() {
                 console.log("Error:" + error);
             };
 
+            payhere.startPayment(json.payhereJson);
+
         }
 
 
 
 
     } else {
+
+        popup.info({
+            message: "Please Login First"
+        });
 
     }
 }

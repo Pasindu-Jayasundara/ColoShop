@@ -1,4 +1,4 @@
-const cartListElement = document.getElementById("cartListElement");
+const cle = document.getElementById("cartListElement");
 const loadCart = async () => {
 
     const response = await fetch("LoadCart");
@@ -19,7 +19,7 @@ const loadCart = async () => {
 
             data.cartList.forEach((productObj) => {
 
-                let element = cartListElement.cloneNode(true);
+                let element = cle.cloneNode(true);
                 element.removeAttribute("id");
 
 
