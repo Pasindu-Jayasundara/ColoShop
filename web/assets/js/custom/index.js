@@ -2,22 +2,21 @@ window.addEventListener("load", () => {
     loadProduct();
 });
 
-var bigCategoryElement;
+var bigCategoryElement =document.getElementById("bigCategoryElement");
 var isBigFirstTime = true;
+var parentC = document.getElementById("category-big-container");
+parentC.innerHTML=""
 const loadBigCategories = (categoryName) => {
 
-    let parent = document.getElementById("category-big-container");
-    bigCategoryElement = document.getElementById("bigCategoryElement");
-
     if (isBigFirstTime) {
-        parent.innerHTML = "";
+        parentC.innerHTML = "";
         isBigFirstTime = false;
     }
 
     let element = bigCategoryElement.cloneNode(true);
     element.querySelector(".bigCategoryCategory").innerHTML = categoryName;
 
-    parent.appendChild(element);
+    parentC.appendChild(element);
 
 };
 
@@ -47,15 +46,27 @@ const productArr = [];
 
 var parent = document.getElementById("productContainer");
 var productElement = document.getElementById("productElement");
+parent.innerHTML=""
 const loadProduct = async () => {
 
-    const response = await fetch("LoadProduct?productCount=30");
+    const response = await fetch("LoadProduct?from=0&to=8");
     if (response.ok) {
 
         const data = await response.json();
         if (data.success) {
 
-            const productData = data.data;
+            const productData = data.data.productList;
+            const categoryList = data.data.categoryList;
+
+            categoryList.forEach(obj=>{
+
+                if (!arr.includes(obj.category)) {
+                    loadBigCategories(obj.category);
+                    loadSmallCategories(obj.category);
+    
+                    arr.push(obj.category);
+                }
+            })
 
             for (var i = 1; i <= productData.length; i++) {
 
@@ -64,12 +75,7 @@ const loadProduct = async () => {
 
                 productArr.push(product);
 
-                if (!arr.includes(product.category.category)) {
-                    loadBigCategories(product.category.category);
-                    loadSmallCategories(product.category.category);
-
-                    arr.push(product.category.category);
-                }
+                
 
                 if (isProductFirstTime) {
                     parent.innerHTML = "";
@@ -266,41 +272,6 @@ const addToCart = async () => {
 
 
 };
-
-// var cartListElement;
-// const loadCart = async()=>{
-
-//     const response = await fetch("LoadCart");
-//     if(response.ok){
-
-//         const jsonData =await response.json();
-//         const data = jsonData.data;
-//         // console.log(data);
-
-//         let cartListParent = document.getElementById("cartSideBarContainer");
-//         cartListElement = document.getElementById("cartListElement");
-
-//         let cartProductTotal=0;
-//         cartListParent.innerHTML="";
-
-//         data.forEach((productObj)=>{
-
-//             // console.log(productObj);
-
-//             let element = cartListElement.cloneNode(true);
-//             element.removeAttribute("id");
-//             element.querySelector(".cartProductName").innerHTML=productObj.name;
-//             element.querySelector(".cartProductUnitPrice").innerHTML="Rs. "+productObj.unit_price;
-
-//             cartListParent.appendChild(element);
-
-//             cartProductTotal+=productObj.unit_price;
-
-//         });
-
-//         document.getElementById("cartProductTotal").innerHTML="Total: "+cartProductTotal;
-//     }
-// };
 
 const addToWishlist = async (productId) => {
 

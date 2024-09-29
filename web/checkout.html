@@ -1,621 +1,628 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Smart Trade</title>
-        <meta name="robots" content="noindex, follow" />
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Smart Trade</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
-        <!-- CSS
+    <!-- CSS
         ============================================ -->
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/css/vendor/font-awesome.css">
-        <link rel="stylesheet" href="assets/css/vendor/flaticon/flaticon.css">
-        <link rel="stylesheet" href="assets/css/vendor/slick.css">
-        <link rel="stylesheet" href="assets/css/vendor/slick-theme.css">
-        <link rel="stylesheet" href="assets/css/vendor/jquery-ui.min.css">
-        <link rel="stylesheet" href="assets/css/vendor/sal.css">
-        <link rel="stylesheet" href="assets/css/vendor/magnific-popup.css">
-        <link rel="stylesheet" href="assets/css/vendor/base.css">
-        <link rel="stylesheet" href="assets/css/style.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/vendor/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/vendor/jquery-ui.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/sal.css">
+    <link rel="stylesheet" href="assets/css/vendor/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/vendor/base.css">
+    <link rel="stylesheet" href="assets/css/style.min.css">
 
-        <link rel="stylesheet" href="assets/css/notification.css">
+    <link rel="stylesheet" href="assets/css/notification.css">
 
-    </head>
+</head>
 
 
-    <body class="sticky-header" onload="loadData();">
-        <!--[if lte IE 9]>
+<body class="sticky-header" onload="loadData();">
+    <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
-        <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
-        <!-- Start Header -->
-        <header class="header axil-header header-style-1">
+    <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+    <!-- Start Header -->
+    <header class="header axil-header header-style-1">
 
-            <div class="axil-header-top">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-sm-6">
-                            <div class="header-top-dropdown">
-                                <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        English
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">English</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        LKR
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">LKR</a></li>
-                                    </ul>
-                                </div>
+        <div class="axil-header-top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <div class="header-top-dropdown">
+                            <div class="dropdown">
+                                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    English
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">English</a></li>
+                                </ul>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="header-top-link">
-                                <ul class="quick-link">
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="sign-up.html">Join Us</a></li>
-                                    <li><a href="sign-in.html">Sign In</a></li>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    LKR
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">LKR</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- Start Mainmenu Area  -->
-            <div id="axil-sticky-placeholder"></div>
-            <div class="axil-mainmenu">
-                <div class="container">
-                    <div class="header-navbar">
-                        <div class="header-brand">
-                            <a href="index.html" class="logo logo-dark">
-                                <img src="assets/images/logo/logo.png" alt="Site Logo">
-                            </a>
-                            <a href="index.html" class="logo logo-light">
-                                <img src="assets/images/logo/logo-light.png" alt="Site Logo">
-                            </a>
-                        </div>
-                        <div class="header-main-nav">
-                            <!-- Start Mainmanu Nav -->
-                            <nav class="mainmenu-nav">
-                                <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
-                                <div class="mobile-nav-brand">
-                                    <a href="index.html" class="logo">
-                                        <img src="assets/images/logo/logo.png" alt="Site Logo">
-                                    </a>
-                                </div>
-                                <ul class="mainmenu">
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Menu-1</a>
-                                        <ul class="axil-submenu">
-                                            <li><a href="#">Menu-1-Item-1</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Menu-2</a>
-                                        <ul class="axil-submenu">
-                                            <li><a href="#">Menu-2-Item-1</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Menu-3</a>
-                                        <ul class="axil-submenu">
-                                            <li><a href="#">Menu-3-Item-1</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Menu-4</a></li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Menu-5</a>
-                                        <ul class="axil-submenu">
-                                            <li><a href="#">Menu-5-Item-1</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Menu-6</a></li>
-                                </ul>
-                            </nav>
-                            <!-- End Mainmanu Nav -->
-                        </div>
-                        <div class="header-action">
-                            <ul class="action-list">
-                                <li class="axil-search">
-                                    <a href="javascript:void(0)" class="header-search-icon" title="Search">
-                                        <i class="flaticon-magnifying-glass"></i>
-                                    </a>
-                                </li>
-                                <li class="wishlist">
-                                    <a href="#">
-                                        <i class="flaticon-heart"></i>
-                                    </a>
-                                </li>
-                                <li class="shopping-cart">
-                                    <a href="#" class="cart-dropdown-btn">
-                                        <span class="cart-count">3</span>
-                                        <i class="flaticon-shopping-cart"></i>
-                                    </a>
-                                </li>
-                                <li class="my-account">
-                                    <a href="javascript:void(0)">
-                                        <i class="flaticon-person"></i>
-                                    </a>
-                                    <div class="my-account-dropdown">
-                                        <span class="title">QUICKLINKS</span>
-                                        <ul>
-                                            <li>
-                                                <a href="#">My Account</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Support</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Language</a>
-                                            </li>
-                                        </ul>
-                                        <div class="login-btn">
-                                            <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
-                                        </div>
-                                        <div class="reg-footer text-center">No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a></div>
-                                    </div>
-                                </li>
-                                <li class="axil-mobile-toggle">
-                                    <button class="menu-btn mobile-nav-toggler">
-                                        <i class="flaticon-menu-2"></i>
-                                    </button>
-                                </li>
+                    <div class="col-sm-6">
+                        <div class="header-top-link">
+                            <ul class="quick-link">
+                                <li><a href="#">Help</a></li>
+                                <li><a href="sign-up.html">Join Us</a></li>
+                                <li><a href="sign-in.html">Sign In</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End Mainmenu Area -->
-        </header>
-        <!-- End Header -->
-
-        <main class="main-wrapper">
-
-            <!-- Start Checkout Area  -->
-            <div class="axil-checkout-area axil-section-gap">
-                <div class="container">
-                    <form action="#">
-                        <div class="row">
-                            <div class="col-lg-6">
-
-                                <div class="axil-checkout-billing">
-                                    <h4 class="title mb--40">Shipping Details</h4>
-
-                                    <div class="form-group input-group">
-                                        <input type="checkbox" id="checkbox1">
-                                        <label for="checkbox1">Same as your current address?</label>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>First Name <span>*</span></label>
-                                                <input type="text" id="first-name" >
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Last Name <span>*</span></label>
-                                                <input type="text" id="last-name" >
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>City <span>*</span></label>
-                                        <select id="city">
-                                            <option value="0">Select</option>
-
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address Line 1 <span>*</span></label>
-                                        <input type="text" id="address1" class="mb--15" placeholder="House number and street name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address Line 2 <span>*</span></label>
-                                        <input type="text" id="address2" class="mb--15" placeholder="House number and street name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Postal Code <span>*</span></label>
-                                        <input type="text" id="postal-code">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Mobile <span>*</span></label>
-                                        <input type="text" id="mobile">
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="axil-order-summery order-checkout-summery">
-                                    <h5 class="title mb--20">Your Order</h5>
-                                    <div class="summery-table-wrap">
-                                        <table class="table summery-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Product</th>
-                                                    <th>Subtotal</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="st-tbody">
-
-                                                <tr class="order-product" id="st-item-tr">
-                                                    <td><span id="st-item-title">Product-1</span> <span class="quantity"><span id="st-item-qty">x1</span></span></td>
-                                                    <td>Rs. <span id="st-item-subtotal"></span></td>
-                                                </tr>
-
-                                                <tr class="order-subtotal" id="st-order-subtotal-tr">
-                                                    <td>Subtotal</td>
-                                                    <td>Rs. <span id="st-subtotal"></span></td>
-                                                </tr>
-
-                                                <tr class="order-shipping" id="st-order-shipping-tr">
-                                                    <td colspan="2">
-                                                        <div class="shipping-amount">
-                                                            <span class="title">Shipping Charges</span>
-                                                            <span class="amount">Rs. <span id="st-shipping-amount"></span> </span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr class="order-total" id="st-order-total-tr">
-                                                    <td>Total</td>
-                                                    <td class="order-total-amount">Rs. <span id="st-total"></span></td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="order-payment-method">
-                                        <div class="single-payment">
-                                            <div class="input-group justify-content-between align-items-center">
-                                                <input type="radio" id="radio6" name="payment" checked>
-                                                <label for="radio6">Visa/Master Card</label>
-                                                <div>
-                                                    <img src="./assets/images/icons/visa.png" >
-                                                    <img src="./assets/images/icons/mastercard.png" >
-                                                </div>
-                                            </div>
-                                            <p>You can pay with your credit or debit card.</p>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="axil-btn btn-bg-primary checkout-btn" onclick="checkout();" >Process to Checkout</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!-- End Checkout Area  -->
-        </main>
-
-
-        <div class="service-area">
-            <div class="container">
-                <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
-                    <div class="col">
-                        <div class="service-box service-style-2">
-                            <div class="icon">
-                                <img src="./assets/images/icons/service1.png" alt="Service">
-                            </div>
-                            <div class="content">
-                                <h6 class="title">Fast &amp; Secure Delivery</h6>
-                                <p>Tell about your service.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="service-box service-style-2">
-                            <div class="icon">
-                                <img src="./assets/images/icons/service2.png" alt="Service">
-                            </div>
-                            <div class="content">
-                                <h6 class="title">Money Back Guarantee</h6>
-                                <p>Within 10 days.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="service-box service-style-2">
-                            <div class="icon">
-                                <img src="./assets/images/icons/service3.png" alt="Service">
-                            </div>
-                            <div class="content">
-                                <h6 class="title">24 Hour Return Policy</h6>
-                                <p>No question ask.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="service-box service-style-2">
-                            <div class="icon">
-                                <img src="./assets/images/icons/service4.png" alt="Service">
-                            </div>
-                            <div class="content">
-                                <h6 class="title">Pro Quality Support</h6>
-                                <p>24/7 Live support.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-
-        <footer class="bg3 p-t-75 p-b-32">
+        <!-- Start Mainmenu Area  -->
+        <div id="axil-sticky-placeholder"></div>
+        <div class="axil-mainmenu">
             <div class="container">
-                <div class="row">
-                    <div class="col-sm-6 col-lg-3 p-b-50">
-                        <h4 class="stext-301 cl0 p-b-30">
-                            GET IN TOUCH
-                        </h4>
-    
-                        <p class="stext-107 cl7 size-201">
-                            Any questions? Let us know in store at 70/1/3, ForeShore, Colombo 13 
-                        </p>
-                        <div class="p-t-27">
-                            <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                                <i class="fa fa-facebook"></i>
-                            </a>
-    
-                            <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                                <i class="fa fa-instagram"></i>
-                            </a>
-    
-                            <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                                <i class="fa fa-pinterest-p"></i>
-                            </a>
-                        </div>
+                <div class="header-navbar">
+                    <div class="header-brand">
+                        <a href="index.html" class="logo logo-dark">
+                            <img src="assets/images/logo/logo.png" alt="Site Logo">
+                        </a>
+                        <a href="index.html" class="logo logo-light">
+                            <img src="assets/images/logo/logo-light.png" alt="Site Logo">
+                        </a>
                     </div>
-    
-                    <div class="col-sm-6 col-lg-3 p-b-50" style="visibility: hidden;">
-                        <h4 class="stext-301 cl0 p-b-30">
-                            Help
-                        </h4>
-    
-                        <ul>
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    Track Order
+                    <div class="header-main-nav">
+                        <!-- Start Mainmanu Nav -->
+                        <nav class="mainmenu-nav">
+                            <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
+                            <div class="mobile-nav-brand">
+                                <a href="index.html" class="logo">
+                                    <img src="assets/images/logo/logo.png" alt="Site Logo">
                                 </a>
-                            </li>
-    
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    Returns
-                                </a>
-                            </li>
-    
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    Shipping
-                                </a>
-                            </li>
-    
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    FAQs
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div class="col-sm-6 col-lg-3 p-b-50" style="visibility: hidden;">
-                        <h4 class="stext-301 cl0 p-b-30">
-                            Help
-                        </h4>
-    
-                        <ul>
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    Track Order
-                                </a>
-                            </li>
-    
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    Returns
-                                </a>
-                            </li>
-    
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    Shipping
-                                </a>
-                            </li>
-    
-                            <li class="p-b-10">
-                                <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                    FAQs
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div class="col-sm-6 col-lg-3 p-b-50">
-                        <h4 class="stext-301 cl0 p-b-30">
-                            Newsletter
-                        </h4>
-    
-                        <form>
-                            <div class="wrap-input1 w-full p-b-4">
-                                <input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
-                                    placeholder="email@example.com" id="nEmail">
-                                <div class="focus-input1 trans-04"></div>
                             </div>
-    
-                            <div class="p-t-18">
-                                <button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
-                                    Subscribe
-                                </button>
-                            </div>
-                        </form>
+                            <ul class="mainmenu">
+                                <li class="menu-item-has-children">
+                                    <a href="#">Menu-1</a>
+                                    <ul class="axil-submenu">
+                                        <li><a href="#">Menu-1-Item-1</a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="#">Menu-2</a>
+                                    <ul class="axil-submenu">
+                                        <li><a href="#">Menu-2-Item-1</a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="#">Menu-3</a>
+                                    <ul class="axil-submenu">
+                                        <li><a href="#">Menu-3-Item-1</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Menu-4</a></li>
+                                <li class="menu-item-has-children">
+                                    <a href="#">Menu-5</a>
+                                    <ul class="axil-submenu">
+                                        <li><a href="#">Menu-5-Item-1</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Menu-6</a></li>
+                            </ul>
+                        </nav>
+                        <!-- End Mainmanu Nav -->
                     </div>
-                </div>
-    
-                <div class="p-t-40">
-                    <div class="flex-c-m flex-w p-b-18">
-                        <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-01.png" alt="ICON-PAY">
-                        </a>
-    
-                        <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-02.png" alt="ICON-PAY">
-                        </a>
-    
-                        <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-03.png" alt="ICON-PAY">
-                        </a>
-    
-                        <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-04.png" alt="ICON-PAY">
-                        </a>
-    
-                        <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-05.png" alt="ICON-PAY">
-                        </a>
-                    </div>
-    
-                    <p class="stext-107 cl6 txt-center">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;
-                        <script>document.write(new Date().getFullYear());</script> All rights reserved | Made with <i
-                            class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                            target="_blank">Colorlib</a> &amp; distributed by <a href="https://themewagon.com"
-                            target="_blank">ThemeWagon</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-    
-                    </p>
-                </div>
-            </div>
-        </footer>
-
-        <!-- Header Search Modal End -->
-        <div class="header-search-modal" id="header-search-modal">
-            <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
-            <div class="header-search-wrap">
-                <div class="card-header">
-                    <form action="#">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name="prod-search" id="prod-search" placeholder="Search">
-                            <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-body">
-                    <div class="search-result-header">
-                        <h6 class="title">1 Result Found</h6>
-                        <a href="#" class="view-all">View All</a>
-                    </div>
-                    <div class="psearch-results">
-                        <div class="axil-product-list">
-                            <div class="thumbnail">
+                    <div class="header-action">
+                        <ul class="action-list">
+                            <li class="axil-search">
+                                <a href="javascript:void(0)" class="header-search-icon" title="Search">
+                                    <i class="flaticon-magnifying-glass"></i>
+                                </a>
+                            </li>
+                            <li class="wishlist">
                                 <a href="#">
-                                    <img src="./assets/images/product/product-03.png" alt="Product Image-1">
+                                    <i class="flaticon-heart"></i>
                                 </a>
-                            </div>
-                            <div class="product-content">
+                            </li>
+                            <li class="shopping-cart">
+                                <a href="#" class="cart-dropdown-btn">
+                                    <span class="cart-count">3</span>
+                                    <i class="flaticon-shopping-cart"></i>
+                                </a>
+                            </li>
+                            <li class="my-account">
+                                <a href="javascript:void(0)">
+                                    <i class="flaticon-person"></i>
+                                </a>
+                                <div class="my-account-dropdown">
+                                    <span class="title">QUICKLINKS</span>
+                                    <ul>
+                                        <li>
+                                            <a href="#">My Account</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Support</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Language</a>
+                                        </li>
+                                    </ul>
+                                    <div class="login-btn">
+                                        <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                    </div>
+                                    <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
+                                            class="btn-link">REGISTER HERE.</a></div>
+                                </div>
+                            </li>
+                            <li class="axil-mobile-toggle">
+                                <button class="menu-btn mobile-nav-toggler">
+                                    <i class="flaticon-menu-2"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Mainmenu Area -->
+    </header>
+    <!-- End Header -->
 
-                                <h6 class="product-title"><a href="#">Product Title-1</a></h6>
-                                <div class="product-price-variant">
-                                    <span class="price current-price">Rs. 0.00</span>
+    <main class="main-wrapper">
+
+        <!-- Start Checkout Area  -->
+        <div class="axil-checkout-area axil-section-gap">
+            <div class="container">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <div class="axil-checkout-billing">
+                                <h4 class="title mb--40">Shipping Details</h4>
+
+                                <div class="form-group input-group">
+                                    <input type="checkbox" id="checkbox1">
+                                    <label for="checkbox1">Same as your current address?</label>
                                 </div>
-                                <div class="product-cart">
-                                    <a href="#" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                    <a href="#" class="cart-btn"><i class="fal fa-heart"></i></a>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>First Name <span>*</span></label>
+                                            <input type="text" id="first-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Last Name <span>*</span></label>
+                                            <input type="text" id="last-name">
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label>City <span>*</span></label>
+                                    <select id="city">
+                                        <option value="0">Select</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address Line 1 <span>*</span></label>
+                                    <input type="text" id="address1" class="mb--15"
+                                        placeholder="House number and street name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Address Line 2 <span>*</span></label>
+                                    <input type="text" id="address2" class="mb--15"
+                                        placeholder="House number and street name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Postal Code <span>*</span></label>
+                                    <input type="text" id="postal-code">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mobile <span>*</span></label>
+                                    <input type="text" id="mobile">
+                                </div>
+
                             </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="axil-order-summery order-checkout-summery">
+                                <h5 class="title mb--20">Your Order</h5>
+                                <div class="summery-table-wrap">
+                                    <table class="table summery-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="st-tbody">
+
+                                            <tr class="order-product" id="st-item-tr">
+                                                <td><span id="st-item-title">Product-1</span> <span
+                                                        class="quantity"><span id="st-item-qty">x1</span></span></td>
+                                                <td>Rs. <span id="st-item-subtotal"></span></td>
+                                            </tr>
+
+                                            <tr class="order-subtotal" id="st-order-subtotal-tr">
+                                                <td>Subtotal</td>
+                                                <td>Rs. <span id="st-subtotal"></span></td>
+                                            </tr>
+
+                                            <tr class="order-shipping" id="st-order-shipping-tr">
+                                                <td colspan="2">
+                                                    <div class="shipping-amount">
+                                                        <span class="title">Shipping Charges</span>
+                                                        <span class="amount">Rs. <span id="st-shipping-amount"></span>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="order-total" id="st-order-total-tr">
+                                                <td>Total</td>
+                                                <td class="order-total-amount">Rs. <span id="st-total"></span></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="order-payment-method">
+                                    <div class="single-payment">
+                                        <div class="input-group justify-content-between align-items-center">
+                                            <input type="radio" id="radio6" name="payment" checked>
+                                            <label for="radio6">Visa/Master Card</label>
+                                            <div>
+                                                <img src="./assets/images/icons/visa.png">
+                                                <img src="./assets/images/icons/mastercard.png">
+                                            </div>
+                                        </div>
+                                        <p>You can pay with your credit or debit card.</p>
+                                    </div>
+                                </div>
+                                <button type="button" class="axil-btn btn-bg-primary checkout-btn"
+                                    onclick="checkout();">Process to Checkout</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- End Checkout Area  -->
+    </main>
+
+
+    <div class="service-area">
+        <div class="container">
+            <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img src="./assets/images/icons/service1.png" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">Fast &amp; Secure Delivery</h6>
+                            <p>Tell about your service.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img src="./assets/images/icons/service2.png" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">Money Back Guarantee</h6>
+                            <p>Within 10 days.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img src="./assets/images/icons/service3.png" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">24 Hour Return Policy</h6>
+                            <p>No question ask.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img src="./assets/images/icons/service4.png" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">Pro Quality Support</h6>
+                            <p>24/7 Live support.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Header Search Modal End -->
+    </div>
 
+    <!-- Footer -->
+    <footer class="bg3 p-t-75 p-b-32">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-lg-3 p-b-50">
+                    <h4 class="stext-301 cl0 p-b-30">
+                        GET IN TOUCH
+                    </h4>
 
+                    <p class="stext-107 cl7 size-201">
+                        Any questions? Let us know in store at 70/1/3, ForeShore, Colombo 13
+                    </p>
+                    <div class="p-t-27">
+                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+                            <i class="fa fa-facebook"></i>
+                        </a>
 
-        <div class="cart-dropdown" id="cart-dropdown">
-            <div class="cart-content-wrap">
-                <div class="cart-header">
-                    <h2 class="header-title">Cart Review</h2>
-                    <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
+                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+
+                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+                            <i class="fa fa-pinterest-p"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="cart-body">
-                    <ul class="cart-item-list">
-                        <li class="cart-item">
-                            <div class="item-img">
-                                <a href="#"><img src="assets/images/product/product-01.png" alt="Product Image-1"></a>
-                                <button class="close-btn"><i class="fas fa-times"></i></button>
-                            </div>
-                            <div class="item-content">
-                                <h3 class="item-title"><a href="#">Product Title-1</a></h3>
-                                <div class="item-price"><span class="currency-symbol">Rs. </span>0.00</div>
-                                <div class="pro-qty item-quantity">
-                                    <input type="number" class="quantity-input" value="1">
-                                </div>
-                            </div>
+
+                <div class="col-sm-6 col-lg-3 p-b-50" style="visibility: hidden;">
+                    <h4 class="stext-301 cl0 p-b-30">
+                        Help
+                    </h4>
+
+                    <ul>
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                Track Order
+                            </a>
+                        </li>
+
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                Returns
+                            </a>
+                        </li>
+
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                Shipping
+                            </a>
+                        </li>
+
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                FAQs
+                            </a>
                         </li>
                     </ul>
                 </div>
-                <div class="cart-footer">
-                    <h3 class="cart-subtotal">
-                        <span class="subtotal-title">Subtotal:</span>
-                        <span class="subtotal-amount">Rs. 0.00</span>
-                    </h3>
-                    <div class="group-btn">
-                        <a href="#" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
-                        <a href="#" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
+
+                <div class="col-sm-6 col-lg-3 p-b-50" style="visibility: hidden;">
+                    <h4 class="stext-301 cl0 p-b-30">
+                        Help
+                    </h4>
+
+                    <ul>
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                Track Order
+                            </a>
+                        </li>
+
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                Returns
+                            </a>
+                        </li>
+
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                Shipping
+                            </a>
+                        </li>
+
+                        <li class="p-b-10">
+                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                                FAQs
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-6 col-lg-3 p-b-50">
+                    <h4 class="stext-301 cl0 p-b-30">
+                        Newsletter
+                    </h4>
+
+                    <form>
+                        <div class="wrap-input1 w-full p-b-4">
+                            <input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
+                                placeholder="email@example.com" id="nEmail">
+                            <div class="focus-input1 trans-04"></div>
+                        </div>
+
+                        <div class="p-t-18">
+                            <button type="button"
+                                class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04"
+                                onclick="addtoNewsL()">
+                                Subscribe
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="p-t-40">
+                <div class="flex-c-m flex-w p-b-18">
+                    <a href="#" class="m-all-1">
+                        <img src="images/icons/icon-pay-01.png" alt="ICON-PAY">
+                    </a>
+
+                    <a href="#" class="m-all-1">
+                        <img src="images/icons/icon-pay-02.png" alt="ICON-PAY">
+                    </a>
+
+                    <a href="#" class="m-all-1">
+                        <img src="images/icons/icon-pay-03.png" alt="ICON-PAY">
+                    </a>
+
+                    <a href="#" class="m-all-1">
+                        <img src="images/icons/icon-pay-04.png" alt="ICON-PAY">
+                    </a>
+
+                    <a href="#" class="m-all-1">
+                        <img src="images/icons/icon-pay-05.png" alt="ICON-PAY">
+                    </a>
+                </div>
+
+                <p class="stext-107 cl6 txt-center">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | ColoShop &amp;
+                    Developed by Pasindu Jayasundara
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Header Search Modal End -->
+    <div class="header-search-modal" id="header-search-modal">
+        <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
+        <div class="header-search-wrap">
+            <div class="card-header">
+                <form action="#">
+                    <div class="input-group">
+                        <input type="search" class="form-control" name="prod-search" id="prod-search"
+                            placeholder="Search">
+                        <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="search-result-header">
+                    <h6 class="title">1 Result Found</h6>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="psearch-results">
+                    <div class="axil-product-list">
+                        <div class="thumbnail">
+                            <a href="#">
+                                <img src="./assets/images/product/product-03.png" alt="Product Image-1">
+                            </a>
+                        </div>
+                        <div class="product-content">
+
+                            <h6 class="product-title"><a href="#">Product Title-1</a></h6>
+                            <div class="product-price-variant">
+                                <span class="price current-price">Rs. 0.00</span>
+                            </div>
+                            <div class="product-cart">
+                                <a href="#" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
+                                <a href="#" class="cart-btn"><i class="fal fa-heart"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Header Search Modal End -->
 
-        <!-- JS
+
+
+    <div class="cart-dropdown" id="cart-dropdown">
+        <div class="cart-content-wrap">
+            <div class="cart-header">
+                <h2 class="header-title">Cart Review</h2>
+                <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-body">
+                <ul class="cart-item-list">
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="#"><img src="assets/images/product/product-01.png" alt="Product Image-1"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-title"><a href="#">Product Title-1</a></h3>
+                            <div class="item-price"><span class="currency-symbol">Rs. </span>0.00</div>
+                            <div class="pro-qty item-quantity">
+                                <input type="number" class="quantity-input" value="1">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="cart-footer">
+                <h3 class="cart-subtotal">
+                    <span class="subtotal-title">Subtotal:</span>
+                    <span class="subtotal-amount">Rs. 0.00</span>
+                </h3>
+                <div class="group-btn">
+                    <a href="#" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
+                    <a href="#" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS
     ============================================ -->
 
-        //payhere cdn link
-        <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+    //payhere cdn link
+    <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
 
-        <!-- Modernizer JS -->
-        <script src="assets/js/vendor/modernizr.min.js"></script>
-        <!-- jQuery JS -->
-        <script src="assets/js/vendor/jquery.js"></script>
-        <!-- Bootstrap JS -->
-        <script src="assets/js/vendor/popper.min.js"></script>
-        <script src="assets/js/vendor/bootstrap.min.js"></script>
-        <script src="assets/js/vendor/slick.min.js"></script>
-        <script src="assets/js/vendor/js.cookie.js"></script>
-        <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-        <script src="assets/js/vendor/jquery-ui.min.js"></script>
-        <script src="assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
-        <script src="assets/js/vendor/jquery.countdown.min.js"></script>
-        <script src="assets/js/vendor/sal.js"></script>
-        <script src="assets/js/vendor/jquery.magnific-popup.min.js"></script>
-        <script src="assets/js/vendor/imagesloaded.pkgd.min.js"></script>
-        <script src="assets/js/vendor/isotope.pkgd.min.js"></script>
-        <script src="assets/js/vendor/counterup.js"></script>
-        <script src="assets/js/vendor/waypoints.min.js"></script>
+    <!-- Modernizer JS -->
+    <script src="assets/js/vendor/modernizr.min.js"></script>
+    <!-- jQuery JS -->
+    <script src="assets/js/vendor/jquery.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="assets/js/vendor/popper.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="assets/js/vendor/slick.min.js"></script>
+    <script src="assets/js/vendor/js.cookie.js"></script>
+    <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
+    <script src="assets/js/vendor/jquery-ui.min.js"></script>
+    <script src="assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+    <script src="assets/js/vendor/jquery.countdown.min.js"></script>
+    <script src="assets/js/vendor/sal.js"></script>
+    <script src="assets/js/vendor/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+    <script src="assets/js/vendor/isotope.pkgd.min.js"></script>
+    <script src="assets/js/vendor/counterup.js"></script>
+    <script src="assets/js/vendor/waypoints.min.js"></script>
 
-        <!-- Main JS -->
-        <script src="assets/js/main.js"></script>
-        <script src="assets/js/custom/header.js"></script>
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/custom/header.js"></script>
 
-        <script src="assets/js/notification.js"></script>
-        <script src="assets/js/checkout.js"></script>
-        <script src="assets/js/custom/footer.js"></script>
-    </body>
+    <script src="assets/js/notification.js"></script>
+    <script src="assets/js/checkout.js"></script>
+    <script src="assets/js/custom/footer.js"></script>
+</body>
 
 </html>

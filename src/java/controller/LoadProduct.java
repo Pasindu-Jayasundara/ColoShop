@@ -1,11 +1,13 @@
 package controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.Brand;
 import entity.Category;
 import entity.Product;
 import entity.Product_color;
+import entity.Seller;
 import entity.Size;
 import entity.Status;
 import java.io.IOException;
@@ -29,7 +31,8 @@ public class LoadProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int resultCount = (int) request.getAttribute("productCount");
+        int from = (int) request.getAttribute("from");
+        int to = (int) request.getAttribute("to");
         boolean isBrandFound = (boolean) request.getAttribute("isBrandFound");
         boolean isCategoryFound = (boolean) request.getAttribute("isCategoryFound");
         boolean isColorFound = (boolean) request.getAttribute("isColorFound");
@@ -144,14 +147,16 @@ public class LoadProduct extends HttpServlet {
             }
         }
 
-        productCriteria.setMaxResults(resultCount);
-
+//        productCriteria.setFirstResult(from);
+//        productCriteria.setMaxResults(to);
+        int allProductCount = 0;
         List<Product> productList1 = productCriteria.list();
         ArrayList<Product> productList = new ArrayList<>();
+
         for (Product product : productList1) {
 
             if (product.getSeller().getUser().getAccount_type().getType().equals("Seller")) {
-
+                allProductCount += 1;
                 productList.add(product);
             }
         }
@@ -160,8 +165,62 @@ public class LoadProduct extends HttpServlet {
             product.getSeller().setUser(null);
         }
 
+        int searchTO;
+        if (to > productList.size()) {
+            searchTO = productList.size();
+        } else {
+            searchTO = to;
+        }
+        ArrayList<Product> sendProductList = new ArrayList<>();
+        for (int i = from; i < searchTO; i++) {
+            sendProductList.add(productList.get(i));
+        }
+
+        
+
+        //size
+        Criteria criteria2 = hibernateSession.createCriteria(Size.class);
+        criteria2.add(Restrictions.eq("status", statusActive));
+        criteria2.addOrder(Order.asc("id"));
+        criteria2.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Size> sizeList = criteria2.list();
+        
+        
+        //color
+        Criteria criteria3 = hibernateSession.createCriteria(Product_color.class);
+        criteria3.add(Restrictions.eq("status", statusActive));
+        criteria3.addOrder(Order.asc("id"));
+        criteria3.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Product_color> colorList = criteria3.list();
+        
+        
+        //brand
+        Criteria criteria4 = hibernateSession.createCriteria(Brand.class);
+        criteria4.add(Restrictions.eq("status", statusActive));
+        criteria4.addOrder(Order.asc("id"));
+        criteria4.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Brand> brandList = criteria4.list();
+        
+        
+        // category
+        Criteria criteria1 = hibernateSession.createCriteria(Category.class);
+        criteria1.add(Restrictions.eq("status", statusActive));
+        criteria1.addOrder(Order.asc("id"));
+        criteria1.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Category> categoryList = criteria1.list();
+        
+        
         Gson gson = new Gson();
-        Response_DTO response_DTO = new Response_DTO(true, gson.toJsonTree(productList));
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("allProductCount", allProductCount);
+        jsonObject.add("productList", gson.toJsonTree(sendProductList));
+        jsonObject.add("categoryList", gson.toJsonTree(categoryList));
+        jsonObject.add("brandList", gson.toJsonTree(brandList));
+        jsonObject.add("colorList", gson.toJsonTree(colorList));
+        jsonObject.add("sizeList", gson.toJsonTree(sizeList));
+
+        Response_DTO response_DTO = new Response_DTO(true, gson.toJsonTree(jsonObject));
 
         hibernateSession.close();
 

@@ -211,103 +211,80 @@ const loadFilterColors = (colorArr) => {
 var isFiltertFirstTime = true;
 var productArr = [];
 var productCount = 30;
+var isFilterArrFirstTime = true;
 
 var loadFrom = 0
-var loadTo = 20
+var loadTo = 2
+var allProductCount = 0;
 
 var parent = document.getElementById("productContainer");
 var productElement = document.getElementById("productElement");
+parent.innerHTML=""
 const loadProduct = async () => {
 
     Notification().info({
         message: "Applying Filters ..."
     })
 
-    const response = await fetch("LoadProduct?from=" + loadFrom + "&to="+loadTo+"&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
+    // console.log("LoadProduct?from=" + loadFrom + "&to=" + loadTo + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search)
+    const response = await fetch("LoadProduct?from=" + loadFrom + "&to=" + loadTo + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
     if (response.ok) {
 
         const data = await response.json();
         if (data.success) {
 
-            const productData = data.data;
+            const productData = data.data.productList;
+            // console.log(productData)
+            allProductCount = data.data.allProductCount;
             parent.innerHTML = "";
             productArr = []
 
+            if (isFilterArrFirstTime) {
+
+                isFilterArrFirstTime = false;
+
+                const categoryList = data.data.categoryList;
+                categoryList.forEach(obj => {
+                    let ob = {
+                        id: obj.id,
+                        category: obj.category
+                    }
+                    arr.push(ob)
+                })
+
+                const sizeList = data.data.sizeList;
+                sizeList.forEach(obj => {
+                    let ob = {
+                        id: obj.id,
+                        size: obj.size
+                    }
+                    arrSize.push(ob)
+                })
+
+                const colorList = data.data.colorList;
+                colorList.forEach(obj => {
+                    let ob = {
+                        id: obj.id,
+                        color: obj.color
+                    }
+                    arrColor.push(ob)
+                })
+
+                const brandList = data.data.brandList;
+                brandList.forEach(obj => {
+                    let ob = {
+                        id: obj.id,
+                        brand: obj.brand
+                    }
+                    arrBrand.push(ob)
+                })
+            }
+
             // load features to array
-            for (var i = 1; i <= productData.length; i++) {
+            for (let i = 1; i <= productData.length; i++) {
 
                 let product = productData[i - 1];
                 productArr.push(product);
-
-                // if (isProductFirstTime) {
-
-                //category
-                let categoryFound = false;
-                arr.forEach(obj => {
-                    if (obj.id == product.category.id) {
-                        categoryFound = true;
-                        return;
-                    }
-                })
-                if (!categoryFound) {
-                    let obj = {
-                        id: product.category.id,
-                        category: product.category.category
-                    }
-                    arr.push(obj);
-                }
-
-                //brand
-                let brandFound = false;
-                arrBrand.forEach(obj => {
-                    if (obj.id == product.brand.id) {
-                        brandFound = true;
-                        return;
-                    }
-                })
-                if (!brandFound) {
-                    let obj = {
-                        id: product.brand.id,
-                        brand: product.brand.brand
-                    }
-                    arrBrand.push(obj);
-                }
-
-                //size
-                let sizeFound = false;
-                arrSize.forEach(obj => {
-                    if (obj.id == product.size.id) {
-                        sizeFound = true;
-                        return;
-                    }
-                })
-                if (!sizeFound) {
-                    let obj = {
-                        id: product.size.id,
-                        size: product.size.size
-                    }
-                    arrSize.push(obj);
-                }
-
-                //color
-                let colorFound = false;
-                arrColor.forEach(obj => {
-                    if (obj.id == product.product_color.id) {
-                        colorFound = true;
-                        return;
-                    }
-                })
-                if (!colorFound) {
-                    let obj = {
-                        id: product.product_color.id,
-                        color: product.product_color.color
-                    }
-                    arrColor.push(obj);
-                }
-
-                // parent.innerHTML = "";
-                // isProductFirstTime = false;
-                // }
             }
 
             //load for page
@@ -389,7 +366,7 @@ const loadProduct = async () => {
         Notification().error({
             message: "Please Try Again Latter"
         })
-        console.log(response)
+        // console.log(response)
     }
 
 };
@@ -397,22 +374,22 @@ const loadProduct = async () => {
 function loadProductCards() {
 
     parent.innerHTML = ""
-    if (productArr.length > loadFrom) {
+    if (productArr.length == 0) {
 
-        if (productArr.length < loadTo) {
-            loadTo = productArr.length
-        }
-        for (let x = loadFrom; x < loadTo; x++) {
+        parent.innerHTML = "No Product Found"
+        parent.style.display = "flex"
+        parent.style.JustifyContent = "center"
+
+    } else {
+        for (let x = 0; x < productArr.length; x++) {
 
 
             let product = productArr[x];
 
-            console.log(product)
-            // console.log(product)
             //get product element
             let element = productElement.cloneNode(true);
             element.querySelector(".productName").innerHTML = product.name;
-            element.querySelector(".productName").href="product-detail.html?product="+product.id;
+            element.querySelector(".productName").href = "product-detail.html?product=" + product.id;
             element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
             element.querySelector(".productElementATag").addEventListener("click", (e) => {
                 e.preventDefault();
@@ -432,6 +409,7 @@ function loadProductCards() {
 
         }
     }
+
 
 }
 
@@ -573,44 +551,87 @@ const addToWishlist = async (productId) => {
 
 };
 
-var currentPage = 1
-var pgParent = document.getElementById("pgParent")
-var pgPrevious = document.getElementById("pgPrevious")
-var pgNext = document.getElementById("pgNext")
-var pgChild = document.getElementById("pgChild")
+var currentPage = 1;
+var pgParent = document.getElementById("pgParent");
+var pgPrevious = document.getElementById("pgPrevious");
+var pgNext = document.getElementById("pgNext");
+var pgChild = document.getElementById("pgChild");
+var isNextFirstLoad = true;
+var isPrevFirstLoad = true;
+
 function pagination() {
 
-    let pages = Math.ceil(productArr.length / 2);
+    let availableProductCount = allProductCount;
+    let productsPerPage = 10;
 
+    let pages = Math.ceil(availableProductCount / productsPerPage);
 
-    pgParent.innerHTML = ""
-    pgParent.appendChild(pgPrevious)
+    pgParent.innerHTML = "";
+
+    if (currentPage > 1) {
+        if (isPrevFirstLoad) {
+            isPrevFirstLoad = false;
+            pgPrevious.addEventListener("click", () => {
+
+                currentPage--;
+
+                loadFrom = (currentPage - 1) * productsPerPage;
+                loadTo = loadFrom + productsPerPage;
+
+                loadProduct();
+            })
+        }
+        pgParent.appendChild(pgPrevious);
+    }
 
     for (let i = 1; i <= pages; i++) {
 
-        let element = pgChild.cloneNode(true)
+        let element = pgChild.cloneNode(true);
         element.querySelector(".paginationNum").innerHTML = i;
-        // element.href=window.location.href.split("?")[0]+"?page="+currentPage
-        element.addEventListener("click", () => {
-            currentPage = i
-            element.style.backgroundColor = "black"
+        element.addEventListener("click", (event) => {
+            currentPage = i;
 
-            loadFrom = (currentPage * 20) + 1
-            loadTo = loadFrom + 20
+            let paginationButtons = pgParent.querySelectorAll(".paginationNum");
+            paginationButtons.forEach(button => {
+                button.style.backgroundColor = "";
+            });
 
-            loadProductCards()
-        })
 
-        pgParent.appendChild(element)
+            loadFrom = (currentPage - 1) * productsPerPage;
+            loadTo = loadFrom + productsPerPage;
+
+            loadProduct();
+        });
+
+        if (i === currentPage) {
+            element.querySelector(".paginationNum").style.backgroundColor = "black";
+            element.querySelector(".paginationNum").classList.replace("text-dark", "text-light")
+        }
+
+        pgParent.appendChild(element);
     }
-    pgParent.appendChild(pgNext)
 
 
+    if (currentPage < pages) {
+        if (isNextFirstLoad) {
+            isNextFirstLoad = false;
+            pgNext.addEventListener("click", () => {
+
+                currentPage++;
+
+                loadFrom = (currentPage - 1) * productsPerPage;
+                loadTo = loadFrom + productsPerPage;
+
+                loadProduct();
+            })
+        }
+        pgParent.appendChild(pgNext);
+    }
 }
 
 function showAlert() {
     // swal("", "success");
-    if(cartData!=null && cartData!=undefined){
+    if (cartData != null && cartData != undefined) {
         swal({
             title: cartData.success,
             text: cartData.data,

@@ -61,9 +61,10 @@ const loadCart = async () => {
             if (data.length == 0) {
                 document.getElementById("cartProductTotal").innerHTML = "Total: 00.00";
             }
-        } else {
-            console.log(response)
-        }
+        } 
+        // else {
+        //     // console.log(response)
+        // }
 
     } else {
         console.log(response)
