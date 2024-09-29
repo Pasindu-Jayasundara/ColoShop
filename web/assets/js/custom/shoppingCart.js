@@ -234,7 +234,7 @@ function updateTable() {
                 minimumFractionDigits: 2
             }
         ).format(item.qty * item.unitPrice)
-        
+
         element.querySelector(".ptrdf").innerHTML = new Intl.NumberFormat(
             "en-US",
             {
@@ -249,7 +249,7 @@ function updateTable() {
     })
     total = subtotal + deliveryFee
 
-    document.querySelector(".cartProductTotal").innerHTML = "Rs. "+new Intl.NumberFormat(
+    document.querySelector(".cartProductTotal").innerHTML = "Rs. " + new Intl.NumberFormat(
         "en-US",
         {
             minimumFractionDigits: 2
@@ -345,18 +345,32 @@ const deleteFromCart = async (productId) => {
                 }
             });
 
+            loadCartData()
+            loadCart()
 
             const jsonData = await response.json();
+            if(jsonData.success){
+
+                popup.success({
+                    message: jsonData.data
+                });
+
+            }else{
+                popup.error({
+                    message: "Please Try Again Later"
+                });
+            }
             console.log(jsonData)
 
+        }else{
+            popup.error({
+                message: "Please Try Again Later"
+            });
         }
     }
 
 };
 
-
-var text = "";
-var address = "";
 const checkSignIn = async () => {
 
     const response = await fetch("CheckSignIn");
@@ -368,7 +382,6 @@ const checkSignIn = async () => {
         } else {
             return false;
         }
-        const data = jsonData.data;
     }
 
 };
@@ -377,6 +390,9 @@ async function procedToCheckout() {
     const isLoggedIn = await checkSignIn();
     if (isLoggedIn) {
 
+        let txt = document.getElementById("otherText").value;
+        let addr = document.getElementById("address").value;
+
         if (address.trim() == "") {
             //wrong address
             popup.info({
@@ -384,45 +400,70 @@ async function procedToCheckout() {
             });
         } else {
 
-            // Payment completed. It can be a successful failure.
-            payhere.onCompleted = function onCompleted(orderId) {
-                console.log("Payment completed. OrderID:" + orderId);
-                // Note: validate the payment and show success or failure page to the customer
-                popup.success({
-                    message: "Order Placed, Thank You!"
-                });
-                // window.location = "index.html";
-            };
+            const obj = {
+                address: addr,
+                list: buyArr,
+                text: txt
+            }
+            const response = await fetch("Checkout", {
+                method: "POST",
+                body: JSON.stringify(obj),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
 
-            // Payment window closed
-            payhere.onDismissed = function onDismissed() {
-                // Note: Prompt user to pay again or show an error page
-                console.log("Payment dismissed");
-                popup.info({
-                    message: "Payment Dismissed"
-                });
-            };
+            if (response.ok) {
 
-            // Error occurred
-            payhere.onError = function onError(error) {
-                // Note: show an error page
-                console.log("Error:" + error);
+                const jsonData = await response.json();
+                if (jsonData.success) {
+
+                    // Payment completed. It can be a successful failure.
+                    payhere.onCompleted = function onCompleted(orderId) {
+                        console.log("Payment completed. OrderID:" + orderId);
+                        // Note: validate the payment and show success or failure page to the customer
+                        popup.success({
+                            message: "Order Placed, Thank You!"
+                        });
+                        // window.location = "index.html";
+                    };
+
+                    // Payment window closed
+                    payhere.onDismissed = function onDismissed() {
+                        // Note: Prompt user to pay again or show an error page
+                        console.log("Payment dismissed");
+                        popup.info({
+                            message: "Payment Dismissed"
+                        });
+                    };
+
+                    // Error occurred
+                    payhere.onError = function onError(error) {
+                        // Note: show an error page
+                        console.log("Error:" + error);
+                        popup.error({
+                            message: "Payment Error, Please Try Again Later!"
+                        });
+                    };
+
+                    let paymentJson = jsonData.data
+                    payhere.startPayment(paymentJson);
+                }else{
+                    popup.error({
+                        message: jsonData.data
+                    });
+                }
+
+            }else{
                 popup.error({
-                    message: "Payment Error, Please Try Again Later!"
+                    message: "Please Try Again Later"
                 });
-            };
-
-            let paymentJson = jsonData.data 
-            payhere.startPayment(paymentJson);
-
+            }
         }
-
-
-
 
     } else {
 
-        popup.info({
+        popup.error({
             message: "Please Login First"
         });
 
