@@ -389,7 +389,7 @@ async function procedToCheckout() {
                 console.log("Payment completed. OrderID:" + orderId);
                 // Note: validate the payment and show success or failure page to the customer
                 popup.success({
-                    message: "Thank you, Payment completed!"
+                    message: "Order Placed, Thank You!"
                 });
                 // window.location = "index.html";
             };
@@ -398,15 +398,22 @@ async function procedToCheckout() {
             payhere.onDismissed = function onDismissed() {
                 // Note: Prompt user to pay again or show an error page
                 console.log("Payment dismissed");
+                popup.info({
+                    message: "Payment Dismissed"
+                });
             };
 
             // Error occurred
             payhere.onError = function onError(error) {
                 // Note: show an error page
                 console.log("Error:" + error);
+                popup.error({
+                    message: "Payment Error, Please Try Again Later!"
+                });
             };
 
-            payhere.startPayment(json.payhereJson);
+            let paymentJson = jsonData.data 
+            payhere.startPayment(paymentJson);
 
         }
 

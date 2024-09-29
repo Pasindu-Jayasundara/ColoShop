@@ -38,7 +38,7 @@ public class UpdateProductStatus extends HttpServlet {
 
             boolean isInvalid = false;
             String newStatus = "";
-            if (status.equals("Pending")) {
+            if (status.equals("Paid")) {
 
                 Criteria orderStatusCriteria = hibernateSession.createCriteria(Order_status.class);
                 orderStatusCriteria.add(Restrictions.eq("status", "Shipped"));
