@@ -29,16 +29,9 @@ const loadWishlist = async () => {
                 productArr.push(product);
 
                 if (!arr.includes(product.product.category.category)) {
-                    // loadBigCategories(product.product.category.category);
-                    // loadSmallCategories(product.product.category.category);
 
                     arr.push(product.product.category.category);
                 }
-
-                // if (isProductFirstTime) {
-                //     parent.innerHTML = "";
-                //     isProductFirstTime = false;
-                // }
 
                 //get product element
                 let element = productElement.cloneNode(true);
@@ -64,8 +57,6 @@ const loadWishlist = async () => {
                 });
 
                 parent.appendChild(element);
-
-                // console.log(element)
 
             }
 
@@ -152,8 +143,6 @@ const removeFromWishlist = async (productId) => {
         }
     });
     if (response.ok) {
-        // console.log("response");
-        // console.log(await response.text());
 
         let data = await response.json();
         if (data.success) {

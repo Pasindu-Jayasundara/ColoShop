@@ -10,7 +10,6 @@ window.addEventListener("load", () => {
 });
 
 var pId;
-// var addToCartProductId;
 
 const loadSingleProduct = async (productId) => {
 
@@ -34,12 +33,8 @@ const loadSingleProduct = async (productId) => {
 
     if (response.ok) {
 
-        // console.log(response)
-
         const jsonData = await response.json();
         const data = jsonData.data;
-
-        // console.log(data)
 
         pId = data.id;
         document.getElementById("productName").innerHTML = data.name;
@@ -200,7 +195,6 @@ var productElementS = document.getElementById("productElement");
 parentS.innerHTML=""
 const loadSimilarProducts = async () => {
 
-    // console.log("similar product")
     const data = {
         "id": pId
     }
@@ -215,17 +209,13 @@ const loadSimilarProducts = async () => {
 
     if (response.ok) {
 
-        // console.log(response)
         const data = await response.json();
         const productData = data.data;
-
-        // console.log(productData)
 
         parentS.innerHTML = "";
         for (var i = 1; i <= productData.length; i++) {
 
             let product = productData[i - 1];
-            // console.log(product);
 
             productArr.push(product);
 
@@ -261,19 +251,7 @@ const loadSimilarProducts = async () => {
 
             parentS.appendChild(element);
 
-            // console.log(element)
-
         }
-
-        // //from main.js
-        // $('.js-show-modal1').on('click', function (e) {
-        //     e.preventDefault();
-        //     $('.js-modal1').addClass('show-modal1');
-        // });
-
-        // $('.js-hide-modal1').on('click', function () {
-        //     $('.js-modal1').removeClass('show-modal1');
-        // });
 
         // [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
@@ -332,8 +310,6 @@ const loadQuickView = (productId) => {
             document.getElementById("modelProductDesc").innerHTML = productObject.description;
             document.getElementById("modelProductSize").innerHTML = productObject.size.size;
             document.getElementById("modelProductColor").innerHTML = productObject.product_color.color;
-
-            // addToCartProductId = productId;
 
             const trimmedPath = productObject.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
             const trimmedPath2 = productObject.img2.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
@@ -397,18 +373,9 @@ const addToCart = async () => {
     });
 
     if (response.ok) {
-        // console.log(response);
 
         let data = await response.json();
-        // console.log(data)
         if (data.success) {
-
-            // swal({
-            //     title: "Success",
-            //     text: data.data,
-            //     icon: "success",
-            //     button: "OK",
-            // });
 
             loadCart()
             Notification().success({

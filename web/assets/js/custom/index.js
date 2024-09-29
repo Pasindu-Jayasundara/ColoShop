@@ -6,6 +6,7 @@ var bigCategoryElement =document.getElementById("bigCategoryElement");
 var isBigFirstTime = true;
 var parentC = document.getElementById("category-big-container");
 parentC.innerHTML=""
+
 const loadBigCategories = (categoryName) => {
 
     if (isBigFirstTime) {
@@ -22,6 +23,7 @@ const loadBigCategories = (categoryName) => {
 
 var smallCategoryElement;
 var isSmallFirstTime = true;
+
 const loadSmallCategories = (categoryName) => {
 
     let parent = document.getElementById("category-small-container");
@@ -71,7 +73,6 @@ const loadProduct = async () => {
             for (var i = 1; i <= productData.length; i++) {
 
                 let product = productData[i - 1];
-                // console.log(product);
 
                 productArr.push(product);
 
@@ -109,12 +110,8 @@ const loadProduct = async () => {
 
                 parent.appendChild(element);
 
-                // console.log(element)
 
             }
-
-            //from main.js
-
 
             // [ Isotope ]*/
             var $topeContainer = $('.isotope-grid');
@@ -254,18 +251,9 @@ const addToCart = async () => {
     });
 
     if (response.ok) {
-        // console.log(response);
 
         let data = await response.json();
-        // console.log(data)
         if (data.success) {
-
-            // swal({
-            //     title: "Success",
-            //     text: data.data,
-            //     icon: "success",
-            //     button: "OK",
-            // });
 
             loadCart()
             Notification().success({
@@ -301,8 +289,6 @@ const addToWishlist = async (productId) => {
         }
     });
     if (response.ok) {
-        // console.log("response");
-        // console.log(await response.text());
 
         let data = await response.json();
         if (data.success) {

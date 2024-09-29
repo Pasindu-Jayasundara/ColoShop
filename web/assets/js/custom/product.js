@@ -118,7 +118,6 @@ const loadFilterBrands = (brandArr) => {
     const parent = document.getElementById("brandParent");
     filterBrandElement = document.getElementById("brandLi");
 
-    // if (isBrandFilterFirstTime) {
     parent.innerHTML = "";
     let element = filterBrandElement.cloneNode(true);
     element.removeAttribute("id")
@@ -126,8 +125,6 @@ const loadFilterBrands = (brandArr) => {
         applyBrand(e, 0)
     });
     parent.appendChild(element);
-    // isBrandFilterFirstTime = false;
-    // }
 
     brandArr.forEach(obj => {
 
@@ -152,15 +149,12 @@ const loadFilterSizes = (sizeArr) => {
     const parent = document.getElementById("sizeParent");
     filterSizeElement = document.getElementById("sizeA");
 
-    // if (isSizeFilterFirstTime) {
     parent.innerHTML = "";
     let element = filterSizeElement.cloneNode(true);
     element.addEventListener("click", (e) => {
         applySize(e, 0)
     });
     parent.appendChild(element);
-    // isSizeFilterFirstTime = false;
-    // }
 
     sizeArr.forEach((obj) => {
 
@@ -189,7 +183,6 @@ const loadFilterColors = (colorArr) => {
         applyColor(e, 0)
     });
     parent.appendChild(element);
-    // isColorFilterFirstTime = false;
 
     // filter area
     colorArr.forEach(obj => {
@@ -226,7 +219,6 @@ const loadProduct = async () => {
         message: "Applying Filters ..."
     })
 
-    // console.log("LoadProduct?from=" + loadFrom + "&to=" + loadTo + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search)
     const response = await fetch("LoadProduct?from=" + loadFrom + "&to=" + loadTo + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
     if (response.ok) {
 
@@ -234,7 +226,6 @@ const loadProduct = async () => {
         if (data.success) {
 
             const productData = data.data.productList;
-            // console.log(productData)
             allProductCount = data.data.allProductCount;
             parent.innerHTML = "";
             productArr = []
@@ -358,7 +349,6 @@ const loadProduct = async () => {
         Notification().error({
             message: "Please Try Again Latter"
         })
-        // console.log(response)
     }
 
 };
@@ -486,18 +476,11 @@ const addToCart = async () => {
         });
 
         if (response.ok) {
-            // console.log(response);
 
             let data = await response.json();
             cartData = data
 
             if (data.success) {
-                // swal({
-                //     title: "Success",
-                //     text: data.data,
-                //     icon: "success",
-                //     button: "OK",
-                // });
                 loadCart()
 
                 Notification().success({
@@ -539,10 +522,8 @@ const addToWishlist = async (productId) => {
         }
     });
     if (response.ok) {
-        // console.log(response);
 
         let data = await response.json();
-        // console.log(data)
         if (data.success) {
 
             Notification().success({
@@ -645,7 +626,6 @@ function pagination() {
 }
 
 function showAlert() {
-    // swal("", "success");
     if (cartData != null && cartData != undefined) {
         swal({
             title: cartData.success,

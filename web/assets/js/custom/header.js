@@ -1,6 +1,7 @@
 const cle = document.getElementById("cartListElement");
 let cartListParentH = document.getElementById("cartSideBarContainer");
 cartListParentH.innerHTML=""
+
 const loadCart = async () => {
 
     const response = await fetch("LoadCart");
@@ -10,8 +11,6 @@ const loadCart = async () => {
         if (jsonData.success) {
 
             const data = jsonData.data;
-            // console.log(data);
-
 
             let cartProductTotal = 0;
             cartListParentH.innerHTML = "";
@@ -63,9 +62,6 @@ const loadCart = async () => {
                 document.getElementById("cartProductTotal").innerHTML = "Total: 00.00";
             }
         } 
-        // else {
-        //     // console.log(response)
-        // }
 
     } else {
         console.log(response)

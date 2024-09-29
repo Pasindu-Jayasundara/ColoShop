@@ -20,10 +20,8 @@ async function addtoNewsL() {
         });
     
         if (response.ok) {
-            // console.log(response);
     
             let data = await response.json();
-            // console.log(data)
             if(data.success){
 
                 Notification().success({

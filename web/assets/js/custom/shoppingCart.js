@@ -5,7 +5,6 @@ payhere.onCompleted = function onCompleted(orderId) {
     popup.success({
         message: "Order Placed, Thank You!"
     });
-    // window.location = "index.html";
 };
 
 // Payment window closed
@@ -59,8 +58,6 @@ const loadCartData = async () => {
         if (data.success) {
             let list = data.data.cartList
             list.forEach((productObj) => {
-
-                // console.log(productObj);
 
                 let element = cartListElement.cloneNode(true);
                 element.removeAttribute("id");
@@ -158,7 +155,6 @@ const loadCartData = async () => {
 
                 });
 
-                // buyArr.push({
                 allProductArr.push({
                     id: productObj.product.id,
                     unitPrice: productObj.product.unit_price,
@@ -214,8 +210,6 @@ const loadCartData = async () => {
                 });
 
 
-
-
                 // purchase
                 element.querySelector(".checkBox").setAttribute("id", "cb" + productObj.product.id);
                 element.querySelector(".checkBox").addEventListener("click", (event) => {
@@ -243,11 +237,7 @@ const loadCartData = async () => {
 
                 cartListParent.appendChild(element);
 
-                // cartProductTotal += productObj.product.unit_price;
-
             });
-            // document.getElementById("cartProductTotal").innerHTML = "Rs. " + cartProductTotal;
-            // finaltotal();
         }
 
         loadCart()
@@ -306,34 +296,6 @@ function updateTable() {
 
 }
 
-// function total() {
-//     console.log("total")
-//     let tot = 0;
-//     buyArr.forEach((obj) => {
-
-//         let value = parseInt(document.getElementById("changeProductQty" + obj.id).value);
-//         tot += value * obj.unitPrice;
-
-//     });
-
-//     document.getElementById("cartProductTotal").innerHTML = "Rs. " + tot;
-
-// }
-
-// function finaltotal() {
-
-//     let tot = 0;
-//     buyArr.forEach((obj) => {
-
-//         let value = parseInt(document.getElementById("changeProductQty" + obj.id).value);
-//         tot += value * obj.unitPrice;
-//         tot += obj.deliveryFee;
-
-//     });
-
-//     document.getElementById("fulTotal").innerHTML = "Rs. " + tot;
-
-// }
 
 var deleteArr = undefined;
 var prevEl
