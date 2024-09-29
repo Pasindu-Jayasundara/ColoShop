@@ -479,7 +479,6 @@ async function procedToCheckout() {
                 const jsonData = await response.json();
                 if (jsonData.success) {
 
-                    alert("ok")
                     let paymentJson = jsonData.data
                     payhere.startPayment(paymentJson);
                 } else {
