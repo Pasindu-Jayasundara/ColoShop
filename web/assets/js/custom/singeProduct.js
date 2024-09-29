@@ -18,7 +18,7 @@ const loadSingleProduct = async (productId) => {
     if (productId.includes("#")) {
         pid = productId.split("#")[0];
     } else {
-       pid= productId
+        pid = productId
     }
     const data = {
         "id": pid
@@ -73,6 +73,19 @@ const loadSingleProduct = async (productId) => {
         document.getElementById("quickViewAddToWishlist").addEventListener("click", () => {
             addToWishlist(productId)
         })
+
+        const images = document.querySelectorAll("#sl3dImg img");
+        const newSrcs = [
+            trimmedPath,
+            trimmedPath2,
+            trimmedPath3
+        ];
+        images.forEach((img, index) => {
+            if (newSrcs[index]) {
+                img.src = newSrcs[index];
+            }
+        });
+
         loadReview(productId);
         loadCart()
         loadSimilarProducts();
@@ -90,7 +103,7 @@ const loadReview = async (productId) => {
     if (productId.includes("#")) {
         pid = productId.split("#")[0];
     } else {
-       pid= productId
+        pid = productId
     }
 
     reviewParent.innerHTML = ""
@@ -181,6 +194,10 @@ async function deleteReview(reviewId) {
 
 var isProductFirstTime = true;
 const productArr = [];
+
+var parentS = document.getElementById("productContainer");
+var productElementS = document.getElementById("productElement");
+parentS.innerHTML=""
 const loadSimilarProducts = async () => {
 
     // console.log("similar product")
@@ -203,9 +220,8 @@ const loadSimilarProducts = async () => {
         const productData = data.data;
 
         // console.log(productData)
-        let parent = document.getElementById("productContainer");
-        let productElement = document.getElementById("productElement");
-        parent.innerHTML = "";
+
+        parentS.innerHTML = "";
         for (var i = 1; i <= productData.length; i++) {
 
             let product = productData[i - 1];
@@ -214,12 +230,12 @@ const loadSimilarProducts = async () => {
             productArr.push(product);
 
             if (isProductFirstTime) {
-                parent.innerHTML = "";
+                parentS.innerHTML = "";
                 isProductFirstTime = false;
             }
 
             //get product element
-            let element = productElement.cloneNode(true);
+            let element = productElementS.cloneNode(true);
             element.querySelector(".productName").innerHTML = product.name;
             element.querySelector(".productName").href = "product-detail.html?product=" + product.id;
             element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
@@ -243,21 +259,21 @@ const loadSimilarProducts = async () => {
                 loadQuickView(product.id);
             });
 
-            parent.appendChild(element);
+            parentS.appendChild(element);
 
             // console.log(element)
 
         }
 
-        //from main.js
-        $('.js-show-modal1').on('click', function (e) {
-            e.preventDefault();
-            $('.js-modal1').addClass('show-modal1');
-        });
+        // //from main.js
+        // $('.js-show-modal1').on('click', function (e) {
+        //     e.preventDefault();
+        //     $('.js-modal1').addClass('show-modal1');
+        // });
 
-        $('.js-hide-modal1').on('click', function () {
-            $('.js-modal1').removeClass('show-modal1');
-        });
+        // $('.js-hide-modal1').on('click', function () {
+        //     $('.js-modal1').removeClass('show-modal1');
+        // });
 
         // [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
@@ -339,6 +355,27 @@ const loadQuickView = (productId) => {
                 addToWishlist(productId)
             })
 
+            const images = document.querySelectorAll("#modelSlickImg img");
+            const newSrcs = [
+                trimmedPath,
+                trimmedPath2,
+                trimmedPath3
+            ];
+            images.forEach((img, index) => {
+                if (newSrcs[index]) {
+                    img.src = newSrcs[index];
+                }
+            });
+
+            //from main.js
+            $('.js-show-modal1').on('click', function (e) {
+                e.preventDefault();
+                $('.js-modal1').addClass('show-modal1');
+            });
+
+            $('.js-hide-modal1').on('click', function () {
+                $('.js-modal1').removeClass('show-modal1');
+            });
             return;
         }
     });
@@ -444,7 +481,7 @@ async function addNewReview() {
         if (pid.includes("#")) {
             productId = pid.split("#")[0];
         } else {
-            productId= pid
+            productId = pid
         }
 
         const response = await fetch("AddNewReview", {

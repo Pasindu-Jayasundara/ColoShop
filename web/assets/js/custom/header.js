@@ -1,4 +1,6 @@
 const cle = document.getElementById("cartListElement");
+let cartListParentH = document.getElementById("cartSideBarContainer");
+cartListParentH.innerHTML=""
 const loadCart = async () => {
 
     const response = await fetch("LoadCart");
@@ -10,10 +12,9 @@ const loadCart = async () => {
             const data = jsonData.data;
             // console.log(data);
 
-            let cartListParent = document.getElementById("cartSideBarContainer");
 
             let cartProductTotal = 0;
-            cartListParent.innerHTML = "";
+            cartListParentH.innerHTML = "";
 
             let isLoggedIn = data.isLoggedIn
 
@@ -46,7 +47,7 @@ const loadCart = async () => {
 
                 element.querySelector("#cartImg").src = trimmedPath;
 
-                cartListParent.appendChild(element);
+                cartListParentH.appendChild(element);
 
 
             });

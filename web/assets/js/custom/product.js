@@ -290,15 +290,7 @@ const loadProduct = async () => {
             //load for page
             loadProductCards()
 
-            //from main.js
-            $('.js-show-modal1').on('click', function (e) {
-                e.preventDefault();
-                $('.js-modal1').addClass('show-modal1');
-            });
-
-            $('.js-hide-modal1').on('click', function () {
-                $('.js-modal1').removeClass('show-modal1');
-            });
+            
 
             // [ Isotope ]*/
             var $topeContainer = $('.isotope-grid');
@@ -446,6 +438,29 @@ const loadQuickView = (productId) => {
             document.getElementById("quickViewAddToWishlist").addEventListener("click", () => {
                 addToWishlist(productId)
             })
+
+            const images = document.querySelectorAll("#modelSlickImg img");
+            const newSrcs = [
+                trimmedPath,
+                trimmedPath2,
+                trimmedPath3
+            ];
+            images.forEach((img, index) => {
+                if (newSrcs[index]) {
+                    img.src = newSrcs[index];
+                }
+            });
+
+
+            //from main.js
+            $('.js-show-modal1').on('click', function (e) {
+                e.preventDefault();
+                $('.js-modal1').addClass('show-modal1');
+            });
+
+            $('.js-hide-modal1').on('click', function () {
+                $('.js-modal1').removeClass('show-modal1');
+            });
 
             return;
         }
