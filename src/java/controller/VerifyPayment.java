@@ -19,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Email;
 import model.HibernateUtil;
 import model.Payhere;
 import org.hibernate.Criteria;
@@ -59,9 +60,10 @@ public class VerifyPayment extends HttpServlet {
 
             String address = jsonObject.get("address").getAsString();
             String text = jsonObject.get("text").getAsString();
+            final String itemsName = jsonObject.get("itemsName").getAsString();
             JsonArray itemProductArr = jsonObject.get("itemProductArr").getAsJsonArray();
 
-            UserTable user = (UserTable) request.getSession().getAttribute("user");
+            final UserTable user = (UserTable) request.getSession().getAttribute("user");
 
             if (address != null && text != null && itemProductArr != null && user != null) {
 
@@ -84,20 +86,31 @@ public class VerifyPayment extends HttpServlet {
                 hibernateSession.save(order);
 
                 Gson gson = new Gson();
-                
+
                 for (JsonElement obj : itemProductArr) {
-                    
+
                     JsonObject productJson = obj.getAsJsonObject().get("product").getAsJsonObject();
                     Product product = gson.fromJson(productJson, Product.class);  // Convert JsonObject to Product object
-                    
+
                     Order_item item = new Order_item();
                     item.setOrder(order);
                     item.setProduct(product);
-                    item.setQty(obj.getAsJsonObject().get("qty").getAsInt()); 
-                    hibernateSession.save(item);  
+                    item.setQty(obj.getAsJsonObject().get("qty").getAsInt());
+                    hibernateSession.save(item);
                 }
-                
+
                 hibernateSession.beginTransaction().commit();
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Email.sendEmail(user.getEmail(), "Order Success", "Order placed for this items :" + itemsName);
+
+                    }
+                });
+                thread.start();
+
                 hibernateSession.close();
 
             }

@@ -77,6 +77,7 @@ public class Checkout extends HttpServlet {
             jsonObject.addProperty("address", address);
             jsonObject.addProperty("text", text);
             jsonObject.add("itemProductArr", gson.toJsonTree(itemProductArr));
+            jsonObject.addProperty("itemsName", String.valueOf(itemsName));
 
             request.getSession().setAttribute("payment", gson.toJsonTree(jsonObject));
 
