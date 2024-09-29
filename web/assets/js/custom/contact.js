@@ -1,3 +1,6 @@
+window.addEventListener("load",()=>{
+    loadCart()
+})
 async function sendMessage() {
 
     let titleM = document.getElementById("title").value
