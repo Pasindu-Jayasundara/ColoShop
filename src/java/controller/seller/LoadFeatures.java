@@ -3,10 +3,8 @@ package controller.seller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
-import entity.AdminDetailTable;
 import entity.Brand;
 import entity.Category;
-import entity.Message;
 import entity.Message_status;
 import entity.Message_to_seller;
 import entity.OrderDataTable;
@@ -30,7 +28,6 @@ import model.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "LoadFeatures", urlPatterns = {"/LoadFeatures"})
@@ -113,7 +110,6 @@ public class LoadFeatures extends HttpServlet {
         }
 
         //product messages
-//        List<Message_to_seller> msgToSellerList = null;
         List<Message_to_seller> msgToSellerList = new ArrayList<>();
         if (productList != null) {
 

@@ -1,7 +1,6 @@
 package controller.seller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.Brand;
 import entity.Category;
@@ -9,7 +8,6 @@ import entity.Product;
 import entity.Product_color;
 import entity.Seller;
 import entity.Size;
-import entity.Status;
 import entity.UserTable;
 import java.io.IOException;
 import java.util.Date;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.HibernateUtil;
-import model.Validation;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -64,12 +61,6 @@ public class UpdateProduct extends HttpServlet {
 
         if (isProductIdOk) {
 
-//            request.getRequestDispatcher("/UpdateProductImageUpload").include(request, response);
-//            if ((boolean) request.getAttribute("isImageUpdateSuccess")) {
-            //image uploading success
-//                String img1Path = (String) request.getAttribute("img1Path");
-//                String img2Path = (String) request.getAttribute("img2Path");
-//                String img3Path = (String) request.getAttribute("img3Path");
             Product_color product_color = (Product_color) hibernateSession.load(Product_color.class, product_color_id);
             Size size = (Size) hibernateSession.load(Size.class, size_id);
             Brand brand = (Brand) hibernateSession.load(Brand.class, brand_id);
@@ -101,15 +92,7 @@ public class UpdateProduct extends HttpServlet {
             message = "Product Updating Success";
 
         }
-//        else {
-        // image uploading faild
-//                isValid = false;
-//                message = "Image Updating Failed";
-//            }
-
-//        }
         Response_DTO response_DTO = new Response_DTO(isValid, message);
-//        Gson gson = new Gson();
 
         hibernateSession.close();
 

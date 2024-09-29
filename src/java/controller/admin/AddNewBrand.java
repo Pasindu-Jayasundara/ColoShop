@@ -3,7 +3,6 @@ package controller.admin;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.Brand;
-import entity.Product_color;
 import entity.Status;
 import java.io.IOException;
 import java.util.ArrayList;

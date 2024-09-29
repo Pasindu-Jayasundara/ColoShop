@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
 
 @WebFilter(urlPatterns = {"/LoadProduct"})
 public class LoadProductFilter implements Filter {
@@ -22,29 +21,6 @@ public class LoadProductFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        //HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        //result count
-//        int resultCount = 0;
-//        if (request.getParameter("productCount") != null && Validation.isInteger(request.getParameter("productCount"))) {
-//
-//            try {
-//                resultCount = Integer.parseInt(request.getParameter("productCount"));
-//                request.setAttribute("productCount", resultCount);
-////                chain.doFilter(request, response);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//
-//                Gson gson = new Gson();
-//                Response_DTO dTO = new Response_DTO(false, "Invalid Parameter");
-//
-//                response.setContentType("application/json");
-//                response.getWriter().write(gson.toJson(dTO));
-//            }
-//        } else {
-//            resultCount = 10;
-//            request.setAttribute("productCount", resultCount);
-//        }
         int from = 0;
         int to = 10;
         if (request.getParameter("from") != null && Validation.isInteger(request.getParameter("from"))) {

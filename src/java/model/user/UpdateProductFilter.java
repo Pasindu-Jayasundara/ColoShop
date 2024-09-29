@@ -4,18 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import model.Validation;
 
 public class UpdateProductFilter implements Filter {

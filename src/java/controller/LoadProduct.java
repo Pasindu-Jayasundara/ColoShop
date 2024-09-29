@@ -7,7 +7,6 @@ import entity.Brand;
 import entity.Category;
 import entity.Product;
 import entity.Product_color;
-import entity.Seller;
 import entity.Size;
 import entity.Status;
 import java.io.IOException;
@@ -117,7 +116,6 @@ public class LoadProduct extends HttpServlet {
             String sortBy = (String) request.getAttribute("sortBy");
 
             if (sortBy.equals("default")) {
-//                productCriteria.addOrder(Order.desc("RAND()"));
                 productCriteria.add(Restrictions.sqlRestriction("1=1 order by rand()"));
 
             } else if (sortBy.equals("new")) {

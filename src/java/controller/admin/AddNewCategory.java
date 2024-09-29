@@ -2,7 +2,6 @@ package controller.admin;
 
 import com.google.gson.Gson;
 import dto.Response_DTO;
-import entity.Brand;
 import entity.Category;
 import entity.Status;
 import java.io.IOException;

@@ -3,7 +3,6 @@ package controller.user;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.Newsletter;
-import entity.Wishlist;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

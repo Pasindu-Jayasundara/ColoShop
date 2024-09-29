@@ -1,14 +1,12 @@
 package controller.user;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.Cart;
 import entity.UserTable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

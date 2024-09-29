@@ -44,7 +44,6 @@ public class AddNewProduct extends HttpServlet {
             String description = (String) request.getAttribute("description");
             double unit_price =  Double.parseDouble((String) request.getAttribute("unit_price"));
             double delivery_fee = Double.parseDouble((String) request.getAttribute("delivery_fee"));
-//            int status_id = Integer.parseInt((String) request.getAttribute("status_id"));
             int product_color_id = Integer.parseInt((String) request.getAttribute("color"));
             int size_id = Integer.parseInt((String) request.getAttribute("size"));
             int brand_id = Integer.parseInt((String) request.getAttribute("brand"));

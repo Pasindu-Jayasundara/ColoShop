@@ -41,12 +41,6 @@ public class AddNewProductReviewFilter implements Filter {
 
         } else {
 
-//            if (request.getParameter("productId") == null || request.getParameter("productId").isBlank()) {
-//                //no product id
-//                isInvalid = true;
-//                errorMessage = "Missing Product Id";
-//
-//            } else 
             if (review.isEmpty()) {
                 //no review text
                 isInvalid = true;

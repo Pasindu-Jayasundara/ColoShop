@@ -23,7 +23,6 @@ public class VerifyNewUser extends HttpServlet {
 
         String token = (String) request.getAttribute("token");
         String email = (String) request.getSession().getAttribute("userEmail");
-//        String email = "pasindubathiya2d8@gmail.com";
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Criteria userCriteria = hibernateSession.createCriteria(UserTable.class);

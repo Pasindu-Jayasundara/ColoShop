@@ -10,7 +10,6 @@ import entity.Order_status;
 import entity.Product;
 import entity.UserTable;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.HibernateUtil;
 import model.Payhere;
-import model.Validation;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -116,12 +114,6 @@ public class Checkout extends HttpServlet {
 
             hibernateSession.beginTransaction().commit();
             hibernateSession.close();
-//            JsonObject jsonObject = new JsonObject();
-//            jsonObject.addProperty("address", address);
-//            jsonObject.addProperty("text", text);
-//            jsonObject.add("itemProductArr", gson.toJsonTree(itemProductArr));
-//            jsonObject.addProperty("itemsName", String.valueOf(itemsName));
-//            request.getSession().setAttribute("payment", gson.toJsonTree(jsonObject));
 
             Response_DTO response_DTO = new Response_DTO(true, gson.toJsonTree(payhere));
             response.setContentType("application/json");

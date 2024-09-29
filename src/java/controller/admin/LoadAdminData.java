@@ -1,7 +1,6 @@
 package controller.admin;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
 import entity.AdminDetailTable;
@@ -16,7 +15,6 @@ import entity.Size;
 import entity.Status;
 import entity.UserTable;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;

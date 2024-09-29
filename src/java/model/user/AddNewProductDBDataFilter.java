@@ -6,7 +6,6 @@ import entity.Brand;
 import entity.Category;
 import entity.Product_color;
 import entity.Size;
-import entity.Status;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,7 +13,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.MultipartConfig;
 import model.HibernateUtil;
 import org.hibernate.Session;
 

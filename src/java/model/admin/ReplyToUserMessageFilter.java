@@ -12,7 +12,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import model.Validation;
 
 @WebFilter(urlPatterns = {"/ReplyToUserMessage"})
 public class ReplyToUserMessageFilter implements Filter {

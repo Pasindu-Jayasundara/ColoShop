@@ -2,16 +2,8 @@ package controller;
 
 import com.google.gson.Gson;
 import dto.Response_DTO;
-import entity.AdminDetailTable;
-import entity.Message;
-import entity.Message_status;
 import entity.Newsletter;
-import entity.Reply;
-import entity.UserTable;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +14,6 @@ import model.Email;
 import model.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "NewsLetter", urlPatterns = {"/NewsLetter"})
 public class NewsLetter extends HttpServlet {
