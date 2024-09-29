@@ -29,7 +29,7 @@ public class LoadCart extends HttpServlet {
         boolean isLoggedIn = (boolean) request.getAttribute("isLoggedIn");
         if (isLoggedIn) {
             // logged in get from , user cart
-            
+
             UserTable userTable = ((UserTable) request.getSession().getAttribute("user"));
 
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
@@ -37,13 +37,21 @@ public class LoadCart extends HttpServlet {
             cartCriteria.add(Restrictions.eq("user", userTable));
             cartCriteria.addOrder(Order.desc("id"));
 
-            ArrayList<Cart> cartList =  (ArrayList<Cart>) cartCriteria.list();
-            if(cartList!=null && !cartList.isEmpty()){
-                
+            ArrayList<Cart> cartList1 = (ArrayList<Cart>) cartCriteria.list();
+            ArrayList<Cart> cartList = new ArrayList<>();
+            if (cartList1 != null && !cartList1.isEmpty()) {
+
+                for (Cart cart : cartList1) {
+
+                    if (cart.getProduct().getSeller().getUser().getAccount_type().getType().equals("Seller")) {
+
+                        cartList.add(cart);
+                    }
+
+                }
+
                 for (Cart cart : cartList) {
-                    
                     cart.getProduct().setSeller(null);
-                    
                 }
             }
 
@@ -54,9 +62,9 @@ public class LoadCart extends HttpServlet {
                 response_DTO = new Response_DTO(false, "No Cart Data");
             } else {
                 JsonObject jo = new JsonObject();
-                jo.add("cartList",gson.toJsonTree(cartList));
+                jo.add("cartList", gson.toJsonTree(cartList));
                 jo.addProperty("isLoggedIn", isLoggedIn);
-                
+
                 response_DTO = new Response_DTO(true, gson.toJsonTree(jo));
             }
 
@@ -72,13 +80,13 @@ public class LoadCart extends HttpServlet {
             Gson gson = new Gson();
 
             Response_DTO response_DTO;
-            if (cartList==null || cartList.isEmpty()) {
+            if (cartList == null || cartList.isEmpty()) {
                 response_DTO = new Response_DTO(false, "No Cart Data");
             } else {
                 JsonObject jo = new JsonObject();
-                jo.add("cartList",gson.toJsonTree(cartList));
+                jo.add("cartList", gson.toJsonTree(cartList));
                 jo.addProperty("isLoggedIn", isLoggedIn);
-                
+
                 response_DTO = new Response_DTO(true, gson.toJsonTree(jo));
             }
 

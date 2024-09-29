@@ -9,6 +9,7 @@ import entity.Product_color;
 import entity.Size;
 import entity.Status;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -146,14 +147,17 @@ public class LoadProduct extends HttpServlet {
         productCriteria.setMaxResults(resultCount);
 
         List<Product> productList1 = productCriteria.list();
-        List<Product> productList = productCriteria.list();
+        ArrayList<Product> productList = new ArrayList<>();
         for (Product product : productList1) {
-            
-            if(product.getSeller().getUser().getAccount_type().getType().equals("Seller")){
-                
-                product.getSeller().setUser(null);
+
+            if (product.getSeller().getUser().getAccount_type().getType().equals("Seller")) {
+
                 productList.add(product);
             }
+        }
+
+        for (Product product : productList) {
+            product.getSeller().setUser(null);
         }
 
         Gson gson = new Gson();

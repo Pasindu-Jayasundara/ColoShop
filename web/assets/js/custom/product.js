@@ -222,8 +222,8 @@ const loadProduct = async () => {
     Notification().info({
         message: "Applying Filters ..."
     })
-    console.log("LoadProduct?productCount=" + productCount + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search)
-    const response = await fetch("LoadProduct?productCount=" + productCount + "&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
+
+    const response = await fetch("LoadProduct?from=" + loadFrom + "&to="+loadTo+"&color=" + color + "&brand=" + brand + "&category=" + category + "&size=" + size + "&sortBy=" + sortBy + "&search=" + search);
     if (response.ok) {
 
         const data = await response.json();
@@ -580,7 +580,7 @@ var pgNext = document.getElementById("pgNext")
 var pgChild = document.getElementById("pgChild")
 function pagination() {
 
-    let pages = Math.ceil(productArr.length / 20);
+    let pages = Math.ceil(productArr.length / 2);
 
 
     pgParent.innerHTML = ""
