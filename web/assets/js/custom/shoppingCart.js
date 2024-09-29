@@ -1,3 +1,31 @@
+// Payment completed. It can be a successful failure.
+payhere.onCompleted = function onCompleted(orderId) {
+    console.log("Payment completed. OrderID:" + orderId);
+    // Note: validate the payment and show success or failure page to the customer
+    popup.success({
+        message: "Order Placed, Thank You!"
+    });
+    // window.location = "index.html";
+};
+
+// Payment window closed
+payhere.onDismissed = function onDismissed() {
+    // Note: Prompt user to pay again or show an error page
+    console.log("Payment dismissed");
+    popup.info({
+        message: "Payment Dismissed"
+    });
+};
+
+// Error occurred
+payhere.onError = function onError(error) {
+    // Note: show an error page
+    console.log("Error:" + error);
+    popup.error({
+        message: "Payment Error, Please Try Again Later!"
+    });
+};
+
 window.addEventListener("load", () => {
     loadCartData();
 });
@@ -83,45 +111,52 @@ const loadCartData = async () => {
                 // decrease qty
                 element.querySelector(".tableProductCountMinus").addEventListener("click", () => {
 
-                    value = parseInt(document.getElementById("changeProductQty" + productObj.product.id).value);
-                    if (value > 1) {
-                        value -= 1;
-                        document.getElementById("changeProductQty" + productObj.product.id).value = value;
+                    let foundInBuyArr = buyArr.find(buyObj => buyObj.id === productObj.product.id);
+                    if (foundInBuyArr) {
+                        if (foundInBuyArr.qty > 1) {
 
-                        document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
-                            "en-US",
-                            {
-                                minimumFractionDigits: 2
-                            }
-                        ).format(value * productObj.product.unit_price);
-
-
-                        // Update the qty in allProductArr
-                        let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
-                        if (foundInAllProducts) {
-                            foundInAllProducts.qty = parseInt(foundInAllProducts.qty) - 1;
-                        }
-
-                        // Update the qty in buyArr if the product already exists
-                        let foundInBuyArr = buyArr.find(buyObj => buyObj.id === productObj.product.id);
-                        if (foundInBuyArr) {
                             foundInBuyArr.qty = parseInt(foundInBuyArr.qty) - 1;
 
+                            let value = foundInBuyArr.qty;
+                            document.getElementById("changeProductQty" + productObj.product.id).value = value;
+
+                            document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
+                                "en-US",
+                                {
+                                    minimumFractionDigits: 2
+                                }
+                            ).format(value * productObj.product.unit_price);
+
                             updateTable()
+
+                            let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
+                            if (foundInAllProducts) {
+                                foundInAllProducts.qty = foundInBuyArr.qty;
+                            }
                         }
 
-                        // document.getElementById("cartProductTotal").innerHTML = "Rs. " + value * productObj.unit_price;
+                    } else {
 
-                        // total();
-                        // finaltotal();
+                        let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
+                        if (foundInAllProducts) {
+                            if (foundInAllProducts.qty > 1) {
+                                foundInAllProducts.qty = parseInt(foundInAllProducts.qty) - 1;
+
+                                let value = foundInAllProducts.qty;
+                                document.getElementById("changeProductQty" + productObj.product.id).value = value;
+
+                                document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
+                                    "en-US",
+                                    {
+                                        minimumFractionDigits: 2
+                                    }
+                                ).format(value * productObj.product.unit_price);
+                            }
+                        }
 
                     }
+
                 });
-
-                // deliveryFee += productObj.product.delivery_fee;
-                // document.getElementById("cartProductDeliveryFee").innerHTML = "Rs. " + deliveryFee;
-
-
 
                 // buyArr.push({
                 allProductArr.push({
@@ -132,43 +167,54 @@ const loadCartData = async () => {
                     name: productObj.product.name
                 });
 
-                // increase qty
+                //increse qty
                 element.querySelector(".tableProductCountPlus").addEventListener("click", () => {
 
-                    let value = parseInt(document.getElementById("changeProductQty" + productObj.product.id).value);
-                    value += 1;
-                    document.getElementById("changeProductQty" + productObj.product.id).value = value;
-
-                    document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
-                        "en-US",
-                        {
-                            minimumFractionDigits: 2
-                        }
-                    ).format(value * productObj.product.unit_price);
-
-                    // Update the qty in allProductArr
-                    let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
-                    if (foundInAllProducts) {
-                        foundInAllProducts.qty = parseInt(foundInAllProducts.qty) + 1;
-                    }
-
-                    // Update the qty in buyArr if the product already exists
                     let foundInBuyArr = buyArr.find(buyObj => buyObj.id === productObj.product.id);
                     if (foundInBuyArr) {
+
                         foundInBuyArr.qty = parseInt(foundInBuyArr.qty) + 1;
 
-                        updateTable()
+                        let value = foundInBuyArr.qty;
+                        document.getElementById("changeProductQty" + productObj.product.id).value = value;
+
+                        document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
+                            "en-US",
+                            {
+                                minimumFractionDigits: 2
+                            }
+                        ).format(value * productObj.product.unit_price);
+
+                        updateTable();
+
+                        let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
+                        if (foundInAllProducts) {
+                            foundInAllProducts.qty = foundInBuyArr.qty;
+                        }
+                    } else {
+
+                        let foundInAllProducts = allProductArr.find(obj => obj.id === productObj.product.id);
+                        if (foundInAllProducts) {
+                            foundInAllProducts.qty = parseInt(foundInAllProducts.qty) + 1;
+
+                            let value = foundInAllProducts.qty;
+                            document.getElementById("changeProductQty" + productObj.product.id).value = value;
+
+
+                            document.getElementById("changeProductPrice" + productObj.product.id).innerHTML = "Rs. " + new Intl.NumberFormat(
+                                "en-US",
+                                {
+                                    minimumFractionDigits: 2
+                                }
+                            ).format(value * productObj.product.unit_price);
+                        }
+
                     }
 
-
-
-
-                    // total();
-                    // finaltotal();
-
-                    // document.getElementById("cartProductTotal").innerHTML = "Rs. " + value * productObj.unit_price;
-
                 });
+
+
+
 
                 // purchase
                 element.querySelector(".checkBox").setAttribute("id", "cb" + productObj.product.id);
@@ -180,7 +226,7 @@ const loadCartData = async () => {
                             let foundObj = allProductArr.find(obj => obj.id === productObj.product.id);
 
                             if (foundObj) {
-
+                                console.log("c : " + JSON.stringify(foundObj))
                                 buyArr.push(foundObj);
                                 updateTable()
                             }
@@ -246,6 +292,8 @@ function updateTable() {
 
         subtotal += item.qty * item.unitPrice
         deliveryFee += item.deliveryFee
+
+        console.log(item.qty)
     })
     total = subtotal + deliveryFee
 
@@ -349,20 +397,20 @@ const deleteFromCart = async (productId) => {
             loadCart()
 
             const jsonData = await response.json();
-            if(jsonData.success){
+            if (jsonData.success) {
 
                 popup.success({
                     message: jsonData.data
                 });
 
-            }else{
+            } else {
                 popup.error({
                     message: "Please Try Again Later"
                 });
             }
             console.log(jsonData)
 
-        }else{
+        } else {
             popup.error({
                 message: "Please Try Again Later"
             });
@@ -371,38 +419,51 @@ const deleteFromCart = async (productId) => {
 
 };
 
+var isLoggedIn = false
 const checkSignIn = async () => {
 
     const response = await fetch("CheckSignIn");
     if (response.ok) {
 
         const jsonData = await response.json();
-        if (jsonData.data.isSignedIn) {
-            return true;
+        if (jsonData.success) {
+            isLoggedIn = true;
+
+            procedToCheckout()
         } else {
-            return false;
+            popup.info({
+                message: "Please Login First"
+            });
         }
+    } else {
+        popup.info({
+            message: "Please Try Again Later"
+        });
     }
 
 };
 
 async function procedToCheckout() {
-    const isLoggedIn = await checkSignIn();
     if (isLoggedIn) {
 
         let txt = document.getElementById("otherText").value;
         let addr = document.getElementById("address").value;
 
-        if (address.trim() == "") {
+        if (addr.trim() == "") {
             //wrong address
             popup.info({
                 message: "Please Fill The Address"
+            });
+        } else if (buyArr.length == 0) {
+            //wrong address
+            popup.info({
+                message: "Please Select What You Want To Buy"
             });
         } else {
 
             const obj = {
                 address: addr,
-                list: buyArr,
+                array: buyArr,
                 text: txt
             }
             const response = await fetch("Checkout", {
@@ -418,54 +479,21 @@ async function procedToCheckout() {
                 const jsonData = await response.json();
                 if (jsonData.success) {
 
-                    // Payment completed. It can be a successful failure.
-                    payhere.onCompleted = function onCompleted(orderId) {
-                        console.log("Payment completed. OrderID:" + orderId);
-                        // Note: validate the payment and show success or failure page to the customer
-                        popup.success({
-                            message: "Order Placed, Thank You!"
-                        });
-                        // window.location = "index.html";
-                    };
-
-                    // Payment window closed
-                    payhere.onDismissed = function onDismissed() {
-                        // Note: Prompt user to pay again or show an error page
-                        console.log("Payment dismissed");
-                        popup.info({
-                            message: "Payment Dismissed"
-                        });
-                    };
-
-                    // Error occurred
-                    payhere.onError = function onError(error) {
-                        // Note: show an error page
-                        console.log("Error:" + error);
-                        popup.error({
-                            message: "Payment Error, Please Try Again Later!"
-                        });
-                    };
-
+                    alert("ok")
                     let paymentJson = jsonData.data
                     payhere.startPayment(paymentJson);
-                }else{
+                } else {
                     popup.error({
                         message: jsonData.data
                     });
                 }
 
-            }else{
+            } else {
                 popup.error({
                     message: "Please Try Again Later"
                 });
             }
         }
-
-    } else {
-
-        popup.error({
-            message: "Please Login First"
-        });
 
     }
 }

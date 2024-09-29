@@ -145,9 +145,15 @@ public class LoadProduct extends HttpServlet {
 
         productCriteria.setMaxResults(resultCount);
 
+        List<Product> productList1 = productCriteria.list();
         List<Product> productList = productCriteria.list();
-        for (Product product : productList) {
-            product.getSeller().setUser(null);
+        for (Product product : productList1) {
+            
+            if(product.getSeller().getUser().getAccount_type().getType().equals("Seller")){
+                
+                product.getSeller().setUser(null);
+                productList.add(product);
+            }
         }
 
         Gson gson = new Gson();

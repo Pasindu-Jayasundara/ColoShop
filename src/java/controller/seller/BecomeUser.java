@@ -63,10 +63,12 @@ public class BecomeUser extends HttpServlet {
                         for (Order_item order_item : orderItemList) {
 
                             if (!order_item.getOrder().getOrder_status().getStatus().equals("Delivered")) {
-                                //not delivered
-                                hasNotDeliveredProducts = true;
-                                message="Not Delivered Products Avaliable";
-                                break outer;
+                                if (!order_item.getOrder().getOrder_status().getStatus().equals("Pending")) {
+                                    //not delivered
+                                    hasNotDeliveredProducts = true;
+                                    message = "Not Delivered Products Avaliable";
+                                    break outer;
+                                }
                             }
                         }
 
@@ -75,9 +77,9 @@ public class BecomeUser extends HttpServlet {
                 }
             }
 
-        }else{
-            message="Not A Seller";
-            hasNotDeliveredProducts=true;
+        } else {
+            message = "Not A Seller";
+            hasNotDeliveredProducts = true;
         }
 
         boolean isSuccess = false;
@@ -91,9 +93,9 @@ public class BecomeUser extends HttpServlet {
             user.setAccount_type(accountType);
             hibernateSession.merge(user);
             hibernateSession.beginTransaction().commit();
-            
+
             isSuccess = true;
-            message="Success";
+            message = "Success";
         }
 
         hibernateSession.close();

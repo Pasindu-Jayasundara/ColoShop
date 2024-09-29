@@ -38,7 +38,7 @@ public class CheckoutFilter implements Filter {
             message = "Please LogIn First";
         } else {
 
-            if (!fromJson.has("address") || !fromJson.has("list")) {
+            if (!fromJson.has("address") || !fromJson.has("array")) {
                 message = "Missing Data";
             } else {
                 String address = fromJson.get("address").getAsString();

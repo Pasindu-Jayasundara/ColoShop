@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dto.Payhere_DTO;
 import entity.OrderDataTable;
 import entity.Order_item;
 import entity.Order_status;
@@ -56,64 +55,20 @@ public class VerifyPayment extends HttpServlet {
 
             System.out.println("payment completed ");
 
-            JsonObject jsonObject = (JsonObject) request.getSession().getAttribute("payment");
+            Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
 
-            String address = jsonObject.get("address").getAsString();
-            String text = jsonObject.get("text").getAsString();
-            final String itemsName = jsonObject.get("itemsName").getAsString();
-            JsonArray itemProductArr = jsonObject.get("itemProductArr").getAsJsonArray();
+            Criteria orderStatusCriteria = hibernateSession.createCriteria(Order_status.class);
+            orderStatusCriteria.add(Restrictions.eq("status", "Paid"));
+            Order_status status = (Order_status) orderStatusCriteria.uniqueResult();
 
-            final UserTable user = (UserTable) request.getSession().getAttribute("user");
+            // order 
+            OrderDataTable order = (OrderDataTable) hibernateSession.get(OrderDataTable.class, Integer.parseInt(order_id));
+            order.setOrder_status(status);
 
-            if (address != null && text != null && itemProductArr != null && user != null) {
+            hibernateSession.update(order);
 
-                Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
-
-                Criteria orderStatusCriteria = hibernateSession.createCriteria(Order_status.class);
-                orderStatusCriteria.add(Restrictions.eq("status", "Paid"));
-                Order_status status = (Order_status) orderStatusCriteria.uniqueResult();
-
-                // order 
-                OrderDataTable order = new OrderDataTable();
-                order.setId(Integer.parseInt(order_id));
-                order.setDatetime(new Date());
-                order.setDelivery_date(new Date());
-                order.setAddress(address);
-                order.setText(text);
-                order.setUser(user);
-                order.setOrder_status(status);
-
-                hibernateSession.save(order);
-
-                Gson gson = new Gson();
-
-                for (JsonElement obj : itemProductArr) {
-
-                    JsonObject productJson = obj.getAsJsonObject().get("product").getAsJsonObject();
-                    Product product = gson.fromJson(productJson, Product.class);  // Convert JsonObject to Product object
-
-                    Order_item item = new Order_item();
-                    item.setOrder(order);
-                    item.setProduct(product);
-                    item.setQty(obj.getAsJsonObject().get("qty").getAsInt());
-                    hibernateSession.save(item);
-                }
-
-                hibernateSession.beginTransaction().commit();
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Email.sendEmail(user.getEmail(), "Order Success", "Order placed for this items :" + itemsName);
-
-                    }
-                });
-                thread.start();
-
-                hibernateSession.close();
-
-            }
+            hibernateSession.beginTransaction().commit();
+            hibernateSession.close();
 
         }
 

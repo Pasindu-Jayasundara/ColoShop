@@ -163,11 +163,14 @@ public class LoadFeatures extends HttpServlet {
 
                 if (orderItemList != null) {
                     for (Order_item order_item : orderItemList) {
-                        
+
                         if (!order_item.getOrder().getOrder_status().getStatus().equals("Delivered")) {
                             //not delivered
-                            order_item.getOrder().setUser(null);
-                            orderList.add(order_item);
+                            if (!order_item.getOrder().getOrder_status().getStatus().equals("Pending")) {
+
+                                order_item.getOrder().setUser(null);
+                                orderList.add(order_item);
+                            }
                         }
                     }
 
@@ -176,17 +179,22 @@ public class LoadFeatures extends HttpServlet {
             }
         } else {
             //buyer
+            Criteria pen = hiberSession.createCriteria(Order_status.class);
+            pen.add(Restrictions.eq("status", "Pending"));
+            Order_status pendingStatus = (Order_status) pen.uniqueResult();
+
             Criteria orderCriteria = hiberSession.createCriteria(OrderDataTable.class);
             orderCriteria.add(Restrictions.and(
                     Restrictions.eq("user", user),
-                    Restrictions.ne("order_status", deliveredOrderStatus)
+                    Restrictions.ne("order_status", deliveredOrderStatus),
+                    Restrictions.ne("order_status", pendingStatus)
             ));
             List<OrderDataTable> orderList2 = orderCriteria.list();
 
             if (orderList2 != null) {
 
                 for (OrderDataTable orderDataTable : orderList2) {
-                    
+
                     Criteria orderItemCriteria = hiberSession.createCriteria(Order_item.class);
                     orderItemCriteria.add(Restrictions.eq("orders", orderDataTable));
                     List<Order_item> orderItems = orderItemCriteria.list();
