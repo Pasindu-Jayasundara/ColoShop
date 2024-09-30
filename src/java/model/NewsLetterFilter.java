@@ -27,28 +27,35 @@ public class NewsLetterFilter implements Filter {
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
 
-        String text = fromJson.get("text").getAsString();
-
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (httpServletRequest.getSession(false).getAttribute("admin") != null) {
-            //already loged in
-            if (text == null || text.isEmpty()) {
-                //missing reply
-                isInvalid = true;
-                errorMessage = "Missing Reply Text";
+        if (!fromJson.has("text")) {
 
-            } else {
-
-                request.setAttribute("text", text);
-
-                chain.doFilter(request, response);
-            }
-        } else {
-            //need to login first
             isInvalid = true;
-            errorMessage = "Missing Email Address";
+            errorMessage = "Reply Text Cannot Be Found";
+
+        } else {
+            String text = fromJson.get("text").getAsString();
+
+            if (httpServletRequest.getSession(false).getAttribute("admin") != null) {
+                //already loged in
+                if (text == null || text.isEmpty()) {
+                    //missing reply
+                    isInvalid = true;
+                    errorMessage = "Missing Reply Text";
+
+                } else {
+
+                    request.setAttribute("text", text);
+
+                    chain.doFilter(request, response);
+                }
+            } else {
+                //need to login first
+                isInvalid = true;
+                errorMessage = "Missing Email Address";
+            }
         }
 
         if (isInvalid) {

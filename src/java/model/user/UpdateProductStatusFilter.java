@@ -33,26 +33,32 @@ public class UpdateProductStatusFilter implements Filter {
             boolean isInvalid = false;
             String message = "";
 
-            String id = fromJson.get("id").getAsString();
-            if (id != null) {
-                int oid = Integer.parseInt(id);
-                if (oid <= 0) {
-                    isInvalid = true;
-                    message = "Invalid Id";
+            if (!fromJson.has("id")) {
 
-                } else if (!Validation.isInteger(id)) {
-                    isInvalid = true;
-                    message = "Not A Number";
-
-                } else {
-                    request.setAttribute("id", oid);
-                    chain.doFilter(request, response);
-                }
-            } else {
                 isInvalid = true;
-                message = "Missing Id";
-            }
+                message = "Id Cannot Be Found";
 
+            } else {
+                String id = fromJson.get("id").getAsString();
+                if (id != null) {
+                    int oid = Integer.parseInt(id);
+                    if (oid <= 0) {
+                        isInvalid = true;
+                        message = "Invalid Id";
+
+                    } else if (!Validation.isInteger(id)) {
+                        isInvalid = true;
+                        message = "Not A Number";
+
+                    } else {
+                        request.setAttribute("id", oid);
+                        chain.doFilter(request, response);
+                    }
+                } else {
+                    isInvalid = true;
+                    message = "Missing Id";
+                }
+            }
             if (isInvalid) {
                 Response_DTO response_DTO = new Response_DTO(false, message);
 

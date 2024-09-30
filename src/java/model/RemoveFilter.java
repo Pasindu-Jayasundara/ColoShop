@@ -29,74 +29,86 @@ public class RemoveFilter implements Filter {
         if (hsr.getSession().getAttribute("admin") != null) {
 
             JsonObject fromJson = gson.fromJson(hsr.getReader(), JsonObject.class);
-            String id = fromJson.get("id").getAsString();
-            String of = fromJson.get("of").getAsString();
 
             boolean isError = false;
             String message = "";
 
-            if (id.isEmpty()) {
-                message = "Missing Id";
-                isError = true;
+            if (!fromJson.has("id")) {
 
-            } else if (!Validation.isInteger(id)) {
-                //not a number
                 isError = true;
-                message = "Not a Number";
+                message = "Number Cannot Be Found";
+
+            } else if (!fromJson.has("of")) {
+
+                isError = true;
+                message = "Of Cannot Be Found";
 
             } else {
+                String id = fromJson.get("id").getAsString();
+                String of = fromJson.get("of").getAsString();
 
-                int cid = Integer.parseInt(id);
+                if (id.isEmpty()) {
+                    message = "Missing Id";
+                    isError = true;
 
-                if (cid <= 0) {
-                    message = "Invalid Id";
-                    isError = false;
+                } else if (!Validation.isInteger(id)) {
+                    //not a number
+                    isError = true;
+                    message = "Not a Number";
 
                 } else {
 
-                    if (of.equals("color")) {
-                        //color
+                    int cid = Integer.parseInt(id);
 
-                        request.setAttribute("id", id);
-                        request.setAttribute("of", of);
-
-                        request.getRequestDispatcher("/DeleteColor").include(request, response);
-
-                    } else if (of.equals("size")) {
-                        //size
-
-                        request.setAttribute("id", id);
-                        request.setAttribute("of", of);
-
-                        request.getRequestDispatcher("/DeleteSize").include(request, response);
-
-                    } else if (of.equals("category")) {
-                        //category
-
-                        request.setAttribute("id", id);
-                        request.setAttribute("of", of);
-
-                        request.getRequestDispatcher("/DeleteCategory").include(request, response);
-
-                    } else if (of.equals("brand")) {
-                        //brand
-
-                        request.setAttribute("id", id);
-                        request.setAttribute("of", of);
-
-                        request.getRequestDispatcher("/DeleteBrand").include(request, response);
+                    if (cid <= 0) {
+                        message = "Invalid Id";
+                        isError = false;
 
                     } else {
-                        Response_DTO response_DTO = new Response_DTO(false, "Missing Data");
 
-                        response.setContentType("application/json");
-                        response.getWriter().write(gson.toJson(response_DTO));
+                        if (of.equals("color")) {
+                            //color
+
+                            request.setAttribute("id", id);
+                            request.setAttribute("of", of);
+
+                            request.getRequestDispatcher("/DeleteColor").include(request, response);
+
+                        } else if (of.equals("size")) {
+                            //size
+
+                            request.setAttribute("id", id);
+                            request.setAttribute("of", of);
+
+                            request.getRequestDispatcher("/DeleteSize").include(request, response);
+
+                        } else if (of.equals("category")) {
+                            //category
+
+                            request.setAttribute("id", id);
+                            request.setAttribute("of", of);
+
+                            request.getRequestDispatcher("/DeleteCategory").include(request, response);
+
+                        } else if (of.equals("brand")) {
+                            //brand
+
+                            request.setAttribute("id", id);
+                            request.setAttribute("of", of);
+
+                            request.getRequestDispatcher("/DeleteBrand").include(request, response);
+
+                        } else {
+                            Response_DTO response_DTO = new Response_DTO(false, "Missing Data");
+
+                            response.setContentType("application/json");
+                            response.getWriter().write(gson.toJson(response_DTO));
+                        }
+
                     }
 
                 }
-
             }
-
             if (isError) {
                 Response_DTO response_DTO = new Response_DTO(false, message);
 

@@ -26,46 +26,58 @@ public class MessageToAdminFilter implements Filter {
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(request.getReader(), JsonObject.class);
 
-        String title = fromJson.get("title").getAsString();
-        String msg = fromJson.get("msg").getAsString();
-
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (httpServletRequest.getSession().getAttribute("user") != null) {
+        if (!fromJson.has("title")) {
 
-            if (!title.isBlank()) {
-                if (!msg.isBlank()) {
-                    if (title.length() <= 45) {
+            isInvalid = true;
+            errorMessage = "Title Cannot Be FOund";
 
-                        request.setAttribute("title", title);
-                        request.setAttribute("msg", msg);
-                        chain.doFilter(request, response);
+        } else if (!fromJson.has("msg")) {
 
-                    } else {
-                        //title too long
-                        isInvalid = true;
-                        errorMessage = "Title Too Long";
-                    }
-
-                } else {
-                    //invalid message
-                    isInvalid = true;
-                    errorMessage = "Missing Message Content";
-                }
-            } else {
-                //invalid title
-                isInvalid = true;
-                errorMessage = "Missing Message Title";
-            }
+            isInvalid = true;
+            errorMessage = "Message Cannot Be FOund";
 
         } else {
-            isInvalid = true;
-            errorMessage = "Please LogIn First";
-        }
 
+            String title = fromJson.get("title").getAsString();
+            String msg = fromJson.get("msg").getAsString();
+
+            if (httpServletRequest.getSession().getAttribute("user") != null) {
+
+                if (!title.isBlank()) {
+                    if (!msg.isBlank()) {
+                        if (title.length() <= 45) {
+
+                            request.setAttribute("title", title);
+                            request.setAttribute("msg", msg);
+                            chain.doFilter(request, response);
+
+                        } else {
+                            //title too long
+                            isInvalid = true;
+                            errorMessage = "Title Too Long";
+                        }
+
+                    } else {
+                        //invalid message
+                        isInvalid = true;
+                        errorMessage = "Missing Message Content";
+                    }
+                } else {
+                    //invalid title
+                    isInvalid = true;
+                    errorMessage = "Missing Message Title";
+                }
+
+            } else {
+                isInvalid = true;
+                errorMessage = "Please LogIn First";
+            }
+        }
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
 

@@ -1,8 +1,11 @@
 package controller;
 
 import entity.OrderDataTable;
+import entity.Order_item;
 import entity.Order_status;
+import entity.Product;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,6 +58,23 @@ public class VerifyPayment extends HttpServlet {
             order.setOrder_status(status);
 
             hibernateSession.update(order);
+
+            //order Items
+            Criteria orderItemCriteria = hibernateSession.createCriteria(Order_item.class);
+            orderItemCriteria.add(Restrictions.eq("orders", order));
+            List<Order_item> orderItemList = orderItemCriteria.list();
+
+            for (Order_item order_item : orderItemList) {
+                int productId = order_item.getProduct().getId();
+
+                Product product = (Product) hibernateSession.get(Product.class, productId);
+                if (product != null) {
+
+                    product.setSold_count(product.getSold_count() + 1);
+                    hibernateSession.update(product);
+                }
+
+            }
 
             hibernateSession.beginTransaction().commit();
             hibernateSession.close();

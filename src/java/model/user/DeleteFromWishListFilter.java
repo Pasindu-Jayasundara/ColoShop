@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.Validation;
 
 @WebFilter(urlPatterns = {"/DeleteFromWishList"})
-public class DeleteFromWishListFilter implements Filter{
+public class DeleteFromWishListFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,46 +25,53 @@ public class DeleteFromWishListFilter implements Filter{
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        
+
         boolean isInvalid = false;
         String message = "";
-        
+
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(request.getReader(), JsonObject.class);
-        String id = fromJson.get("id").getAsString();
-        
-        if (httpServletRequest.getSession().getAttribute("user") == null) {
-            //login first
+
+        if (!fromJson.has("id")) {
+
             isInvalid = true;
-            message = "Please Login First";
-            
-        } else if (id.isEmpty()) {
-            //no product id
-            isInvalid = true;
-            message = "Missing Product Id";
-            
+            message = "Id Cannot Be FOund";
+
         } else {
-            
-            if (!Validation.isInteger(id)) {
-                //not a integer
+            String id = fromJson.get("id").getAsString();
+
+            if (httpServletRequest.getSession().getAttribute("user") == null) {
+                //login first
                 isInvalid = true;
-                message = "Product Id is Not a Number";
+                message = "Please Login First";
+
+            } else if (id.isEmpty()) {
+                //no product id
+                isInvalid = true;
+                message = "Missing Product Id";
+
             } else {
-                int pId = Integer.parseInt(id);
-                if (pId <= 0) {
-                    //invalid id
+
+                if (!Validation.isInteger(id)) {
+                    //not a integer
                     isInvalid = true;
-                    message = "Invalid Product Id";
+                    message = "Product Id is Not a Number";
                 } else {
-                    
-                    request.setAttribute("id", pId);
-                    chain.doFilter(request, response);
+                    int pId = Integer.parseInt(id);
+                    if (pId <= 0) {
+                        //invalid id
+                        isInvalid = true;
+                        message = "Invalid Product Id";
+                    } else {
+
+                        request.setAttribute("id", pId);
+                        chain.doFilter(request, response);
+                    }
                 }
+
             }
-            
         }
-        
-        if(isInvalid){
+        if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, message);
 
             response.setContentType("application/json");
@@ -76,5 +83,5 @@ public class DeleteFromWishListFilter implements Filter{
     @Override
     public void destroy() {
     }
-    
+
 }

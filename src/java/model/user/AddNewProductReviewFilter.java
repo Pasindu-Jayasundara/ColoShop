@@ -28,50 +28,62 @@ public class AddNewProductReviewFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
-        String review = fromJson.get("txt").getAsString();
-        String productId = fromJson.get("id").getAsString();
 
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (httpServletRequest.getSession().getAttribute("user") == null) {
-            //not logedin
+        if (!fromJson.has("txt")) {
+
             isInvalid = true;
-            errorMessage = "Please LogIn First";
+            errorMessage = "Review Cannot Be Found";
+
+        } else if (!fromJson.has("id")) {
+
+            isInvalid = true;
+            errorMessage = "Id Cannot Be Found";
 
         } else {
+            String review = fromJson.get("txt").getAsString();
+            String productId = fromJson.get("id").getAsString();
 
-            if (review.isEmpty()) {
-                //no review text
+            if (httpServletRequest.getSession().getAttribute("user") == null) {
+                //not logedin
                 isInvalid = true;
-                errorMessage = "Missing Review Text";
+                errorMessage = "Please LogIn First";
 
             } else {
 
-                if (!Validation.isInteger(productId)) {
-                    //not a integer
+                if (review.isEmpty()) {
+                    //no review text
                     isInvalid = true;
-                    errorMessage = "Invalid Product Id";
+                    errorMessage = "Missing Review Text";
 
                 } else {
-                    int pId = Integer.parseInt(productId);
-                    if (pId <= 0) {
-                        //invalid id
+
+                    if (!Validation.isInteger(productId)) {
+                        //not a integer
                         isInvalid = true;
-                        errorMessage = "Incorrect Product Id";
+                        errorMessage = "Invalid Product Id";
 
                     } else {
+                        int pId = Integer.parseInt(productId);
+                        if (pId <= 0) {
+                            //invalid id
+                            isInvalid = true;
+                            errorMessage = "Incorrect Product Id";
 
-                        request.setAttribute("id", pId);
-                        request.setAttribute("review", review);
-                        chain.doFilter(request, response);
+                        } else {
+
+                            request.setAttribute("id", pId);
+                            request.setAttribute("review", review);
+                            chain.doFilter(request, response);
+                        }
                     }
+
                 }
 
             }
-
         }
-
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
             response.setContentType("application/json");

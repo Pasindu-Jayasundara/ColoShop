@@ -13,7 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter(urlPatterns = {"/LoadSingleProduct","/loadSimilarProduct","/LoadReview","/DeleteReview"})
+@WebFilter(urlPatterns = {"/LoadSingleProduct", "/loadSimilarProduct", "/LoadReview", "/DeleteReview"})
 public class LoadSingleProductFilter implements Filter {
 
     @Override
@@ -25,37 +25,44 @@ public class LoadSingleProductFilter implements Filter {
 
         Gson gson = new Gson();
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        
-        String productId = gson.fromJson(httpServletRequest.getReader(),JsonObject.class).get("id").getAsString();
+
+        JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
 
         String message = "";
         boolean isInvalid = false;
 
-        if (productId != null) {
-            // have id
-            try {
-                int id = Integer.parseInt(productId);
-                if (id >= 0) {
-                    request.setAttribute("id", id);
-                    chain.doFilter(request, response);
-                } else {
-                    // id cannot be negative
-                    isInvalid = true;
-                    message = "Id Cannot be Negative";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (!fromJson.has("id")) {
 
-                isInvalid = true;
-                message = "Tnvalid Id Type";
-            }
-
-        } else {
-            //no id
             isInvalid = true;
-            message = "Cannot Find Id";
-        }
+            message = "Id Cannot be Found";
+        } else {
+            String productId = fromJson.get("id").getAsString();
 
+            if (productId != null) {
+                // have id
+                try {
+                    int id = Integer.parseInt(productId);
+                    if (id >= 0) {
+                        request.setAttribute("id", id);
+                        chain.doFilter(request, response);
+                    } else {
+                        // id cannot be negative
+                        isInvalid = true;
+                        message = "Id Cannot be Negative";
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    isInvalid = true;
+                    message = "Tnvalid Id Type";
+                }
+
+            } else {
+                //no id
+                isInvalid = true;
+                message = "Cannot Find Id";
+            }
+        }
         if (isInvalid) {
 
             Response_DTO response_DTO = new Response_DTO(false, message);

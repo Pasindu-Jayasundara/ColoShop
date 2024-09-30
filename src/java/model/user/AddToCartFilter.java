@@ -27,53 +27,68 @@ public class AddToCartFilter implements Filter {
 
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
-        String pId = fromJson.get("productId").getAsString();
 
-        //new cart product is a arraylist of product comes when syncing session cart and db cart
-        if (httpServletRequest.getAttribute("newCartProduct") != null || pId != null) {
+        boolean isInvalid = false;
+        String errorMessage = "";
+        boolean proceedToCart = true;
 
-            boolean isOnlyOneProduct = false;
-            boolean proceedToCart = true;
+        if (!fromJson.has("productId")) {
+            
+            isInvalid = true;
+            errorMessage = "Product Id Cannot Be Found";
+            proceedToCart = false;
+            
+        } else {
+            String pId = fromJson.get("productId").getAsString();
 
-            boolean isLoggedIn = true;
-            if (httpServletRequest.getSession().getAttribute("user") == null) {
-                //already logedin user
-                isLoggedIn = false;
-            }
+            //new cart product is a arraylist of product comes when syncing session cart and db cart
+            if (httpServletRequest.getAttribute("newCartProduct") != null || pId != null) {
 
-            if (pId != null) {
+                boolean isOnlyOneProduct = false;
 
-                isOnlyOneProduct = true;
-
-                boolean isInvalid = false;
-                String errorMessage = "";
-
-                int productId = Integer.parseInt(pId);
-                if (productId <= 0) {
-                    //invalid product id
-                    isInvalid = true;
-                    errorMessage = "Invalid Product Id";
-                    proceedToCart = false;
+                boolean isLoggedIn = true;
+                if (httpServletRequest.getSession().getAttribute("user") == null) {
+                    //already logedin user
+                    isLoggedIn = false;
                 }
 
-                if (isInvalid) {
-                    proceedToCart = false;
-                    Response_DTO response_DTO = new Response_DTO(false, errorMessage);
+                if (pId != null) {
 
-                    response.setContentType("application/json");
-                    response.getWriter().write(gson.toJson(response_DTO));
+                    isOnlyOneProduct = true;
+
+                    int productId = Integer.parseInt(pId);
+                    if (productId <= 0) {
+                        //invalid product id
+                        isInvalid = true;
+                        errorMessage = "Invalid Product Id";
+                        proceedToCart = false;
+                    }
+
+                    if (isInvalid) {
+                        proceedToCart = false;
+                        Response_DTO response_DTO = new Response_DTO(false, errorMessage);
+
+                        response.setContentType("application/json");
+                        response.getWriter().write(gson.toJson(response_DTO));
+                    }
+
                 }
 
-            }
-
-            if (proceedToCart) {
-                request.setAttribute("isOnlyOneProduct", isOnlyOneProduct);
-                request.setAttribute("isLoggedIn", isLoggedIn);
-                request.setAttribute("productId", Integer.valueOf(pId));
-                chain.doFilter(request, response);
+                if (proceedToCart) {
+                    request.setAttribute("isOnlyOneProduct", isOnlyOneProduct);
+                    request.setAttribute("isLoggedIn", isLoggedIn);
+                    request.setAttribute("productId", Integer.valueOf(pId));
+                    chain.doFilter(request, response);
+                }
             }
         }
 
+        if (isInvalid) {
+            Response_DTO response_DTO = new Response_DTO(false, errorMessage);
+
+            response.setContentType("application/json");
+            response.getWriter().write(gson.toJson(response_DTO));
+        }
     }
 
     @Override

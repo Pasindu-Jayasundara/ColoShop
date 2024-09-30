@@ -27,7 +27,6 @@ public class DeleteFromCartFilter implements Filter {
 
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
-        String pId = fromJson.get("id").getAsString();
 
         boolean isLoggedIn = true;
         if (httpServletRequest.getSession().getAttribute("user") == null) {
@@ -35,35 +34,44 @@ public class DeleteFromCartFilter implements Filter {
             isLoggedIn = false;
         }
 
-        if (pId != null) {
+        boolean isInvalid = false;
+        String errorMessage = "";
 
-            boolean isInvalid = false;
-            String errorMessage = "";
+        if (!fromJson.has("id")) {
 
-            int productId = Integer.parseInt(pId);
-            if (productId <= 0) {
-                //invalid product id
-                isInvalid = true;
-                errorMessage = "Invalid Product Id";
-            }
+            isInvalid = true;
+            errorMessage = "Product Id Cannot Be FOund";
 
-            if (isInvalid) {
-                Response_DTO response_DTO = new Response_DTO(false, errorMessage);
-
-                response.setContentType("application/json");
-                response.getWriter().write(gson.toJson(response_DTO));
-            } else {
-                request.setAttribute("isLoggedIn", isLoggedIn);
-                request.setAttribute("id", Integer.valueOf(pId));
-                chain.doFilter(request, response);
-            }
         } else {
-            Response_DTO response_DTO = new Response_DTO(false, "No Id");
+            String pId = fromJson.get("id").getAsString();
+
+            if (pId != null) {
+
+                int productId = Integer.parseInt(pId);
+                if (productId <= 0) {
+                    //invalid product id
+                    isInvalid = true;
+                    errorMessage = "Invalid Product Id";
+                }
+
+                if (!isInvalid) {
+                    request.setAttribute("isLoggedIn", isLoggedIn);
+                    request.setAttribute("id", Integer.valueOf(pId));
+                    chain.doFilter(request, response);
+                }
+            } else {
+                isInvalid = true;
+                errorMessage = "No Id";
+
+            }
+        }
+
+        if (isInvalid) {
+            Response_DTO response_DTO = new Response_DTO(false, errorMessage);
 
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }
-
     }
 
     @Override

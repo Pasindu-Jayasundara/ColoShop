@@ -27,33 +27,42 @@ public class AddToWishlistFilter implements Filter {
 
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
-        String pId = fromJson.get("pId").getAsString();
 
         String message = "";
         boolean isSuccess = false;
-        if (httpServletRequest.getSession().getAttribute("user") != null) {
 
-            if (pId != null) {
+        if (!fromJson.has("pId")) {
 
-                int productId = Integer.parseInt(pId);
-                if (productId <= 0) {
-                    //invalid product id
-                    isSuccess = false;
-                    message = "Invalid Product Id";
-                } else {
+            isSuccess = false;
+            message = "Product Id Cannot Be Found";
 
-                    isSuccess = true;
+        } else {
+            String pId = fromJson.get("pId").getAsString();
 
-                    request.setAttribute("pId", pId);
-                    chain.doFilter(request, response);
+            if (httpServletRequest.getSession().getAttribute("user") != null) {
+
+                if (pId != null) {
+
+                    int productId = Integer.parseInt(pId);
+                    if (productId <= 0) {
+                        //invalid product id
+                        isSuccess = false;
+                        message = "Invalid Product Id";
+                    } else {
+
+                        isSuccess = true;
+
+                        request.setAttribute("pId", pId);
+                        chain.doFilter(request, response);
+
+                    }
 
                 }
 
+            } else {
+                message = "Please LogIn First";
+                isSuccess = false;
             }
-
-        } else {
-            message = "Please LogIn First";
-            isSuccess = false;
         }
 
         if (!isSuccess) {

@@ -27,35 +27,42 @@ public class VerifyNewUserFilter implements Filter {
 
         Gson gson = new Gson();
         JsonObject dto = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
-        String token = dto.get("token").getAsString();
 
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (token == null) {
-            //no token
-            isInvalid = true;
-            errorMessage = "Missing Verification Token";
+        if (!dto.has("token")) {
 
-        } else if (httpServletRequest.getSession().getAttribute("userEmail") == null) {
-            //no email
             isInvalid = true;
-            errorMessage = "Missing Email Address";
+            errorMessage = "Token Cannot Be Found";
 
         } else {
+            String token = dto.get("token").getAsString();
 
-            if (token.length() != 8) {
-                //invalid token length
+            if (token == null) {
+                //no token
                 isInvalid = true;
-                errorMessage = "Invalid Token Length";
+                errorMessage = "Missing Verification Token";
+
+            } else if (httpServletRequest.getSession().getAttribute("userEmail") == null) {
+                //no email
+                isInvalid = true;
+                errorMessage = "Missing Email Address";
 
             } else {
-                request.setAttribute("token", token);
-                chain.doFilter(request, response);
+
+                if (token.length() != 8) {
+                    //invalid token length
+                    isInvalid = true;
+                    errorMessage = "Invalid Token Length";
+
+                } else {
+                    request.setAttribute("token", token);
+                    chain.doFilter(request, response);
+                }
+
             }
-
         }
-
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, errorMessage);
             response.setContentType("application/json");

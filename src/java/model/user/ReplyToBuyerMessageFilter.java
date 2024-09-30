@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.Validation;
 
 @WebFilter(urlPatterns = {"/ReplyToBuyerMessage"})
-public class ReplyToBuyerMessageFilter implements Filter{
+public class ReplyToBuyerMessageFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -23,7 +23,7 @@ public class ReplyToBuyerMessageFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    
+
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(request.getReader(), JsonObject.class);
 
@@ -33,32 +33,44 @@ public class ReplyToBuyerMessageFilter implements Filter{
             boolean isInvalid = false;
             String message = "";
 
-            String id = fromJson.get("id").getAsString();
-            String reply = fromJson.get("reply").getAsString();
-            if (id != null) {
-                int oid = Integer.parseInt(id);
-                if (oid <= 0) {
-                    isInvalid = true;
-                    message = "Invalid Id";
+            if (!fromJson.has("id")) {
 
-                } else if (!Validation.isInteger(id)) {
-                    isInvalid = true;
-                    message = "Not A Number";
-
-                } else if(reply.trim().equals("")){
-                    isInvalid = true;
-                    message = "Missing Reply";
-                    
-                }else {
-                    request.setAttribute("id", oid);
-                    request.setAttribute("reply", reply);
-                    chain.doFilter(request, response);
-                }
-            } else {
                 isInvalid = true;
-                message = "Missing Id";
-            }
+                message = "Id Cannot Be Found";
 
+            } else if (!fromJson.has("reply")) {
+
+                isInvalid = true;
+                message = "Reply Cannot Be Found";
+            } else {
+
+                String id = fromJson.get("id").getAsString();
+                String reply = fromJson.get("reply").getAsString();
+                
+                if (id != null) {
+                    int oid = Integer.parseInt(id);
+                    if (oid <= 0) {
+                        isInvalid = true;
+                        message = "Invalid Id";
+
+                    } else if (!Validation.isInteger(id)) {
+                        isInvalid = true;
+                        message = "Not A Number";
+
+                    } else if (reply.trim().equals("")) {
+                        isInvalid = true;
+                        message = "Missing Reply";
+
+                    } else {
+                        request.setAttribute("id", oid);
+                        request.setAttribute("reply", reply);
+                        chain.doFilter(request, response);
+                    }
+                } else {
+                    isInvalid = true;
+                    message = "Missing Id";
+                }
+            }
             if (isInvalid) {
                 Response_DTO response_DTO = new Response_DTO(false, message);
 
@@ -72,11 +84,11 @@ public class ReplyToBuyerMessageFilter implements Filter{
             response.setContentType("application/json");
             response.getWriter().write(gson.toJson(response_DTO));
         }
-    
+
     }
 
     @Override
     public void destroy() {
     }
-    
+
 }

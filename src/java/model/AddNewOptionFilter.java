@@ -29,53 +29,64 @@ public class AddNewOptionFilter implements Filter {
         if (hsr.getSession().getAttribute("admin") != null) {
 
             JsonObject fromJson = gson.fromJson(hsr.getReader(), JsonObject.class);
-            String type = fromJson.get("type").getAsString();
-            String option = fromJson.get("option").getAsString();
 
             boolean isError = false;
             String message = "";
 
-            if (type.isEmpty()) {
-                message = "Missing Type";
-                isError = true;
+            if (!fromJson.has("type")) {
 
-            } else if (option.isEmpty()) {
-                message = "Missing New Option";
+                message = "Cannot FInd Type";
                 isError = true;
+            } else if (!fromJson.has("option")) {
 
+                message = "Cannot Find Option";
+                isError = true;
             } else {
+                String type = fromJson.get("type").getAsString();
+                String option = fromJson.get("option").getAsString();
 
-                if (type.equals("color")) {
-                    //color
+                if (type.isEmpty()) {
+                    message = "Missing Type";
+                    isError = true;
 
-                    request.setAttribute("option", option);
-                    request.getRequestDispatcher("/AddNewColor").include(request, response);
-
-                } else if (type.equals("size")) {
-                    //size
-                    
-                    request.setAttribute("option", option);
-                    request.getRequestDispatcher("/AddNewSize").include(request, response);
-
-                } else if (type.equals("category")) {
-                    //category
-                    
-                    request.setAttribute("option", option);
-                    request.getRequestDispatcher("/AddCategory").include(request, response);
-
-                } else if (type.equals("brand")) {
-                    //brand
-                    
-                    request.setAttribute("option", option);
-                    request.getRequestDispatcher("/AddBrand").include(request, response);
+                } else if (option.isEmpty()) {
+                    message = "Missing New Option";
+                    isError = true;
 
                 } else {
-                    Response_DTO response_DTO = new Response_DTO(false, "Missing Data");
 
-                    response.setContentType("application/json");
-                    response.getWriter().write(gson.toJson(response_DTO));
+                    if (type.equals("color")) {
+                        //color
+
+                        request.setAttribute("option", option);
+                        request.getRequestDispatcher("/AddNewColor").include(request, response);
+
+                    } else if (type.equals("size")) {
+                        //size
+
+                        request.setAttribute("option", option);
+                        request.getRequestDispatcher("/AddNewSize").include(request, response);
+
+                    } else if (type.equals("category")) {
+                        //category
+
+                        request.setAttribute("option", option);
+                        request.getRequestDispatcher("/AddCategory").include(request, response);
+
+                    } else if (type.equals("brand")) {
+                        //brand
+
+                        request.setAttribute("option", option);
+                        request.getRequestDispatcher("/AddBrand").include(request, response);
+
+                    } else {
+                        Response_DTO response_DTO = new Response_DTO(false, "Missing Data");
+
+                        response.setContentType("application/json");
+                        response.getWriter().write(gson.toJson(response_DTO));
+                    }
+
                 }
-
             }
 
             if (isError) {

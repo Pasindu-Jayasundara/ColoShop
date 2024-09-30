@@ -1,6 +1,5 @@
 package model.user;
 
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
@@ -26,31 +25,38 @@ public class RegisterToNewsletterFilter implements Filter {
 
         Gson gson = new Gson();
         JsonObject fromJson = gson.fromJson(request.getReader(), JsonObject.class);
-        String email = fromJson.get("email").getAsString();
-        
+
         boolean isInvalid = false;
         String message = "";
 
-        if (!email.isBlank()) {
-            if (Validation.isValidEmail(email)) {
+        if (!fromJson.has("email")) {
 
-                if (email.length() <= 60) {
-                    request.setAttribute("email", email);
-                    chain.doFilter(request, response);
+            isInvalid = true;
+            message = "Email Address Cannot Be FOund";
 
+        } else {
+            String email = fromJson.get("email").getAsString();
+
+            if (!email.isBlank()) {
+                if (Validation.isValidEmail(email)) {
+
+                    if (email.length() <= 60) {
+                        request.setAttribute("email", email);
+                        chain.doFilter(request, response);
+
+                    } else {
+                        isInvalid = true;
+                        message = "Email Address Too Long";
+                    }
                 } else {
                     isInvalid = true;
-                    message = "Email Address Too Long";
+                    message = "Invalid Email Address";
                 }
             } else {
                 isInvalid = true;
-                message = "Invalid Email Address";
+                message = "Cannot Find Email Address";
             }
-        } else {
-            isInvalid = true;
-            message = "Cannot Find Email Address";
         }
-
         if (isInvalid) {
             Response_DTO response_DTO = new Response_DTO(false, message);
             response.setContentType("application/json");

@@ -1,6 +1,5 @@
 package model;
 
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dto.Response_DTO;
@@ -26,55 +25,68 @@ public class LogInFilter implements Filter {
 
         Gson gson = new Gson();
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        
+
         JsonObject fromJson = gson.fromJson(httpServletRequest.getReader(), JsonObject.class);
-        String email = fromJson.get("email").getAsString();
-        String password = fromJson.get("password").getAsString();
-        
-        
+
         boolean isInvalid = false;
         String errorMessage = "";
 
-        if (email == null || email.isEmpty()) {
-            //no email
-            isInvalid = true;
-            errorMessage = "Missing Email Address";
+        if (!fromJson.has("email")) {
 
-        } else if (password == null || password.isEmpty()) {
-            //no password
             isInvalid = true;
-            errorMessage = "Missing Password";
+            errorMessage = "Email Address Cannot Be Found";
+
+        } else if (!fromJson.has("password")) {
+
+            isInvalid = true;
+            errorMessage = "Password Cannot Be Found";
 
         } else {
 
-            if (email.length() > 60) {
-                //email too long
-                isInvalid = true;
-                errorMessage = "Email Too Long";
+            String email = fromJson.get("email").getAsString();
+            String password = fromJson.get("password").getAsString();
 
-            } else if (password.length() > 45) {
-                //password too long
+            if (email == null || email.isEmpty()) {
+                //no email
                 isInvalid = true;
-                errorMessage = "Password Too Long";
+                errorMessage = "Missing Email Address";
 
-            } else if (!Validation.isValidEmail(email)) {
-                //invalid email format 
+            } else if (password == null || password.isEmpty()) {
+                //no password
                 isInvalid = true;
-                errorMessage = "Invalid Email Format";
-
-            } else if (!Validation.isValidPassword(password)) {
-                //invalid password
-                isInvalid = true;
-                errorMessage = "Invalid Password Format";
+                errorMessage = "Missing Password";
 
             } else {
-                
-                request.setAttribute("email", email);
-                request.setAttribute("password", password);
-                
-                chain.doFilter(request, response);
-            }
 
+                if (email.length() > 60) {
+                    //email too long
+                    isInvalid = true;
+                    errorMessage = "Email Too Long";
+
+                } else if (password.length() > 45) {
+                    //password too long
+                    isInvalid = true;
+                    errorMessage = "Password Too Long";
+
+                } else if (!Validation.isValidEmail(email)) {
+                    //invalid email format 
+                    isInvalid = true;
+                    errorMessage = "Invalid Email Format";
+
+                } else if (!Validation.isValidPassword(password)) {
+                    //invalid password
+                    isInvalid = true;
+                    errorMessage = "Invalid Password Format";
+
+                } else {
+
+                    request.setAttribute("email", email);
+                    request.setAttribute("password", password);
+
+                    chain.doFilter(request, response);
+                }
+
+            }
         }
 
         if (isInvalid) {
