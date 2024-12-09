@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   CONSTRAINT `fk_admin_verified_status1` FOREIGN KEY (`verified_status_id`) REFERENCES `verified_status` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.admin: ~0 rows (approximately)
+-- Dumping data for table colo-shop.admin: ~1 rows (approximately)
 INSERT INTO `admin` (`id`, `first_name`, `last_name`, `email`, `password`, `token`, `status_id`, `verified_status_id`) VALUES
 	(1, 'Pasindu', 'Bhathiya', 'p@gmail.com', 'Pasindu328@', NULL, 1, 1);
 
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `message_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.message_status: ~2 rows (approximately)
+-- Dumping data for table colo-shop.message_status: ~3 rows (approximately)
 INSERT INTO `message_status` (`id`, `status`) VALUES
 	(1, 'Received'),
 	(2, 'Read'),
@@ -171,11 +171,12 @@ CREATE TABLE IF NOT EXISTS `message_to_seller` (
   CONSTRAINT `fk_message_to_seller_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_seller_has_user_seller1` FOREIGN KEY (`seller_id`) REFERENCES `seller` (`id`),
   CONSTRAINT `fk_seller_has_user_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.message_to_seller: ~1 rows (approximately)
+-- Dumping data for table colo-shop.message_to_seller: ~2 rows (approximately)
 INSERT INTO `message_to_seller` (`id`, `message`, `seller_id`, `user_id`, `datetime`, `message_status_id`, `product_id`, `reply`) VALUES
-	(1, 'hiii', 2, 1, '2024-09-26 11:10:00', 1, 3, NULL);
+	(1, 'hiii', 2, 1, '2024-09-26 11:10:00', 3, 3, 'hi'),
+	(2, 's', 2, 6, '2024-12-09 16:36:08', 3, 7, 'kjndskjdnfsjdfn sdlkcsjndlfjsd');
 
 -- Dumping structure for table colo-shop.newsletter
 CREATE TABLE IF NOT EXISTS `newsletter` (
@@ -206,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Dumping data for table colo-shop.orders: ~4 rows (approximately)
 INSERT INTO `orders` (`id`, `datetime`, `total_amount`, `delivery_date`, `address`, `text`, `user_id`, `order_status_id`) VALUES
 	(1, '2024-09-25 23:40:00', 50, '2030-09-25', 'edse', NULL, 8, 3),
-	(2, '2024-09-25 23:40:47', 2, '2024-10-03', '222', NULL, 8, 3),
+	(2, '2024-09-25 23:40:47', 2, '2024-10-03', '222', NULL, 8, 4),
 	(3, '2024-09-25 23:41:13', 222, '2024-09-28', 'eewrf', NULL, 8, 3),
 	(1021436697, '2024-09-29 13:54:50', 0, '2024-09-29', '70/1/3,george r De Silva Mawath, Police quarters ,colombo 13', 'ijfhfgdsf', 8, 1);
 
@@ -238,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `order_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.order_status: ~2 rows (approximately)
+-- Dumping data for table colo-shop.order_status: ~4 rows (approximately)
 INSERT INTO `order_status` (`id`, `status`) VALUES
 	(1, 'Paid'),
 	(2, 'Shipped'),
@@ -280,14 +281,14 @@ CREATE TABLE IF NOT EXISTS `product` (
 
 -- Dumping data for table colo-shop.product: ~8 rows (approximately)
 INSERT INTO `product` (`id`, `name`, `description`, `unit_price`, `added`, `img1`, `img2`, `img3`, `delivery_fee`, `sold_count`, `status_id`, `product_color_id`, `size_id`, `brand_id`, `seller_id`, `category_id`) VALUES
-	(1, 'sdcdc', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 3, 5, 2, 4),
-	(2, 'dfgbf', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 3, 5, 2, 2),
-	(3, 'fbfd', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 3, 5, 2, 4),
-	(4, 'zdsdcc', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 3, 5, 2, 3),
-	(5, 'ABCD', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc ddddddddddd', 203, '2024-09-25 23:34:59', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 503, 0, 1, 3, 3, 13, 2, 3),
-	(6, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:14:48', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 2, 14, 2, 2),
-	(7, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:18:03', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 2, 14, 2, 2),
-	(8, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:18:53', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 1, 1, 2, 14, 2, 1);
+	(1, 'sdcdc', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 4),
+	(2, 'dfgbf', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 2),
+	(3, 'fbfd', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 4),
+	(4, 'zdsdcc', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 3),
+	(5, 'ABCD', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc ddddddddddd', 203, '2024-09-25 23:34:59', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 503, 0, 2, 3, 3, 13, 2, 3),
+	(6, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:14:48', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 2, 14, 2, 2),
+	(7, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:18:03', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 2, 14, 2, 2),
+	(8, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:18:53', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 2, 14, 2, 1);
 
 -- Dumping structure for table colo-shop.product_color
 CREATE TABLE IF NOT EXISTS `product_color` (
@@ -359,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `seller` (
   CONSTRAINT `fk_seller_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.seller: ~0 rows (approximately)
+-- Dumping data for table colo-shop.seller: ~2 rows (approximately)
 INSERT INTO `seller` (`id`, `user_id`, `status_id`) VALUES
 	(1, 1, 1),
 	(2, 8, 1);
@@ -389,13 +390,14 @@ CREATE TABLE IF NOT EXISTS `status` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(10) NOT NULL COMMENT 'active/deactive',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.status: ~3 rows (approximately)
+-- Dumping data for table colo-shop.status: ~4 rows (approximately)
 INSERT INTO `status` (`id`, `name`) VALUES
 	(1, 'Active'),
 	(2, 'De-Active'),
-	(3, 'Pending');
+	(3, 'Pending'),
+	(4, 'Deleted');
 
 -- Dumping structure for table colo-shop.user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -423,7 +425,7 @@ INSERT INTO `user` (`id`, `first_name`, `last_name`, `email`, `password`, `token
 	(5, 'Pasindu', 'Bathiya', 'pasindubathiya28@gmail.com', 'Pasindu328@', '7071a8bb', 3, 1, 2),
 	(6, 'Jayasundara', 'Jayasundara', 'pasindubathiyl28@gmail.com', 'Pasindu328@', 'deb9c5f9', 3, 1, 2),
 	(7, 'Jayasundara', 'Jayasundara', 'pasindubathiyql28@gmail.com', 'Pasindu328@', '31c6af16', 3, 1, 2),
-	(8, 'Jayasundara', 'Jayasundara', 'pasindubathiya2d8@gmail.com', 'Pasindu328@', '945837a7', 3, 1, 1);
+	(8, 'Jayasundara', 'Jayasundara', 'pasindubathiya2d8@gmail.com', 'Pasindu328@', '945837a7', 2, 1, 1);
 
 -- Dumping structure for table colo-shop.verified_status
 CREATE TABLE IF NOT EXISTS `verified_status` (
