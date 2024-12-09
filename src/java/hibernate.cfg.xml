@@ -30,7 +30,8 @@
         <mapping class="entity.Status" />  
         <mapping class="entity.UserTable" />  
         <mapping class="entity.Verified_status" />  
-        <mapping class="entity.Wishlist" />  
+        <mapping class="entity.Wishlist" /> 
+        <mapping class="entity.Message_to_seller" />  
         
     </session-factory>
 </hibernate-configuration>

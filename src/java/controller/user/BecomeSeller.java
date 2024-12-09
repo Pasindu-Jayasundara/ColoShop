@@ -3,10 +3,12 @@ package controller.user;
 import com.google.gson.Gson;
 import dto.Response_DTO;
 import entity.Account_type;
+import entity.Product;
 import entity.Seller;
 import entity.Status;
 import entity.UserTable;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -56,7 +58,34 @@ public class BecomeSeller extends HttpServlet {
 
             hibernateSession.save(seller);
         }
+        hibernateSession.beginTransaction().commit();
 
+        // if this seller has deactive products active them
+        Criteria sellerNCriteria = hibernateSession.createCriteria(Seller.class);
+        sellerNCriteria.add(Restrictions.and(
+                Restrictions.eq("user", user),
+                Restrictions.eq("status", status)
+        ));
+        Seller uniqueResultSeller = (Seller) sellerNCriteria.uniqueResult();
+        if (uniqueResultSeller != null) {
+            
+            Criteria deactiveStatusCriteria = hibernateSession.createCriteria(Status.class);
+            deactiveStatusCriteria.add(Restrictions.eq("name", "De-Active"));
+            Status deactiveStatus = (Status) deactiveStatusCriteria.uniqueResult();
+
+            Criteria productCriteria = hibernateSession.createCriteria(Product.class);
+            productCriteria.add(Restrictions.and(
+                    Restrictions.eq("seller", uniqueResultSeller),
+                    Restrictions.eq("status", deactiveStatus)
+            ));
+            List<Product> productList = productCriteria.list();
+            for (Product product : productList) {
+
+                product.setStatus(status);
+                hibernateSession.update(product);
+
+            }
+        }
         hibernateSession.beginTransaction().commit();
         hibernateSession.close();
 

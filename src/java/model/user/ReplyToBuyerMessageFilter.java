@@ -38,14 +38,14 @@ public class ReplyToBuyerMessageFilter implements Filter {
                 isInvalid = true;
                 message = "Id Cannot Be Found";
 
-            } else if (!fromJson.has("reply")) {
+            } else if (!fromJson.has("text")) {
 
                 isInvalid = true;
                 message = "Reply Cannot Be Found";
             } else {
 
                 String id = fromJson.get("id").getAsString();
-                String reply = fromJson.get("reply").getAsString();
+                String reply = fromJson.get("text").getAsString();
                 
                 if (id != null) {
                     int oid = Integer.parseInt(id);

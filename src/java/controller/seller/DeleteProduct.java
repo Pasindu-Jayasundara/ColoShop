@@ -44,10 +44,10 @@ public class DeleteProduct extends HttpServlet {
             //have product
 
             Criteria deActiveStatusCriteria = hibernaSession.createCriteria(Status.class);
-            deActiveStatusCriteria.add(Restrictions.eq("name", "De-Active"));
-            Status deActiveStatus = (Status) deActiveStatusCriteria.uniqueResult();
+            deActiveStatusCriteria.add(Restrictions.eq("name", "Deleted"));
+            Status deletedStatus = (Status) deActiveStatusCriteria.uniqueResult();
 
-            product.setStatus(deActiveStatus);
+            product.setStatus(deletedStatus);
             hibernaSession.update(product);
             hibernaSession.beginTransaction().commit();
             

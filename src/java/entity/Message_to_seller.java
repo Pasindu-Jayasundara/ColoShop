@@ -24,22 +24,22 @@ public class Message_to_seller implements Serializable {
     private String message;
 
     @ManyToOne
-    @JoinColumn(name = "seller_id", nullable = false)
+    @JoinColumn(name = "seller_id")
     private Seller seller;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private UserTable user;
 
     @Column(name = "datetime", nullable = false)
     private Date datetime;
 
     @ManyToOne
-    @JoinColumn(name = "message_status_id", nullable = false)
+    @JoinColumn(name = "message_status_id")
     private Message_status message_status;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(name = "reply", nullable = true)

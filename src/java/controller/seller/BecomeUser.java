@@ -85,6 +85,25 @@ public class BecomeUser extends HttpServlet {
         boolean isSuccess = false;
         if (!hasNotDeliveredProducts) {
 
+            // make selling products deactive
+            Criteria deactiveStatusCriteria = hibernateSession.createCriteria(Status.class);
+            deactiveStatusCriteria.add(Restrictions.eq("name", "De-Active"));
+            Status deactiveStatus = (Status) deactiveStatusCriteria.uniqueResult();
+
+            Criteria productCriteria = hibernateSession.createCriteria(Product.class);
+            productCriteria.add(Restrictions.and(
+                    Restrictions.eq("seller", seller),
+                    Restrictions.eq("status", status)
+            ));
+            List<Product> productList = productCriteria.list();
+            for (Product product : productList) {
+
+                product.setStatus(deactiveStatus);
+                hibernateSession.update(product);
+
+            }
+
+            //change account type
             Criteria accountTypeCriteria = hibernateSession.createCriteria(Account_type.class);
             accountTypeCriteria.add(Restrictions.eq("type", "Buyer"));
 

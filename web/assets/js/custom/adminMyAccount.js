@@ -86,6 +86,8 @@ function loadSelectOptionTable() {
         loadTable(categoryArr, "category")
     } else if (option == 4) {//brand
         loadTable(brandArr, "brand")
+    } else if (option == 0) {//brand
+        tableBody.innerHTML = "";
     } else {
         Notification().error({
             message: "Invalid Selection"
@@ -96,6 +98,7 @@ function loadSelectOptionTable() {
 
 let tableBody = document.getElementById("manageTableBody");
 let row = document.getElementById("manageRow");
+tableBody.innerHTML = "";
 
 function loadTable(array, receivedName) {
 

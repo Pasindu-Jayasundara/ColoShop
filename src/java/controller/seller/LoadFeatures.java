@@ -117,7 +117,7 @@ public class LoadFeatures extends HttpServlet {
             Criteria messageStatusCriteria = hiberSession.createCriteria(Message_status.class);
             messageStatusCriteria.add(Restrictions.eq("id", 3));
             Message_status replyiedStatus = (Message_status) messageStatusCriteria.uniqueResult();
-
+            
             Criteria msgToSellerCriteria = hiberSession.createCriteria(Message_to_seller.class);
             msgToSellerCriteria.add(Restrictions.and(
                     Restrictions.eq("seller", seller),
@@ -125,7 +125,6 @@ public class LoadFeatures extends HttpServlet {
             ));
 
             msgToSellerList = msgToSellerCriteria.list();
-
             if (msgToSellerList != null) {
 
                 for (Message_to_seller message : msgToSellerList) {
@@ -136,7 +135,7 @@ public class LoadFeatures extends HttpServlet {
             }
 
         }
-
+        
         //delivered order status
         Criteria orderStatusCriteria = hiberSession.createCriteria(Order_status.class);
         orderStatusCriteria.add(Restrictions.eq("status", "Delivered"));

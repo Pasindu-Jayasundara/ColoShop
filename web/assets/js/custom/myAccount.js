@@ -44,10 +44,14 @@ async function addNewProduct() {
     }
 }
 
+var switchbtn
+
 var categoryList;
 var colorList;
 var sizeList;
 var brandList;
+var msgToSellerList;
+var orderList
 async function loadData() {
 
     const response = await fetch("LoadFeatures");
@@ -72,14 +76,13 @@ async function loadData() {
             }
 
             if (productList != null || productList != undefined) {
-                const msgToSellerList = json.data.msgToSellerList;
-                console.log(msgToSellerList)
+                msgToSellerList = json.data.msgToSellerList;
                 loadMessages(msgToSellerList)
             }
 
             document.getElementById("userName").innerHTML = userName;
 
-            const orderList = json.data.orderList;
+            orderList = json.data.orderList;
             if (isBuyer) {
                 document.getElementById("accountType").innerHTML = "Buyer";
                 document.getElementById("oppositeAccountType").innerHTML = "Seller";
@@ -102,6 +105,8 @@ async function loadData() {
                 loadReceivedOrders(orderList)
 
             }
+
+            switchbtn = document.getElementById("switch").innerHTML
 
             loadSelectOptions("category", categoryList, ["category"]);
             loadSelectOptions("size", sizeList, ["size"]);
@@ -169,6 +174,8 @@ async function sendReply() {
                 Notification().success({
                     message: jsonData.data
                 })
+
+                removeMsgTableRow()
             } else {
                 Notification().error({
                     message: jsonData.data
@@ -181,9 +188,16 @@ async function sendReply() {
             })
             console.error("Failed to submit the form", response.statusText);
         }
+    }else{
+        document.getElementById("reply").style.border = "1px solid red"
     }
 }
 
+function removeMsgTableRow(){
+    msgToSellerList = msgToSellerList.filter(msg => msg.id !== messageId);
+    document.getElementById("messageCount").innerHTML = msgToSellerList.length
+    loadMessages(msgToSellerList)
+}
 
 async function changeOrderStatus(orderId) {
     const response = await fetch("UpdateProductStatus", {
@@ -208,6 +222,11 @@ async function changeOrderStatus(orderId) {
             Notification().success({
                 message: jsonData.data.message
             })
+
+            setTimeout(() => {
+               orderList = orderList.filter(order => order.orders.id !== orderId); 
+                loadReceivedOrders(orderList)
+            }, 3000);
         } else {
             Notification().error({
                 message: jsonData.data
@@ -233,6 +252,11 @@ async function changeAccountType() {
             const jsonData = await response.json();
             if (jsonData.success) {
                 logOut()
+            } else if (!jsonData.success && jsonData.data == "Not Delivered Products Avaliable") {
+                Notification().error({
+                    message: jsonData.data
+                })
+                document.getElementById("switch").innerHTML = switchbtn
             } else {
                 Notification().error({
                     message: jsonData.data
@@ -322,6 +346,7 @@ function loadPurchasedOrders(orderList) {
 
 var rtableBody = document.getElementById("rTableBody");
 var row = document.getElementById("rTableRow");
+rtableBody.innerHTML = "";
 
 function loadReceivedOrders(orderList) {
 
@@ -399,11 +424,12 @@ function loadReceivedOrders(orderList) {
     document.getElementById("pendingOrderCount").innerHTML = orderList.length
 }
 
-function loadMessages(msgList) {
-    console.log(msgList)
 
-    let messageTableBody = document.getElementById("mTableBody");
-    let messageRow = document.getElementById("mTableRow");
+let messageTableBody = document.getElementById("mTableBody");
+let messageRow = document.getElementById("mTableRow");
+messageTableBody.innerHTML = "";
+
+function loadMessages(msgList) {
 
     messageTableBody.innerHTML = "";
 

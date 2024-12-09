@@ -46,7 +46,8 @@ public class LoadProduct extends HttpServlet {
         Status statusActive = (Status) statusCriteria.uniqueResult();
 
         Criteria productCriteria = hibernateSession.createCriteria(Product.class);
-
+        productCriteria.add(Restrictions.eq("status", statusActive));
+        
         //brand
         if (isBrandFound) {
             int brandId = Integer.parseInt((String) request.getAttribute("brandId"));
