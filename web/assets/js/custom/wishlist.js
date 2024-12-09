@@ -4,6 +4,10 @@ window.addEventListener("load", () => {
 
 })
 
+let parent = document.getElementById("productContainer");
+let productElement = document.getElementById("productElement");
+parent.innerHTML = "";
+
 const arr = [];
 var isProductFirstTime = true;
 const productArr = [];
@@ -16,11 +20,6 @@ const loadWishlist = async () => {
         if (data.success) {
 
             const productData = data.data;
-
-            let parent = document.getElementById("productContainer");
-            let productElement = document.getElementById("productElement");
-                    parent.innerHTML = "";
-
             for (var i = 1; i <= productData.length; i++) {
 
                 let product = productData[i - 1];
@@ -116,11 +115,13 @@ const loadWishlist = async () => {
 
             loadCart()
 
-        } else {
+        } else if(data.data == "Please LogIn First") {
+            window.location.href = "sign-in.html";
+        }else{
             Notification().error({
                 message: data.data
             })
-            window.history.back()
+            // window.history.back()
         }
     } else {
         new Notification().error({

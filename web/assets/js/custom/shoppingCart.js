@@ -47,7 +47,6 @@ const loadCartData = async () => {
         console.log(data);
 
         let columnNames = document.getElementById("columnName");
-        let cartListParent = document.getElementById("tableRowParent");
         cartListElement = document.getElementById("cle");
 
         let cartProductTotal = 0;
