@@ -206,9 +206,11 @@ var productArr = [];
 var productCount = 30;
 var isFilterArrFirstTime = true;
 
+const loadToAndPageCount = 5;
+
 var loadFrom = 0
-var loadTo = 2
-var allProductCount = 0;
+var loadTo = loadToAndPageCount
+// var allProductCount = 0;
 
 var parent = document.getElementById("productContainer");
 var productElement = document.getElementById("productElement");
@@ -226,7 +228,8 @@ const loadProduct = async () => {
         if (data.success) {
 
             const productData = data.data.productList;
-            allProductCount = data.data.allProductCount;
+            // allProductCount = data.data.allProductCount;
+            // console.log(allProductCount)
             parent.innerHTML = "";
             productArr = []
 
@@ -337,7 +340,7 @@ const loadProduct = async () => {
                 isFiltertFirstTime = false;
             }
 
-            pagination()
+            pagination(data.data.allProductCount)
             loadCart()
 
         } else {
@@ -372,7 +375,12 @@ function loadProductCards() {
             let element = productElement.cloneNode(true);
             element.querySelector(".productName").innerHTML = product.name;
             element.querySelector(".productName").href = "product-detail.html?product=" + product.id;
-            element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
+            element.querySelector(".productPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                "en-US",
+                {
+                    minimumFractionDigits: 2
+                }
+            ).format(product.unit_price);
             element.querySelector(".productElementATag").addEventListener("click", (e) => {
                 e.preventDefault();
                 loadQuickView(product.id);
@@ -404,7 +412,12 @@ const loadQuickView = (productId) => {
             addToCartProductId = productId;
 
             document.getElementById("modelProductName").innerHTML = productObject.name;
-            document.getElementById("modelProductPrice").innerHTML = productObject.unit_price;
+            document.getElementById("modelProductPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                "en-US",
+                {
+                    minimumFractionDigits: 2
+                }
+            ).format(productObject.unit_price);
             document.getElementById("modelProductDesc").innerHTML = productObject.description;
             document.getElementById("modelProductSize").innerHTML = productObject.size.size;
             document.getElementById("modelProductColor").innerHTML = productObject.product_color.color;
@@ -555,10 +568,11 @@ var pgChild = document.getElementById("pgChild");
 var isNextFirstLoad = true;
 var isPrevFirstLoad = true;
 
-function pagination() {
+function pagination(availableProductCount) {
 
-    let availableProductCount = allProductCount;
-    let productsPerPage = 10;
+    // let availableProductCount = allProductCount;
+    // console.log(availableProductCount)
+    let productsPerPage = loadToAndPageCount;
 
     let pages = Math.ceil(availableProductCount / productsPerPage);
 

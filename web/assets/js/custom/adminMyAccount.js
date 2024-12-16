@@ -1,7 +1,5 @@
 window.addEventListener("load", () => {
-
     loadData()
-
 })
 
 var colorArr;
@@ -44,6 +42,7 @@ async function loadData() {
                 let element = messageRow.cloneNode(true);
 
                 element.removeAttribute("id");
+                element.setAttribute("id", "msgRowId"+message.id);
                 element.querySelector(".msgCount").innerHTML = count;
                 element.querySelector(".mssageTitle").innerHTML = message.title;
                 element.querySelector(".mssageText").innerHTML = message.message;
@@ -56,6 +55,7 @@ async function loadData() {
 
                 count++;
             });
+            document.getElementById("messageCount").innerHTML = messageArr.length
 
         } else {
             Notification().error({
@@ -213,9 +213,13 @@ async function sendReply() {
             const data = await response.json();
             if (data.success) {
 
+
+                document.getElementById("tableBody").removeChild(document.getElementById("msgRowId"+msgId));
+
                 popup.success({
                     message: "Reply Send Successfully"
                 })
+
 
             } else {
                 popup.error({

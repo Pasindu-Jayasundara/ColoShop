@@ -35,6 +35,7 @@ public class ReplyToUserMessage extends HttpServlet {
         AdminDetailTable admin = (AdminDetailTable) request.getSession().getAttribute("admin");
         
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        hibernateSession.clear();
         Message message = (Message) hibernateSession.load(Message.class, messageId);
         if(message!=null){
             //found message

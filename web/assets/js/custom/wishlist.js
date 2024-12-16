@@ -12,7 +12,7 @@ const arr = [];
 var isProductFirstTime = true;
 const productArr = [];
 const loadWishlist = async () => {
-
+    parent.innerHTML = "";
     const response = await fetch("LoadWishlist");
     if (response.ok) {
 
@@ -35,7 +35,12 @@ const loadWishlist = async () => {
                 //get product element
                 let element = productElement.cloneNode(true);
                 element.querySelector(".productName").innerHTML = product.product.name;
-                element.querySelector(".productPrice").innerHTML = "Rs. " + product.product.unit_price;
+                element.querySelector(".productPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2
+                    }
+                ).format(product.product.unit_price);
 
                 const trimmedPath = product.product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
                 element.querySelector(".pimg").src = trimmedPath;
@@ -109,9 +114,9 @@ const loadWishlist = async () => {
                 });
             });
 
-            document.getElementById("modelAddToCart").addEventListener("click", () => {
-                addToCart();
-            });
+            // document.getElementById("modelAddToCart").addEventListener("click", () => {
+            //     addToCart();
+            // });
 
             loadCart()
 

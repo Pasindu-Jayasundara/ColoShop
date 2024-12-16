@@ -37,7 +37,7 @@ public class RegisterToNewsletterFilter implements Filter {
         } else {
             String email = fromJson.get("email").getAsString();
 
-            if (!email.isBlank()) {
+            if (!email.isEmpty()) {
                 if (Validation.isValidEmail(email)) {
 
                     if (email.length() <= 60) {

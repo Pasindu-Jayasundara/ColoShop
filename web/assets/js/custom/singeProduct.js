@@ -38,7 +38,12 @@ const loadSingleProduct = async (productId) => {
 
         pId = data.id;
         document.getElementById("productName").innerHTML = data.name;
-        document.getElementById("productPrice").innerHTML = "Price : Rs. " + data.unit_price;
+        document.getElementById("productPrice").innerHTML = "Price : Rs. " + new Intl.NumberFormat(
+            "en-US",
+            {
+                minimumFractionDigits: 2
+            }
+        ).format(data.unit_price);
         document.getElementById("productDesc").innerHTML = data.description;
         document.getElementById("productSize").innerHTML = "Size :" + data.size.size;
         document.getElementById("productColor").innerHTML = "Color :" + data.product_color.color;
@@ -117,10 +122,13 @@ const loadReview = async (productId) => {
 
     if (response.ok) {
 
+        console.log("Review Loaded")
         let jsonData = await response.json();
         if (jsonData.success) {
 
+            console.log(jsonData)
             let data = jsonData.data;
+
 
             if (data.length > 0) {
 
@@ -148,6 +156,8 @@ const loadReview = async (productId) => {
 
             reviewParent.appendChild(newReview)
 
+        }else{
+            console.log(jsonData)
         }
     }
 
@@ -228,7 +238,12 @@ const loadSimilarProducts = async () => {
             let element = productElementS.cloneNode(true);
             element.querySelector(".productName").innerHTML = product.name;
             element.querySelector(".productName").href = "product-detail.html?product=" + product.id;
-            element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
+            element.querySelector(".productPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                "en-US",
+                {
+                    minimumFractionDigits: 2
+                }
+            ).format(product.unit_price);
             element.querySelector(".productElementATag").addEventListener("click", (e) => {
                 e.preventDefault();
                 loadQuickView(product.id);
@@ -306,7 +321,12 @@ const loadQuickView = (productId) => {
         if (productObject.id == productId) {
 
             document.getElementById("modelProductName").innerHTML = productObject.name;
-            document.getElementById("modelProductPrice").innerHTML = productObject.unit_price;
+            document.getElementById("modelProductPrice").innerHTML = "Rs. "+ new Intl.NumberFormat(
+                "en-US",
+                {
+                    minimumFractionDigits: 2
+                }
+            ).format(productObject.unit_price);
             document.getElementById("modelProductDesc").innerHTML = productObject.description;
             document.getElementById("modelProductSize").innerHTML = productObject.size.size;
             document.getElementById("modelProductColor").innerHTML = productObject.product_color.color;
@@ -473,12 +493,19 @@ async function addNewReview() {
                     message: data.data
                 })
 
-                loadReview()
+                document.getElementById("reviewtxt").value = ""
+                loadReview(productId)
 
             } else {
-                Notification().error({
-                    message: data.data
-                })
+                if(data.data == "You Need To Buy This Product First" || data.data == "You Need To Order This Product First"){
+                    Notification().info({
+                        message: data.data
+                    })
+                }else{
+                    Notification().error({
+                        message: data.data
+                    })
+                }
             }
 
 

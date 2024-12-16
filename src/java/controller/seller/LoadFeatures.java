@@ -38,6 +38,7 @@ public class LoadFeatures extends HttpServlet {
 
         Gson gson = new Gson();
         Session hiberSession = HibernateUtil.getSessionFactory().openSession();
+        hiberSession.clear();
 
         Criteria statusCriteria = hiberSession.createCriteria(Status.class);
         statusCriteria.add(Restrictions.eq("name", "Active"));
@@ -102,7 +103,6 @@ public class LoadFeatures extends HttpServlet {
                         Restrictions.eq("status", status)
                 ));
                 productList = productCriteria.list();
-
                 for (Product product : productList) {
                     product.setSeller(null);
                 }

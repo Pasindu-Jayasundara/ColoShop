@@ -4,6 +4,20 @@ window.addEventListener("load", () => {
 
 })
 
+function clearFormFields() {
+    document.getElementById("inputEmail4").value = "";
+    document.getElementById("inputAddress").value = "";
+    document.getElementById("inputAddress2").value = "";
+    document.getElementById("size").value = "";
+    document.getElementById("color").value = "";
+    document.getElementById("category").value = "";
+    document.getElementById("inputPassword4").value = "";
+    document.getElementById("brand").value = "";
+    document.getElementById("img1").value = "";
+    document.getElementById("img2").value = "";
+    document.getElementById("img3").value = "";
+}
+
 async function addNewProduct() {
     const formData = new FormData();
 
@@ -30,6 +44,9 @@ async function addNewProduct() {
             Notification().success({
                 message: jsonData.data
             })
+            clearFormFields()
+            document.getElementById("totalProductCount").innerHTML = parseInt(document.getElementById("totalProductCount").innerHTML) + 1
+
         } else {
             Notification().error({
                 message: jsonData.data
@@ -82,6 +99,7 @@ async function loadData() {
 
             document.getElementById("userName").innerHTML = userName;
 
+            console.log(json.data)
             orderList = json.data.orderList;
             if (isBuyer) {
                 document.getElementById("accountType").innerHTML = "Buyer";
@@ -95,6 +113,7 @@ async function loadData() {
                 document.getElementById("msg").style.display = "none";
 
                 loadPurchasedOrders(orderList)
+                console.log("1: "+orderList)
 
             } else if (isSeller) {
 
@@ -104,6 +123,7 @@ async function loadData() {
 
                 loadReceivedOrders(orderList)
 
+                console.log("2 :"+orderList)
             }
 
             switchbtn = document.getElementById("switch").innerHTML
@@ -694,6 +714,8 @@ async function logOut() {
 
         const data = await response.json();
         if (data.success) {
+
+            localStorage.removeItem("user");
 
             window.location = "sign-in.html";
 

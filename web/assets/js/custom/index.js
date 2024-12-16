@@ -87,7 +87,12 @@ const loadProduct = async () => {
                 let element = productElement.cloneNode(true);
                 element.querySelector(".productName").innerHTML = product.name;
                 element.querySelector(".productName").href = "product-detail.html?product=" + product.id;
-                element.querySelector(".productPrice").innerHTML = "Rs. " + product.unit_price;
+                element.querySelector(".productPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2
+                    }
+                ).format(product.unit_price);
 
                 let trimmedPath = product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
                 element.querySelector(".pImg").src = trimmedPath;
@@ -180,7 +185,12 @@ const loadQuickView = (productId) => {
         if (productObject.id == productId) {
 
             document.getElementById("modelProductName").innerHTML = productObject.name;
-            document.getElementById("modelProductPrice").innerHTML = productObject.unit_price;
+            document.getElementById("modelProductPrice").innerHTML = "Rs. "+new Intl.NumberFormat(
+                "en-US",
+                {
+                    minimumFractionDigits: 2
+                }
+            ).format(productObject.unit_price);
             document.getElementById("modelProductDesc").innerHTML = productObject.description;
             document.getElementById("modelProductSize").innerHTML = productObject.size.size;
             document.getElementById("modelProductColor").innerHTML = productObject.product_color.color;

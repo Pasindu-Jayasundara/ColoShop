@@ -52,7 +52,7 @@ public class AddNewProductFilter implements Filter {
 
         if (httpServletRequest.getSession().getAttribute("user") == null) {
             isInvalid = true;
-            message = "Please Logedin First";
+            message = "Please Login First";
 
         } else 
             if (name.trim().equals("")) {

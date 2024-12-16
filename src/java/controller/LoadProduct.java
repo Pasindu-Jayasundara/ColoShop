@@ -148,6 +148,7 @@ public class LoadProduct extends HttpServlet {
 
 //        productCriteria.setFirstResult(from);
 //        productCriteria.setMaxResults(to);
+        
         int allProductCount = 0;
         List<Product> productList1 = productCriteria.list();
         ArrayList<Product> productList = new ArrayList<>();

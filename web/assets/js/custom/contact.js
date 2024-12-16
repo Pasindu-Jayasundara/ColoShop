@@ -4,21 +4,23 @@ window.addEventListener("load",()=>{
 async function sendMessage() {
 
     let titleM = document.getElementById("title").value
-    let msgM = document.getElementById("txt").value
+    let msgM = document.getElementById("msg").value
 
     if (titleM.trim() == "") {
-
-        new Notification().error({
+        Notification().error({
             message: "Missing Title"
         })
 
     } else if (msgM.trim() == "") {
 
-        new Notification().error({
+        Notification().error({
             message: "Missing Message"
         })
 
     } else {
+        Notification().info({
+            message: "Sending Message ..."
+        })
 
         const response = await fetch("UserContactMessage", {
             method: "POST",
@@ -34,7 +36,11 @@ async function sendMessage() {
         if (response.ok) {
             const jsonData = await response.json();
             if (jsonData.success) {
-                new Notification().success({
+
+                document.getElementById("title").value = ""
+                document.getElementById("msg").value = ""
+                
+                Notification().success({
                     message: jsonData.data
                 })
             } else {
@@ -44,7 +50,7 @@ async function sendMessage() {
             }
             console.log(jsonData);
         } else {
-            new Notification().error({
+            Notification().error({
                 message: "Please Try Again Later"
             })
             console.error(response.statusText);

@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   CONSTRAINT `fk_admin_verified_status1` FOREIGN KEY (`verified_status_id`) REFERENCES `verified_status` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.admin: ~1 rows (approximately)
+-- Dumping data for table colo-shop.admin: ~0 rows (approximately)
 INSERT INTO `admin` (`id`, `first_name`, `last_name`, `email`, `password`, `token`, `status_id`, `verified_status_id`) VALUES
 	(1, 'Pasindu', 'Bhathiya', 'p@gmail.com', 'Pasindu328@', NULL, 1, 1);
 
@@ -91,13 +91,15 @@ CREATE TABLE IF NOT EXISTS `cart` (
   KEY `fk_cart_product1_idx` (`product_id`),
   CONSTRAINT `fk_cart_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_cart_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.cart: ~3 rows (approximately)
+-- Dumping data for table colo-shop.cart: ~5 rows (approximately)
 INSERT INTO `cart` (`id`, `user_id`, `product_id`) VALUES
-	(1, 8, 2),
-	(2, 8, 7),
-	(3, 8, 8);
+	(1, 2, 8),
+	(2, 2, 13),
+	(3, 2, 6),
+	(4, 2, 15),
+	(5, 2, 8);
 
 -- Dumping structure for table colo-shop.category
 CREATE TABLE IF NOT EXISTS `category` (
@@ -132,12 +134,9 @@ CREATE TABLE IF NOT EXISTS `message` (
   CONSTRAINT `fk_message_admin1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`),
   CONSTRAINT `fk_message_message_status1` FOREIGN KEY (`message_status_id`) REFERENCES `message_status` (`id`),
   CONSTRAINT `fk_message_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.message: ~2 rows (approximately)
-INSERT INTO `message` (`id`, `message`, `title`, `datetime`, `message_status_id`, `user_id`, `admin_id`) VALUES
-	(1, 'aaaaaaaa', 'cccccccccccc', '2024-09-25 11:28:30', 3, 6, 1),
-	(2, 'bbbbbbbb', 'gggg', '2024-09-25 11:28:55', 2, 1, NULL);
+-- Dumping data for table colo-shop.message: ~0 rows (approximately)
 
 -- Dumping structure for table colo-shop.message_status
 CREATE TABLE IF NOT EXISTS `message_status` (
@@ -146,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `message_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.message_status: ~3 rows (approximately)
+-- Dumping data for table colo-shop.message_status: ~2 rows (approximately)
 INSERT INTO `message_status` (`id`, `status`) VALUES
 	(1, 'Received'),
 	(2, 'Read'),
@@ -171,12 +170,9 @@ CREATE TABLE IF NOT EXISTS `message_to_seller` (
   CONSTRAINT `fk_message_to_seller_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_seller_has_user_seller1` FOREIGN KEY (`seller_id`) REFERENCES `seller` (`id`),
   CONSTRAINT `fk_seller_has_user_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.message_to_seller: ~2 rows (approximately)
-INSERT INTO `message_to_seller` (`id`, `message`, `seller_id`, `user_id`, `datetime`, `message_status_id`, `product_id`, `reply`) VALUES
-	(1, 'hiii', 2, 1, '2024-09-26 11:10:00', 3, 3, 'hi'),
-	(2, 's', 2, 6, '2024-12-09 16:36:08', 3, 7, 'kjndskjdnfsjdfn sdlkcsjndlfjsd');
+-- Dumping data for table colo-shop.message_to_seller: ~0 rows (approximately)
 
 -- Dumping structure for table colo-shop.newsletter
 CREATE TABLE IF NOT EXISTS `newsletter` (
@@ -204,12 +200,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `fk_order_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.orders: ~4 rows (approximately)
+-- Dumping data for table colo-shop.orders: ~3 rows (approximately)
 INSERT INTO `orders` (`id`, `datetime`, `total_amount`, `delivery_date`, `address`, `text`, `user_id`, `order_status_id`) VALUES
-	(1, '2024-09-25 23:40:00', 50, '2030-09-25', 'edse', NULL, 8, 3),
-	(2, '2024-09-25 23:40:47', 2, '2024-10-03', '222', NULL, 8, 4),
-	(3, '2024-09-25 23:41:13', 222, '2024-09-28', 'eewrf', NULL, 8, 3),
-	(1021436697, '2024-09-29 13:54:50', 0, '2024-09-29', '70/1/3,george r De Silva Mawath, Police quarters ,colombo 13', 'ijfhfgdsf', 8, 1);
+	(-831328152, '2024-12-16 13:21:00', 0, '2024-12-16', '70/1/3,george r De Silva Mawath, Police quarters ,colombo 13', '', 2, 4),
+	(-808691008, '2024-12-16 19:38:17', 0, '2024-12-16', '70/1/3,george r De Silva Mawath, Police quarters ,colombo 13', '', 2, 4),
+	(-808675336, '2024-12-16 19:38:32', 0, '2024-12-16', '70/1/3,george r De Silva Mawath, Police quarters ,colombo 13', '', 2, 4);
 
 -- Dumping structure for table colo-shop.order_item
 CREATE TABLE IF NOT EXISTS `order_item` (
@@ -222,15 +217,14 @@ CREATE TABLE IF NOT EXISTS `order_item` (
   KEY `orders_id` (`orders_id`),
   CONSTRAINT `FK_order_item_orders` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `fk_order_item_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.order_item: ~5 rows (approximately)
+-- Dumping data for table colo-shop.order_item: ~4 rows (approximately)
 INSERT INTO `order_item` (`id`, `qty`, `product_id`, `orders_id`) VALUES
-	(1, 3, 8, 2),
-	(2, 4, 2, 2),
-	(3, 52, 3, 2),
-	(4, 325, 5, 2),
-	(5, 1, 2, 1021436697);
+	(1, 3, 8, -831328152),
+	(2, 1, 8, -808691008),
+	(3, 1, 8, -808675336),
+	(4, 1, 15, -808675336);
 
 -- Dumping structure for table colo-shop.order_status
 CREATE TABLE IF NOT EXISTS `order_status` (
@@ -239,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `order_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.order_status: ~4 rows (approximately)
+-- Dumping data for table colo-shop.order_status: ~2 rows (approximately)
 INSERT INTO `order_status` (`id`, `status`) VALUES
 	(1, 'Paid'),
 	(2, 'Shipped'),
@@ -277,18 +271,30 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `fk_product_seller1` FOREIGN KEY (`seller_id`) REFERENCES `seller` (`id`),
   CONSTRAINT `fk_product_size1` FOREIGN KEY (`size_id`) REFERENCES `size` (`id`),
   CONSTRAINT `fk_product_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.product: ~8 rows (approximately)
+-- Dumping data for table colo-shop.product: ~20 rows (approximately)
 INSERT INTO `product` (`id`, `name`, `description`, `unit_price`, `added`, `img1`, `img2`, `img3`, `delivery_fee`, `sold_count`, `status_id`, `product_color_id`, `size_id`, `brand_id`, `seller_id`, `category_id`) VALUES
-	(1, 'sdcdc', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 4),
-	(2, 'dfgbf', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 2),
-	(3, 'fbfd', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 4),
-	(4, 'zdsdcc', 'sxsx', 515, '2024-09-13 09:13:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 3, 5, 2, 3),
-	(5, 'ABCD', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc ddddddddddd', 203, '2024-09-25 23:34:59', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 503, 0, 2, 3, 3, 13, 2, 3),
-	(6, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:14:48', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 2, 14, 2, 2),
-	(7, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:18:03', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 2, 14, 2, 2),
-	(8, 'ABC', 'khsnf lsdblndc lsdjdnclsjkdncl  lsddj ncsdlnc', 20, '2024-09-25 18:18:53', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1727268532460\\image1.png', 50, 0, 2, 1, 2, 14, 2, 1);
+	(1, 'GAP Baby Organic Cotton Onesie', 'This ultra-soft onesie is made from 100% organic cotton, ensuring maximum comfort and safety for your babyâs delicate skin. Features a snap closure for easy changes.', 3000, '2024-12-14 22:15:39', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734194739055\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734194739055\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734194739055\\image3.png', 0, 0, 1, 2, 3, 8, 1, 4),
+	(2, 'Champion Kids\' Hoodie', 'Keep the little ones warm and comfortable with this fleece-lined hoodie, featuring Championâs iconic logo and ribbed cuffs for a snug fit.', 4250, '2024-12-14 23:01:46', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734197505678\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734197505678\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734197505678\\image3.png', 300, 0, 1, 1, 3, 12, 1, 3),
+	(3, 'Everlane Women\'s Wide-Leg Pants', 'Crafted from organic cotton, these wide-leg pants are versatile and stylish. Pair them with sneakers or boots for a polished yet comfortable look.', 5000, '2024-12-14 23:14:25', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734198265313\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734198265313\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734198265313\\image3.png', 0, 0, 1, 2, 4, 5, 1, 1),
+	(4, 'Men\'s Down Sweater Jacket', 'Lightweight yet warm, this jacket is made with 100% recycled polyester and features 800-fill-power goose down insulation, perfect for winter adventures or casual outings.', 8000, '2024-12-14 23:16:58', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734198417816\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734198417816\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734198417816\\image3.png', 500, 0, 1, 3, 4, 4, 1, 2),
+	(5, 'Straight Fit Jeans', 'Durable and versatile, these jeans offer a timeless straight fit, perfect for casual and semi-formal wear.', 4850, '2024-12-14 23:49:44', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200384240\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200384240\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200384240\\image3.png', 800, 0, 1, 8, 3, 10, 1, 2),
+	(6, 'Graphic Tee', ' A soft cotton t-shirt featuring bold graphic prints and the Diesel logo for a chic and edgy look.', 1550, '2024-12-14 23:53:36', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200615747\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200615747\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200615747\\image3.png', 550, 0, 1, 8, 3, 9, 1, 1),
+	(7, 'Rain Jacket', 'Keep kids dry and happy in this waterproof, breathable rain jacket designed for outdoor adventures.', 3500, '2024-12-14 23:57:08', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200828237\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200828237\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200828237\\image3.png', 1000, 0, 1, 10, 2, 11, 1, 3),
+	(8, 'Sweatpants', 'Ultra-comfy fleece sweatpants with an adjustable drawstring waist and iconic Champion logo.', 1000, '2024-12-14 23:59:35', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200975236\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200975236\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734200975236\\image3.png', 500, 0, 1, 8, 3, 12, 1, 2),
+	(9, 'Sports Bra', 'This medium-support sports bra features breathable fabric and moisture-wicking technology for ultimate comfort during workouts.', 800, '2024-12-15 00:02:02', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201122034\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201122034\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201122034\\image3.png', 0, 0, 1, 2, 2, 15, 1, 1),
+	(10, ' Graphic Hoodie', 'Soft and stylish, this hoodie features playful graphics and GAP branding, perfect for everyday wear.', 4000, '2024-12-15 00:05:04', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201303755\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201303755\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201303755\\image3.png', 500, 0, 1, 1, 4, 8, 1, 3),
+	(11, ' Baby Organic Cotton Blanket', 'Wrap your baby in comfort with this super-soft organic cotton blanket, ideal for naps and cuddles.', 2500, '2024-12-15 00:10:31', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201631112\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201631112\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734201631112\\image3.png', 0, 0, 1, 9, 2, 2, 1, 4),
+	(12, 'Denim Jacket', 'This classic denim jacket features a slim fit, vintage wash, and iconic True Religion stitching.', 8000, '2024-12-15 00:16:48', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202007640\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202007640\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202007640\\image3.png', 0, 0, 1, 9, 3, 6, 1, 1),
+	(13, ' Surf Tee', 'A soft, lightweight surf tee made from 100% organic cotton, ideal for sunny beach days.', 5000, '2024-12-15 00:20:53', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202252950\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202252950\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202252950\\image3.png', 0, 0, 1, 2, 2, 2, 1, 2),
+	(14, ' Fleece Pullover', 'Cozy and warm, this fleece pullover is perfect for layering during chilly outdoor adventures.', 10000, '2024-12-15 00:23:12', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202391459\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202391459\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202391459\\image3.png', 250, 0, 1, 8, 5, 14, 1, 1),
+	(15, 'Puffer Vest', 'This lightweight, quilted puffer vest is water-resistant and ideal for layering over hoodies or sweaters.', 5000, '2024-12-15 00:25:27', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202526624\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202526624\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202526624\\image3.png', 0, 0, 1, 1, 4, 8, 1, 3),
+	(16, 'Knit Sweater', 'This adorable knit sweater is made from organic cotton and designed for all-day comfort and warmth.', 600, '2024-12-15 00:28:28', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202707953\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202707953\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202707953\\image3.png', 0, 0, 1, 2, 3, 5, 1, 4),
+	(17, ' Cargo Shorts', 'These durable cargo shorts are perfect for outdoor adventures, featuring multiple pockets for convenience.', 1200, '2024-12-15 00:30:44', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202843835\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202843835\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734202843835\\image3.png', 0, 0, 1, 8, 3, 7, 1, 2),
+	(18, 'Knit Cardigan', 'This lightweight, open-front cardigan is perfect for layering over casual or formal outfits.', 1250, '2024-12-15 00:35:00', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203099647\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203099647\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203099647\\image3.png', 0, 0, 1, 2, 3, 8, 1, 1),
+	(19, 'Tracksuit', 'Adorable two-piece tracksuit with a zip-up hoodie and matching pants, made from soft, breathable fabric.', 900, '2024-12-15 00:41:03', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203462828\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203462828\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203462828\\image3.png', 50, 0, 1, 9, 3, 15, 1, 4),
+	(20, 'Slim Fit Jeans', 'Stylish slim-fit jeans designed for comfort and durability, perfect for casual or semi-formal wear.', 2100, '2024-12-15 00:43:33', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203613337\\image1.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203613337\\image2.png', 'F:\\pasindu\\Git\\project\\ColoShop\\web\\product-images\\1734203613337\\image3.png', 250, 0, 1, 8, 4, 10, 1, 2);
 
 -- Dumping structure for table colo-shop.product_color
 CREATE TABLE IF NOT EXISTS `product_color` (
@@ -298,9 +304,9 @@ CREATE TABLE IF NOT EXISTS `product_color` (
   PRIMARY KEY (`id`),
   KEY `fk_product_color_status1_idx` (`status_id`),
   CONSTRAINT `fk_product_color_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.product_color: ~7 rows (approximately)
+-- Dumping data for table colo-shop.product_color: ~9 rows (approximately)
 INSERT INTO `product_color` (`id`, `color`, `status_id`) VALUES
 	(1, 'Red', 1),
 	(2, 'White', 1),
@@ -308,7 +314,10 @@ INSERT INTO `product_color` (`id`, `color`, `status_id`) VALUES
 	(4, 'Brown', 1),
 	(5, 'Ash', 1),
 	(6, 'Silver', 1),
-	(7, 'Gen', 2);
+	(7, 'Gen', 2),
+	(8, 'Black', 1),
+	(9, 'Blue', 1),
+	(10, 'Navy Blue', 1);
 
 -- Dumping structure for table colo-shop.reply
 CREATE TABLE IF NOT EXISTS `reply` (
@@ -322,11 +331,9 @@ CREATE TABLE IF NOT EXISTS `reply` (
   KEY `fk_reply_admin1_idx` (`admin_id`),
   CONSTRAINT `fk_reply_admin1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`),
   CONSTRAINT `fk_reply_message1` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Dumping data for table colo-shop.reply: ~0 rows (approximately)
-INSERT INTO `reply` (`id`, `datetime`, `reply`, `message_id`, `admin_id`) VALUES
-	(1, '2024-09-25 12:06:10', 'kljhgfd', 1, 1);
 
 -- Dumping structure for table colo-shop.review
 CREATE TABLE IF NOT EXISTS `review` (
@@ -340,13 +347,9 @@ CREATE TABLE IF NOT EXISTS `review` (
   KEY `fk_review_product1_idx` (`product_id`),
   CONSTRAINT `fk_review_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_review_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.review: ~2 rows (approximately)
-INSERT INTO `review` (`id`, `review`, `datetime`, `user_id`, `product_id`) VALUES
-	(2, 'efcsfrfvfvfvgfvgfgvfvfvfdv', '2024-09-27 17:47:52', 1, 5),
-	(3, 'f;kd;fmckdsfmv;df vldo;fnvpkdmfv', '2024-09-27 17:48:09', 8, 8),
-	(5, 'dcsdsd', '2024-09-28 10:21:40', 8, 5);
+-- Dumping data for table colo-shop.review: ~1 rows (approximately)
 
 -- Dumping structure for table colo-shop.seller
 CREATE TABLE IF NOT EXISTS `seller` (
@@ -358,12 +361,11 @@ CREATE TABLE IF NOT EXISTS `seller` (
   KEY `fk_seller_status1_idx` (`status_id`),
   CONSTRAINT `fk_seller_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`),
   CONSTRAINT `fk_seller_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.seller: ~2 rows (approximately)
+-- Dumping data for table colo-shop.seller: ~0 rows (approximately)
 INSERT INTO `seller` (`id`, `user_id`, `status_id`) VALUES
-	(1, 1, 1),
-	(2, 8, 1);
+	(1, 1, 1);
 
 -- Dumping structure for table colo-shop.size
 CREATE TABLE IF NOT EXISTS `size` (
@@ -392,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.status: ~4 rows (approximately)
+-- Dumping data for table colo-shop.status: ~3 rows (approximately)
 INSERT INTO `status` (`id`, `name`) VALUES
 	(1, 'Active'),
 	(2, 'De-Active'),
@@ -417,15 +419,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT `fk_user_account_type1` FOREIGN KEY (`account_type_id`) REFERENCES `account_type` (`id`),
   CONSTRAINT `fk_user_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`),
   CONSTRAINT `fk_user_verified_status1` FOREIGN KEY (`verified_status_id`) REFERENCES `verified_status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.user: ~5 rows (approximately)
+-- Dumping data for table colo-shop.user: ~2 rows (approximately)
 INSERT INTO `user` (`id`, `first_name`, `last_name`, `email`, `password`, `token`, `account_type_id`, `status_id`, `verified_status_id`) VALUES
-	(1, 'Kamal', 'Anura', 'p@gmail.com', '123', '1', 3, 1, 1),
-	(5, 'Pasindu', 'Bathiya', 'pasindubathiya28@gmail.com', 'Pasindu328@', '7071a8bb', 3, 1, 2),
-	(6, 'Jayasundara', 'Jayasundara', 'pasindubathiyl28@gmail.com', 'Pasindu328@', 'deb9c5f9', 3, 1, 2),
-	(7, 'Jayasundara', 'Jayasundara', 'pasindubathiyql28@gmail.com', 'Pasindu328@', '31c6af16', 3, 1, 2),
-	(8, 'Jayasundara', 'Jayasundara', 'pasindubathiya2d8@gmail.com', 'Pasindu328@', '945837a7', 2, 1, 1);
+	(1, 'Pasindu', 'Jayasundara', 'pasindubathiya28@gmail.com', 'Pasindu328@Bhathiya', '760b2368', 3, 1, 1),
+	(2, 'Jayasundara', 'Jayasundara', 'pasindujayasundara28@gmail.com', 'Pasindu328@', '14262ce2', 2, 1, 1);
 
 -- Dumping structure for table colo-shop.verified_status
 CREATE TABLE IF NOT EXISTS `verified_status` (
@@ -449,13 +448,11 @@ CREATE TABLE IF NOT EXISTS `wishlist` (
   KEY `fk_wishlist_product1_idx` (`product_id`),
   CONSTRAINT `fk_wishlist_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_wishlist_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Dumping data for table colo-shop.wishlist: ~2 rows (approximately)
+-- Dumping data for table colo-shop.wishlist: ~1 rows (approximately)
 INSERT INTO `wishlist` (`id`, `user_id`, `product_id`) VALUES
-	(6, 8, 6),
-	(7, 8, 4),
-	(8, 8, 1);
+	(4, 2, 13);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -21,7 +21,7 @@ const verifyAccount = async() => {
         console.log(json);
 
         if (json.success) {
-            window.location = "index.html";
+            window.location = "sign-in.html";
         } else {
             Notification().error({
                 message:data.data

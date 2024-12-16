@@ -6,6 +6,9 @@ async function addtoNewsL() {
             message: "Missing Email Address"
         })
     }else{
+        Notification().info({
+            message: "Please Wait.."
+        })
 
         const data = {
             "email":emailAdd
@@ -27,6 +30,8 @@ async function addtoNewsL() {
                 Notification().success({
                     message: data.data
                 })
+
+                document.getElementById("nEmail").value=""
 
             }else{
                 Notification().error({

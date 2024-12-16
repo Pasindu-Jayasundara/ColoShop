@@ -30,6 +30,7 @@ public class LoadReview extends HttpServlet {
         int productId = (int) request.getAttribute("id");
 
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        hibernateSession.clear();
         Product product = (Product) hibernateSession.get(Product.class, productId);
 
         //review for this product

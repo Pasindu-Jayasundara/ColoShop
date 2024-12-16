@@ -29,8 +29,12 @@ const loadCart = async () => {
                     trimmedPath = productObj.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
 
                     element.querySelector(".cartProductName").innerHTML = productObj.name;
-                    element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + productObj.unit_price;
-
+                    element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                        "en-US",
+                        {
+                            minimumFractionDigits: 2
+                        }
+                    ).format(productObj.unit_price);
                     cartProductTotal += productObj.unit_price;
 
                 } else if (isLoggedIn) {
@@ -38,7 +42,12 @@ const loadCart = async () => {
                     trimmedPath = productObj.product.img1.replace("F:\\pasindu\\Git\\project\\ColoShop\\web\\", "");
 
                     element.querySelector(".cartProductName").innerHTML = productObj.product.name;
-                    element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + productObj.product.unit_price;
+                    element.querySelector(".cartProductUnitPrice").innerHTML = "Rs. " + new Intl.NumberFormat(
+                        "en-US",
+                        {
+                            minimumFractionDigits: 2
+                        }
+                    ).format(productObj.product.unit_price);
 
                     cartProductTotal += productObj.product.unit_price;
 
@@ -51,7 +60,12 @@ const loadCart = async () => {
 
             });
 
-            document.getElementById("cartProductTotal").innerHTML = "Total: " + cartProductTotal;
+            document.getElementById("cartProductTotal").innerHTML = "Total: Rs. " + new Intl.NumberFormat(
+                "en-US",
+                {
+                    minimumFractionDigits: 2
+                }
+            ).format(cartProductTotal);
             document.querySelectorAll(".cartProductCount").forEach(el => {
 
                 el.removeAttribute("data-notify")

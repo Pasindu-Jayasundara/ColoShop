@@ -48,8 +48,8 @@ public class MessageToAdminFilter implements Filter {
 
             if (httpServletRequest.getSession().getAttribute("user") != null) {
 
-                if (!title.isBlank()) {
-                    if (!msg.isBlank()) {
+                if (!title.isEmpty()) {
+                    if (!msg.isEmpty()) {
                         if (title.length() <= 45) {
 
                             request.setAttribute("title", title);
