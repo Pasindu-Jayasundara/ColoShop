@@ -75,6 +75,7 @@ async function loadData() {
     if (response.ok) {
 
         const json = await response.json();
+        console.log(json)
 
         if (json.success) {
 
@@ -132,11 +133,16 @@ async function loadData() {
             loadSelectOptions("size", sizeList, ["size"]);
             loadSelectOptions("color", colorList, ["color"]);
             loadSelectOptions("brand", brandList, ["brand"]);
+
+            document.getElementById("msgS").classList.add("visible-false")
         } else {
             Notification().error({
                 message: json.data
             })
-            window.location.href = "sign-in.html"
+            if(json.data=="Please logIn First"){
+                sessionStorage.removeItem("user")
+                window.location.href = "sign-in.html"
+            }
         }
 
     } else {
@@ -424,6 +430,8 @@ function loadReceivedOrders(orderList) {
             element.querySelector(".rStatusBth").setAttribute("id", "r" + arrElement.orders.id);
             element.querySelector(".rStatusBth").addEventListener("click", () => {
                 changeOrderStatus(arrElement.orders.id)
+                // alert(arrElement.orders.id)
+                // console.log(arrElement.orders.id)
             })
 
             //qty
@@ -715,7 +723,7 @@ async function logOut() {
         const data = await response.json();
         if (data.success) {
 
-            localStorage.removeItem("user");
+            sessionStorage.removeItem("user");
 
             window.location = "sign-in.html";
 

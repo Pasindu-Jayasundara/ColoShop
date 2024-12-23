@@ -47,6 +47,10 @@ async function sendMessage() {
                 new Notification().error({
                     message: jsonData.data
                 })
+                if(jsonData.data=="Please LogIn First"){
+                    sessionStorage.setItem("redirect",true)
+                    window.location.href = "sign-in.html";
+                }
             }
             console.log(jsonData);
         } else {

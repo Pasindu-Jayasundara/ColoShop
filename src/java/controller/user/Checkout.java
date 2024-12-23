@@ -49,7 +49,7 @@ public class Checkout extends HttpServlet {
             }
 
             String servletPath = "/ColoShop/VerifyPayment";
-            String notifyUrl = "https://c50e-2407-c00-4004-60d0-5517-5ef0-5a68-f138.ngrok-free.app" + servletPath;
+            String notifyUrl = "https://redbird-suitable-conversely.ngrok-free.app" + servletPath;
             String merchantId = "1228237";
             String orderId = String.valueOf((int) System.currentTimeMillis());
             String amount = new DecimalFormat("0.00").format(totalPrice);
@@ -97,6 +97,7 @@ public class Checkout extends HttpServlet {
             order.setText(text);
             order.setUser(user);
             order.setOrder_status(status);
+            order.setTotal_amount(totalPrice);
 
             hibernateSession.save(order);
 

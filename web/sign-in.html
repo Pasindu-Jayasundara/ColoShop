@@ -7,9 +7,13 @@
         <title>User Login</title>
 
         <script>
-            if(localStorage.getItem('user') != null){
-                window.location.href = 'my-account.html';
+            async function checkLogin(){
+                let user = await sessionStorage.getItem('user')
+                if(user !=null){
+                    window.location.href = 'my-account.html';
+                }
             }
+            checkLogin()
         </script>
 
         <meta name="robots" content="noindex, follow" />

@@ -121,6 +121,7 @@ const loadWishlist = async () => {
             loadCart()
 
         } else if(data.data == "Please LogIn First") {
+            sessionStorage.setItem("redirect",true)
             window.location.href = "sign-in.html";
         }else{
             Notification().error({

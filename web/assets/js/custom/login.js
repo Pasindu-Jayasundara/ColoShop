@@ -1,19 +1,25 @@
 const popup = Notification();
 
-window.onload = () => {
-    if (localStorage.getItem("user") != null) {
+// window.onload = () => {
+//     checkLogin()
+// }
 
-        if (document.referrer.includes("/wishlist.html")) {
-            window.location = "wishlist.html";
-        } else if (document.referrer.includes("/shoping-cart.html")) {
-            window.location = "shoping-cart.html";
-        }else if (document.referrer.includes("/contact.html")) {
-            window.location = "contact.html";
-        } else {
-            window.location = "my-account.html";
-        }
-    }
-}
+// function checkLogin() {
+//     let user = sessionStorage.getItem('user')
+//     if (user!=null) {
+
+//         if (document.referrer.includes("/wishlist.html")) {
+//             window.location = "wishlist.html";
+//         } else if (document.referrer.includes("/shoping-cart.html")) {
+//             window.location = "shoping-cart.html";
+//         } else if (document.referrer.includes("/contact.html")) {
+//             window.location = "contact.html";
+//         } else {
+//             window.location = "my-account.html";
+//         }
+//     }
+// }
+
 const login = async () => {
 
     console.log("Login");
@@ -35,20 +41,25 @@ const login = async () => {
         const data = await response.json();
         if (data.success) {
             if (data.data == "Login Success") {
-                if (localStorage.getItem("user") == null) {
-                    localStorage.setItem("user", JSON.stringify(data.data));
+                if (sessionStorage.getItem("user") == null) {
+                    sessionStorage.setItem("user", JSON.stringify(data.data));
                 }
             }
 
-            if (document.referrer.includes("/wishlist.html")) {
-                window.location = "wishlist.html";
-            } else if (document.referrer.includes("/shoping-cart.html")) {
-                window.location = "shoping-cart.html";
-            } else if (document.referrer.includes("/contact.html")) {
-                window.location = "contact.html";
-            } else {
+            let re = sessionStorage.getItem("redirect")
+            if(re == 'true'){
+                sessionStorage.setItem("redirect",false)
+                if (document.referrer.includes("/wishlist.html")) {
+                    window.location = "wishlist.html";
+                } else if (document.referrer.includes("/shoping-cart.html")) {
+                    window.location = "shoping-cart.html";
+                } else if (document.referrer.includes("/contact.html")) {
+                    window.location = "contact.html";
+                } 
+            }else {
                 window.location = "my-account.html";
             }
+            
         } else {
             popup.error({
                 message: data.data

@@ -42,18 +42,19 @@ public class UpdateProductStatusFilter implements Filter {
                 String id = fromJson.get("id").getAsString();
                 if (id != null) {
                     int oid = Integer.parseInt(id);
-                    if (oid <= 0) {
-                        isInvalid = true;
-                        message = "Invalid Id";
-
-                    } else if (!Validation.isInteger(id)) {
-                        isInvalid = true;
-                        message = "Not A Number";
-
-                    } else {
+//                    if (oid <= 0) {
+//                        isInvalid = true;
+//                        message = "Invalid Id";
+//
+//                    } else 
+//                        if (!Validation.isInteger(id)) {
+//                        isInvalid = true;
+//                        message = "Not A Number";
+//
+//                    } else {
                         request.setAttribute("id", oid);
                         chain.doFilter(request, response);
-                    }
+//                    }
                 } else {
                     isInvalid = true;
                     message = "Missing Id";
